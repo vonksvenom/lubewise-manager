@@ -37,11 +37,11 @@ const Layout = ({ children }) => {
   const currentUser = userService.getCurrentUser();
 
   const filteredNavItems = navItems.filter(item => 
-    !item.adminOnly || (item.adminOnly && isAdmin)
+    !item.adminOnly || (item.adminOnly && isAdmin())
   );
 
   const handleThemeChange = (theme) => {
-    if (isAdmin || isPowerUser) {
+    if (isAdmin() || isPowerUser()) {
       setCurrentTheme(theme);
       document.documentElement.style.setProperty('--background', themes[theme].colors.background);
       document.documentElement.style.setProperty('--foreground', themes[theme].colors.foreground);
@@ -56,7 +56,7 @@ const Layout = ({ children }) => {
   };
 
   const handleLogoChange = (event) => {
-    if (isAdmin || isPowerUser) {
+    if (isAdmin() || isPowerUser()) {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
