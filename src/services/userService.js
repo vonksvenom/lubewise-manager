@@ -29,7 +29,7 @@ users = [
     name: "Admin", 
     email: "admin@admin.com", 
     password: "admin123", 
-    role: "Administrador", 
+    role: "admin", 
     department: "TI", 
     isAdmin: true 
   },
@@ -38,7 +38,7 @@ users = [
     name: "User", 
     email: "user@user.com", 
     password: "user123", 
-    role: "Usuário", 
+    role: "user", 
     department: "Manutenção", 
     isAdmin: false 
   },
@@ -47,7 +47,7 @@ users = [
     name: "Operador", 
     email: "opr@opr.com", 
     password: "opr123", 
-    role: "Operador", 
+    role: "operator", 
     department: "Operações", 
     isAdmin: false 
   },
