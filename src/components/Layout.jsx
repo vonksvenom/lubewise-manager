@@ -29,17 +29,17 @@ const Layout = ({ children }) => {
   useEffect(() => {
     const userTheme = localStorage.getItem(`theme_${currentUser?.id}`);
     if (userTheme) {
-      handleThemeChange(userTheme);
+      handleThemeChange(userTheme, true);
       return;
     }
 
     const companyDefaultTheme = localStorage.getItem('company_default_theme');
     if (companyDefaultTheme) {
-      handleThemeChange(companyDefaultTheme);
+      handleThemeChange(companyDefaultTheme, true);
       return;
     }
 
-    handleThemeChange('corporate');
+    handleThemeChange('corporate', true);
 
     const savedLogo = localStorage.getItem('logoUrl');
     if (savedLogo) {
@@ -47,7 +47,7 @@ const Layout = ({ children }) => {
     }
   }, [currentUser]);
 
-  const handleThemeChange = (theme) => {
+  const handleThemeChange = (theme, isInitialLoad = false) => {
     setCurrentTheme(theme);
     document.documentElement.style.setProperty('--background', themes[theme].colors.background);
     document.documentElement.style.setProperty('--foreground', themes[theme].colors.foreground);
@@ -56,7 +56,7 @@ const Layout = ({ children }) => {
     document.documentElement.style.setProperty('--accent', themes[theme].colors.accent);
     document.documentElement.style.setProperty('--muted', themes[theme].colors.muted);
 
-    if ((auth.isAdmin() || auth.isPowerUser()) && theme !== currentTheme) {
+    if (!isInitialLoad && (auth.isAdmin() || auth.isPowerUser()) && theme !== currentTheme) {
       const setAsDefault = window.confirm("Deseja definir este tema como padrão para todos os usuários?");
       if (setAsDefault) {
         localStorage.setItem('company_default_theme', theme);
@@ -67,7 +67,7 @@ const Layout = ({ children }) => {
     if (currentUser) {
       localStorage.setItem(`theme_${currentUser.id}`, theme);
       userService.update(currentUser.id, { theme: theme });
-      if (theme !== 'corporate') {
+      if (!isInitialLoad && theme !== 'corporate') {
         toast.success("Tema atualizado e salvo com sucesso!");
       }
     }
