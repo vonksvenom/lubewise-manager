@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, FileDown, Upload } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
@@ -15,6 +15,8 @@ import { useToast } from "@/components/ui/use-toast";
 import EquipamentoForm from "@/components/EquipamentoForm";
 import EquipamentoTable from "@/components/EquipamentoTable";
 import { equipamentoService } from "@/services/dataService";
+import BulkImportDialog from "@/components/common/BulkImportDialog";
+import * as XLSX from 'xlsx';
 
 const Equipamentos = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -101,32 +103,83 @@ const Equipamentos = () => {
       eq.modelo?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleExport = () => {
+    const ws = XLSX.utils.json_to_sheet(equipamentos);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Equipamentos");
+    XLSX.writeFile(wb, "equipamentos.xlsx");
+    toast({
+      title: "Exportação concluída",
+      description: "Os dados foram exportados com sucesso.",
+    });
+  };
+
+  const templateData = [
+    {
+      nome: "Exemplo Equipamento",
+      modelo: "Modelo XYZ",
+      tag: "TAG-0001",
+      area: "Produção",
+      responsavel: "João Silva",
+      status: "Operacional",
+      fabricante: "Fabricante ABC",
+      numeroSerie: "NS123456",
+    }
+  ];
+
+  const handleImport = (data) => {
+    data.forEach(item => {
+      equipamentoService.add(item);
+    });
+    setEquipamentos(equipamentoService.getAll());
+    toast({
+      title: "Importação concluída",
+      description: `${data.length} equipamentos foram importados com sucesso.`,
+    });
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">{t("equipment")}</h1>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button
-              className="bg-primary hover:bg-primary/90"
-              onClick={() => setSelectedEquipamento(null)}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Novo Equipamento
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>
-                {selectedEquipamento ? "Editar Equipamento" : "Novo Equipamento"}
-              </DialogTitle>
-            </DialogHeader>
-            <EquipamentoForm
-              initialData={selectedEquipamento}
-              onSave={handleSave}
-            />
-          </DialogContent>
-        </Dialog>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            className="gap-2"
+            onClick={handleExport}
+          >
+            <FileDown className="h-4 w-4" />
+            Exportar
+          </Button>
+          <BulkImportDialog
+            title="Importar Equipamentos"
+            onImport={handleImport}
+            templateData={templateData}
+            templateFilename="template_equipamentos.xlsx"
+          />
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button
+                className="bg-primary hover:bg-primary/90"
+                onClick={() => setSelectedEquipamento(null)}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Novo Equipamento
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>
+                  {selectedEquipamento ? "Editar Equipamento" : "Novo Equipamento"}
+                </DialogTitle>
+              </DialogHeader>
+              <EquipamentoForm
+                initialData={selectedEquipamento}
+                onSave={handleSave}
+              />
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       <Card className="p-6">

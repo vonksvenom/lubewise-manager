@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { FileDown } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -19,6 +20,8 @@ import {
 } from "@/components/ui/select";
 import { inventarioService, areaService } from "@/services/dataService";
 import { format } from "date-fns";
+import * as XLSX from 'xlsx';
+import { useToast } from "@/components/ui/use-toast";
 
 const InventarioHistory = () => {
   const [selectedArea, setSelectedArea] = useState("todas");
@@ -26,6 +29,7 @@ const InventarioHistory = () => {
   const [endDate, setEndDate] = useState("");
   const [history, setHistory] = useState([]);
   const areas = areaService.getAll();
+  const { toast } = useToast();
 
   const handleSearch = () => {
     const area = selectedArea === "todas" ? null : selectedArea;
@@ -35,6 +39,27 @@ const InventarioHistory = () => {
       area
     );
     setHistory(historico);
+  };
+
+  const handleExport = () => {
+    if (history.length === 0) {
+      toast({
+        title: "Nenhum dado para exportar",
+        description: "Realize uma busca primeiro para exportar os dados.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const ws = XLSX.utils.json_to_sheet(history);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Histórico");
+    XLSX.writeFile(wb, `historico_${startDate}_${endDate}.xlsx`);
+    
+    toast({
+      title: "Exportação concluída",
+      description: "O histórico foi exportado com sucesso.",
+    });
   };
 
   return (
@@ -76,8 +101,12 @@ const InventarioHistory = () => {
             onChange={(e) => setEndDate(e.target.value)}
           />
         </div>
-        <div className="flex items-end">
+        <div className="flex items-end gap-2">
           <Button onClick={handleSearch}>Buscar</Button>
+          <Button variant="outline" onClick={handleExport} className="gap-2">
+            <FileDown className="h-4 w-4" />
+            Exportar
+          </Button>
         </div>
       </div>
 

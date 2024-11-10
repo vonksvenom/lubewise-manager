@@ -16,6 +16,7 @@ import InventarioSummary from "@/components/InventarioSummary";
 import InventarioHistory from "@/components/InventarioHistory";
 import InventarioTable from "@/components/InventarioTable";
 import { inventarioService, areaService } from "@/services/dataService";
+import BulkImportDialog from "@/components/common/BulkImportDialog";
 
 const Inventario = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -30,66 +31,95 @@ const Inventario = () => {
     });
   };
 
+  const templateData = [
+    {
+      name: "Exemplo Item",
+      type: "Óleo",
+      quantity: 100,
+      unit: "L",
+      location: "Almoxarifado Central",
+      area: "Produção"
+    }
+  ];
+
+  const handleImport = (data) => {
+    data.forEach(item => {
+      inventarioService.add(item);
+    });
+    toast({
+      title: "Importação concluída",
+      description: `${data.length} itens foram importados com sucesso.`,
+    });
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-catYellow">Inventário</h1>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Novo Item
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Adicionar Item ao Inventário</DialogTitle>
-            </DialogHeader>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.target);
-                handleSave({
-                  name: formData.get("name"),
-                  type: formData.get("type"),
-                  quantity: Number(formData.get("quantity")),
-                  unit: formData.get("unit"),
-                  location: formData.get("location"),
-                  area: formData.get("area"),
-                });
-              }}
-              className="space-y-4"
-            >
-              <Input name="name" placeholder="Nome do item" required />
-              <Input name="type" placeholder="Tipo (Óleo/Graxa)" required />
-              <Input
-                name="quantity"
-                type="number"
-                placeholder="Quantidade"
-                required
-              />
-              <Input name="unit" placeholder="Unidade (L/Kg)" required />
-              <Input
-                name="location"
-                placeholder="Local de Armazenamento"
-                required
-              />
-              <select
-                name="area"
-                className="w-full border rounded-md p-2"
-                required
+        <div className="flex gap-2">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="h-4 w-4 mr-2" />
+                Novo Item
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Adicionar Item ao Inventário</DialogTitle>
+              </DialogHeader>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.target);
+                  handleSave({
+                    name: formData.get("name"),
+                    type: formData.get("type"),
+                    quantity: Number(formData.get("quantity")),
+                    unit: formData.get("unit"),
+                    location: formData.get("location"),
+                    area: formData.get("area"),
+                  });
+                }}
+                className="space-y-4"
               >
-                <option value="">Selecione a área</option>
-                {areas.map((area) => (
-                  <option key={area.id} value={area.nome}>
-                    {area.nome}
-                  </option>
-                ))}
-              </select>
-              <Button type="submit">Salvar</Button>
-            </form>
-          </DialogContent>
-        </Dialog>
+                <Input name="name" placeholder="Nome do item" required />
+                <Input name="type" placeholder="Tipo (Óleo/Graxa)" required />
+                <Input
+                  name="quantity"
+                  type="number"
+                  placeholder="Quantidade"
+                  required
+                />
+                <Input name="unit" placeholder="Unidade (L/Kg)" required />
+                <Input
+                  name="location"
+                  placeholder="Local de Armazenamento"
+                  required
+                />
+                <select
+                  name="area"
+                  className="w-full border rounded-md p-2"
+                  required
+                >
+                  <option value="">Selecione a área</option>
+                  {areas.map((area) => (
+                    <option key={area.id} value={area.nome}>
+                      {area.nome}
+                    </option>
+                  ))}
+                </select>
+                <Button type="submit">Salvar</Button>
+              </form>
+            </DialogContent>
+          </Dialog>
+          <BulkImportDialog
+            title="Importar Itens"
+            onImport={handleImport}
+            templateData={templateData}
+            templateFilename="template_inventario.xlsx"
+          />
+        </div>
       </div>
 
       <InventarioSummary />
