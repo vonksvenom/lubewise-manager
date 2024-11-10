@@ -26,6 +26,7 @@ const Usuarios = () => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
   const { isAdmin, isPowerUser } = useAuth();
 
@@ -44,21 +45,30 @@ const Usuarios = () => {
       isAdmin: formData.get("isAdmin") === "true",
     };
 
-    if (selectedUser) {
-      userService.update(selectedUser.id, data);
+    try {
+      if (selectedUser) {
+        userService.update(selectedUser.id, data);
+        toast({
+          title: "Usuário atualizado",
+          description: "As alterações foram salvas com sucesso.",
+        });
+      } else {
+        userService.add(data);
+        toast({
+          title: "Usuário adicionado",
+          description: "O usuário foi adicionado com sucesso.",
+        });
+      }
+      setUsers(userService.getAll());
+      setSelectedUser(null);
+      setIsDialogOpen(false); // Fecha o modal após salvar
+    } catch (error) {
       toast({
-        title: "Usuário atualizado",
-        description: "As alterações foram salvas com sucesso.",
-      });
-    } else {
-      userService.add(data);
-      toast({
-        title: "Usuário adicionado",
-        description: "O usuário foi adicionado com sucesso.",
+        title: "Erro",
+        description: error.message,
+        variant: "destructive",
       });
     }
-    setUsers(userService.getAll());
-    setSelectedUser(null);
   };
 
   const handleDeleteUser = (id) => {
@@ -85,9 +95,9 @@ const Usuarios = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-catYellow">Usuários</h1>
-        <Dialog>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button>
+            <Button onClick={() => setSelectedUser(null)}>
               <Plus className="h-4 w-4 mr-2" />
               Novo Usuário
             </Button>

@@ -11,7 +11,7 @@ const init = () => {
 };
 
 const getAll = () => {
-  init(); // Garante que os dados iniciais estão carregados
+  init();
   const data = localStorage.getItem(STORAGE_KEY);
   return JSON.parse(data);
 };
@@ -23,6 +23,13 @@ const getById = (id) => {
 
 const add = (user) => {
   const users = getAll();
+  
+  // Verifica se já existe um usuário com o mesmo email
+  const existingUser = users.find(u => u.email.toLowerCase() === user.email.toLowerCase());
+  if (existingUser) {
+    throw new Error('Já existe um usuário cadastrado com este email');
+  }
+
   const newUser = {
     ...user,
     id: Date.now().toString(),
@@ -35,11 +42,19 @@ const add = (user) => {
 const update = (id, user) => {
   const users = getAll();
   const index = users.findIndex(u => u.id === id);
+  
+  // Verifica se o email já está em uso por outro usuário
+  const existingUser = users.find(u => 
+    u.email.toLowerCase() === user.email.toLowerCase() && u.id !== id
+  );
+  if (existingUser) {
+    throw new Error('Este email já está em uso por outro usuário');
+  }
+
   if (index !== -1) {
     users[index] = { ...users[index], ...user };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
     
-    // Atualiza o usuário atual se for o mesmo
     const currentUser = getCurrentUser();
     if (currentUser && currentUser.id === id) {
       localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(users[index]));
@@ -55,7 +70,6 @@ const remove = (id) => {
   const filtered = users.filter(user => user.id !== id);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
   
-  // Remove o usuário atual se for o mesmo
   const currentUser = getCurrentUser();
   if (currentUser && currentUser.id === id) {
     localStorage.removeItem(CURRENT_USER_KEY);

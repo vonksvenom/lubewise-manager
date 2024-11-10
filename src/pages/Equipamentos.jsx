@@ -20,6 +20,7 @@ const Equipamentos = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [equipamentos, setEquipamentos] = useState([]);
   const [selectedEquipamento, setSelectedEquipamento] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { t } = useTranslation();
   const { toast } = useToast();
 
@@ -52,6 +53,7 @@ const Equipamentos = () => {
     }
     setEquipamentos(equipamentoService.getAll());
     setSelectedEquipamento(null);
+    setIsDialogOpen(false); // Fecha o modal após salvar
   };
 
   const filteredEquipamentos = equipamentos.filter(
@@ -64,7 +66,7 @@ const Equipamentos = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">{t("equipment")}</h1>
-        <Dialog>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button
               className="bg-primary hover:bg-primary/90"
