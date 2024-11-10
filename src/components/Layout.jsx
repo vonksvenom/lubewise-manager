@@ -27,24 +27,20 @@ const Layout = ({ children }) => {
   const currentUser = userService.getCurrentUser();
 
   useEffect(() => {
-    // Primeiro, tenta carregar o tema específico do usuário
     const userTheme = localStorage.getItem(`theme_${currentUser?.id}`);
     if (userTheme) {
       handleThemeChange(userTheme);
       return;
     }
 
-    // Se não houver tema do usuário, tenta carregar o tema padrão da empresa
     const companyDefaultTheme = localStorage.getItem('company_default_theme');
     if (companyDefaultTheme) {
       handleThemeChange(companyDefaultTheme);
       return;
     }
 
-    // Se não houver nenhum tema definido, usa o Corporate Gray como padrão
     handleThemeChange('corporate');
 
-    // Tenta carregar o logo salvo
     const savedLogo = localStorage.getItem('logoUrl');
     if (savedLogo) {
       setLogoUrl(savedLogo);
@@ -53,15 +49,13 @@ const Layout = ({ children }) => {
 
   const handleThemeChange = (theme) => {
     setCurrentTheme(theme);
-    // Aplica o tema
     document.documentElement.style.setProperty('--background', themes[theme].colors.background);
     document.documentElement.style.setProperty('--foreground', themes[theme].colors.foreground);
     document.documentElement.style.setProperty('--primary', themes[theme].colors.primary);
     document.documentElement.style.setProperty('--secondary', themes[theme].colors.secondary);
     document.documentElement.style.setProperty('--accent', themes[theme].colors.accent);
     document.documentElement.style.setProperty('--muted', themes[theme].colors.muted);
-    
-    // Se for admin ou power user e estiver definindo o tema padrão da empresa
+
     if ((auth.isAdmin() || auth.isPowerUser()) && theme !== currentTheme) {
       const setAsDefault = window.confirm("Deseja definir este tema como padrão para todos os usuários?");
       if (setAsDefault) {
@@ -69,8 +63,7 @@ const Layout = ({ children }) => {
         toast.success("Tema definido como padrão para todos os usuários!");
       }
     }
-    
-    // Salva o tema escolhido para o usuário atual
+
     if (currentUser) {
       localStorage.setItem(`theme_${currentUser.id}`, theme);
       userService.update(currentUser.id, { theme: theme });
@@ -116,7 +109,7 @@ const Layout = ({ children }) => {
         <Button
           variant="outline"
           size="icon"
-          onClick={logout}
+          onClick={auth.logout}
           className="text-red-500 hover:text-red-700 rounded-xl shadow-lg transform transition hover:scale-105 hover:shadow-xl bg-gradient-to-br from-muted to-accent/10"
         >
           <LogOut className="h-4 w-4" />
