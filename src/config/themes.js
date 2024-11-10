@@ -31,5 +31,49 @@ export const themes = {
       accent: "#374151",
       muted: "#374151"
     }
+  },
+  neon: {
+    name: "Neon Night",
+    colors: {
+      background: "#0a0a0a",
+      foreground: "#00ff00",
+      primary: "#00ff00",
+      secondary: "#1a1a1a",
+      accent: "#222222",
+      muted: "#151515"
+    }
+  },
+  sunset: {
+    name: "Sunset Orange",
+    colors: {
+      background: "#2d1b1b",
+      foreground: "#ff6b6b",
+      primary: "#ff6b6b",
+      secondary: "#4a2c2c",
+      accent: "#3d2424",
+      muted: "#332020"
+    }
+  },
+  forest: {
+    name: "Forest Green",
+    colors: {
+      background: "#1a2416",
+      foreground: "#4caf50",
+      primary: "#4caf50",
+      secondary: "#2c3a28",
+      accent: "#243020",
+      muted: "#1e2a1a"
+    }
+  },
+  ocean: {
+    name: "Deep Ocean",
+    colors: {
+      background: "#0a192f",
+      foreground: "#64ffda",
+      primary: "#64ffda",
+      secondary: "#172a45",
+      accent: "#1d3a5c",
+      muted: "#15243b"
+    }
   }
 };

@@ -23,27 +23,27 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "#2a2a2a", // Mudado para um tom mais claro de cinza escuro
-        foreground: "#E4941A",
+        background: "var(--background)",
+        foreground: "var(--foreground)",
         primary: {
-          DEFAULT: "#E4941A",
-          foreground: "#2a2a2a",
+          DEFAULT: "var(--primary)",
+          foreground: "var(--background)",
         },
         secondary: {
-          DEFAULT: "#4A4A4A",
-          foreground: "#E4941A",
+          DEFAULT: "var(--secondary)",
+          foreground: "var(--foreground)",
         },
         destructive: {
           DEFAULT: "#EF4444",
-          foreground: "#2a2a2a",
+          foreground: "var(--background)",
         },
         muted: {
-          DEFAULT: "#3a3a3a", // Ajustado para um tom mais claro
-          foreground: "#E4941A",
+          DEFAULT: "var(--muted)",
+          foreground: "var(--foreground)",
         },
         accent: {
-          DEFAULT: "#404040", // Ajustado para um tom mais claro
-          foreground: "#E4941A",
+          DEFAULT: "var(--accent)",
+          foreground: "var(--foreground)",
         },
         catYellow: "#E4941A",
         neon: {
