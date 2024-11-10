@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { Clock } from "lucide-react";
-import { ordemServicoService } from "@/services/dataService";
+import { ordemServicoService } from "@/services/ordemServicoService";
 import { InventoryChart } from "@/components/InventoryChart";
 import { InventarioSummary } from "@/components/InventarioSummary";
 import MaintenanceStats from "@/components/dashboard/MaintenanceStats";
@@ -27,7 +27,6 @@ const Dashboard = () => {
           title: "Erro ao carregar dados",
           description: "Usando dados em cache local."
         });
-        // Fallback to localStorage data
         const localData = ordemServicoService.getAllLocal();
         setOrdensServico(Array.isArray(localData) ? localData : []);
       } finally {

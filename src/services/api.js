@@ -1,10 +1,22 @@
 const API_URL = 'http://localhost:3001/api';
 
+const handleResponse = async (response) => {
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  return response.json();
+};
+
 export const api = {
-  // Usuários
+  // Users
   async getUsers() {
-    const response = await fetch(`${API_URL}/users`);
-    return response.json();
+    try {
+      const response = await fetch(`${API_URL}/users`);
+      return handleResponse(response);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      return [];
+    }
   },
 
   async createUser(userData) {
@@ -20,8 +32,13 @@ export const api = {
 
   // Equipamentos
   async getEquipamentos() {
-    const response = await fetch(`${API_URL}/equipamentos`);
-    return response.json();
+    try {
+      const response = await fetch(`${API_URL}/equipamentos`);
+      return handleResponse(response);
+    } catch (error) {
+      console.error('Error fetching equipamentos:', error);
+      return [];
+    }
   },
 
   async createEquipamento(equipamentoData) {
@@ -37,8 +54,13 @@ export const api = {
 
   // Ordens de Serviço
   async getOrdensServico() {
-    const response = await fetch(`${API_URL}/ordensServico`);
-    return response.json();
+    try {
+      const response = await fetch(`${API_URL}/ordensServico`);
+      return handleResponse(response);
+    } catch (error) {
+      console.error('Error fetching ordens servico:', error);
+      return [];
+    }
   },
 
   async createOrdemServico(ordemData) {
@@ -52,27 +74,15 @@ export const api = {
     return response.json();
   },
 
-  // Inventário
-  async getInventario() {
-    const response = await fetch(`${API_URL}/inventario`);
-    return response.json();
-  },
-
-  async createInventario(inventarioData) {
-    const response = await fetch(`${API_URL}/inventario`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(inventarioData),
-    });
-    return response.json();
-  },
-
   // Areas
   async getAreas() {
-    const response = await fetch(`${API_URL}/areas`);
-    return response.json();
+    try {
+      const response = await fetch(`${API_URL}/areas`);
+      return handleResponse(response);
+    } catch (error) {
+      console.error('Error fetching areas:', error);
+      return [];
+    }
   },
 
   async createArea(areaData) {
@@ -82,6 +92,28 @@ export const api = {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(areaData),
+    });
+    return response.json();
+  },
+
+  // Inventário
+  async getInventario() {
+    try {
+      const response = await fetch(`${API_URL}/inventario`);
+      return handleResponse(response);
+    } catch (error) {
+      console.error('Error fetching inventario:', error);
+      return [];
+    }
+  },
+
+  async createInventario(inventarioData) {
+    const response = await fetch(`${API_URL}/inventario`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(inventarioData),
     });
     return response.json();
   },
