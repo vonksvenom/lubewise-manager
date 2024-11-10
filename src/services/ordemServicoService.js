@@ -20,11 +20,22 @@ const add = (ordem) => {
   const ordensServico = getAll();
   const newOrdem = {
     ...ordem,
-    id: Date.now().toString(),
+    id: ordem.id || Date.now().toString(),
   };
   ordensServico.push(newOrdem);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(ordensServico));
   return newOrdem;
+};
+
+const bulkAdd = (ordens) => {
+  const ordensServico = getAll();
+  const newOrdens = ordens.map(ordem => ({
+    ...ordem,
+    id: ordem.id || Date.now().toString(),
+  }));
+  ordensServico.push(...newOrdens);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(ordensServico));
+  return newOrdens;
 };
 
 const update = (id, ordem) => {
@@ -48,6 +59,7 @@ export const ordemServicoService = {
   getAll,
   getById,
   add,
+  bulkAdd,
   update,
   delete: remove
 };

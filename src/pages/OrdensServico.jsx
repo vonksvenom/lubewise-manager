@@ -15,6 +15,7 @@ import { useToast } from "@/components/ui/use-toast";
 import OrdemServicoForm from "@/components/OrdemServicoForm";
 import OrdemServicoTable from "@/components/OrdemServicoTable";
 import { ordemServicoService, equipamentoService } from "@/services/dataService";
+import BulkImportDialog from "@/components/common/BulkImportDialog";
 
 const OrdensServico = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -73,6 +74,26 @@ const OrdensServico = () => {
     setSelectedOrdem(null);
   };
 
+  const handleImport = (data) => {
+    data.forEach(item => {
+      ordemServicoService.add(item);
+    });
+    setOrdensServico(ordemServicoService.getAll());
+  };
+
+  const templateData = [
+    {
+      titulo: "Exemplo Ordem 1",
+      descricao: "Descrição da ordem",
+      tipo: "Preventiva",
+      equipamentoId: "1",
+      status: "Pendente",
+      dataInicio: "2024-03-20",
+      dataFim: "2024-03-21",
+      prioridade: "Media"
+    }
+  ];
+
   const filteredOrdensServico = ordensServico.filter(
     (ordem) =>
       ordem.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -83,31 +104,39 @@ const OrdensServico = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">{t("workOrders")}</h1>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button
-              className="bg-primary hover:bg-primary/90"
-              onClick={() => setSelectedOrdem(null)}
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Nova Ordem de Serviço
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>
-                {selectedOrdem
-                  ? "Editar Ordem de Serviço"
-                  : "Nova Ordem de Serviço"}
-              </DialogTitle>
-            </DialogHeader>
-            <OrdemServicoForm
-              initialData={selectedOrdem}
-              onSave={handleSave}
-              equipamentos={equipamentos}
-            />
-          </DialogContent>
-        </Dialog>
+        <div className="flex gap-2">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                className="bg-primary hover:bg-primary/90"
+                onClick={() => setSelectedOrdem(null)}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Nova Ordem de Serviço
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>
+                  {selectedOrdem
+                    ? "Editar Ordem de Serviço"
+                    : "Nova Ordem de Serviço"}
+                </DialogTitle>
+              </DialogHeader>
+              <OrdemServicoForm
+                initialData={selectedOrdem}
+                onSave={handleSave}
+                equipamentos={equipamentos}
+              />
+            </DialogContent>
+          </Dialog>
+          <BulkImportDialog
+            title="Importar Ordens de Serviço"
+            onImport={handleImport}
+            templateData={templateData}
+            templateFilename="template_ordens_servico.xlsx"
+          />
+        </div>
       </div>
 
       <Card className="p-6">
