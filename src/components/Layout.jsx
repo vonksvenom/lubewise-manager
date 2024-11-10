@@ -72,9 +72,9 @@ const Layout = ({ children }) => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background bg-gradient-to-br from-background to-accent/5">
       <button
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-muted rounded-md shadow-md"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-muted rounded-xl shadow-lg transform transition hover:scale-105 hover:shadow-xl"
         onClick={() => setSidebarOpen(!sidebarOpen)}
       >
         {sidebarOpen ? <X className="text-catYellow" /> : <Menu className="text-catYellow" />}
@@ -84,11 +84,11 @@ const Layout = ({ children }) => {
         {(isAdmin || isPowerUser) && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" className="rounded-xl shadow-lg transform transition hover:scale-105 hover:shadow-xl bg-gradient-to-br from-muted to-accent/10">
                 <Palette className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent className="rounded-xl shadow-lg backdrop-blur-sm bg-background/95">
               {Object.entries(themes).map(([key, theme]) => (
                 <DropdownMenuItem key={key} onClick={() => handleThemeChange(key)}>
                   {theme.name}
@@ -102,7 +102,7 @@ const Layout = ({ children }) => {
           variant="outline"
           size="icon"
           onClick={logout}
-          className="text-red-500 hover:text-red-700"
+          className="text-red-500 hover:text-red-700 rounded-xl shadow-lg transform transition hover:scale-105 hover:shadow-xl bg-gradient-to-br from-muted to-accent/10"
         >
           <LogOut className="h-4 w-4" />
         </Button>
@@ -110,11 +110,11 @@ const Layout = ({ children }) => {
         {(isAdmin || isPowerUser) && (
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" className="rounded-xl shadow-lg transform transition hover:scale-105 hover:shadow-xl bg-gradient-to-br from-muted to-accent/10">
                 <Upload className="h-4 w-4" />
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="rounded-xl shadow-lg backdrop-blur-sm bg-background/95">
               <DialogHeader>
                 <DialogTitle>Alterar Logo</DialogTitle>
               </DialogHeader>
@@ -122,7 +122,7 @@ const Layout = ({ children }) => {
                 type="file"
                 accept="image/*"
                 onChange={handleLogoChange}
-                className="mt-4"
+                className="mt-4 rounded-xl"
               />
             </DialogContent>
           </Dialog>
@@ -130,11 +130,11 @@ const Layout = ({ children }) => {
         
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon">
+            <Button variant="outline" size="icon" className="rounded-xl shadow-lg transform transition hover:scale-105 hover:shadow-xl bg-gradient-to-br from-muted to-accent/10">
               <Globe className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent className="rounded-xl shadow-lg backdrop-blur-sm bg-background/95">
             <DropdownMenuItem onClick={() => i18n.changeLanguage('pt')}>
               Português
             </DropdownMenuItem>
@@ -151,12 +151,12 @@ const Layout = ({ children }) => {
       <div
         className={`fixed inset-y-0 left-0 z-40 ${
           sidebarCollapsed ? 'w-16' : 'w-64'
-        } bg-muted shadow-lg transform transition-all duration-200 ease-in-out lg:translate-x-0 ${
+        } bg-gradient-to-br from-muted to-accent/10 backdrop-blur-sm shadow-xl transform transition-all duration-200 ease-in-out lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        } rounded-r-2xl`}
       >
         <div className="flex flex-col h-full">
-          <div className="p-4 flex justify-center items-center bg-black/20">
+          <div className="p-4 flex justify-center items-center bg-black/10 rounded-tr-2xl backdrop-blur-sm">
             <img
               src={logoUrl}
               alt="Sotreq Industrial Logo"
@@ -168,10 +168,10 @@ const Layout = ({ children }) => {
               <Link
                 key={item.to}
                 to={item.to}
-                className={`flex items-center gap-3 px-4 py-3 mb-2 rounded-md transition-colors ${
+                className={`flex items-center gap-3 px-4 py-3 mb-2 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg ${
                   location.pathname === item.to
-                    ? "bg-primary text-background"
-                    : "text-catYellow hover:bg-accent"
+                    ? "bg-primary text-background translate-x-2"
+                    : "text-catYellow hover:bg-accent bg-gradient-to-br from-muted to-accent/10"
                 } ${sidebarCollapsed ? 'justify-center' : ''}`}
                 title={item.title}
               >
@@ -182,7 +182,7 @@ const Layout = ({ children }) => {
           </nav>
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="p-4 text-catYellow hover:bg-accent rounded-md mx-2 mb-2 flex items-center justify-center"
+            className="p-4 text-catYellow hover:bg-accent rounded-xl mx-2 mb-2 flex items-center justify-center transform transition hover:scale-105 shadow-lg bg-gradient-to-br from-muted to-accent/10"
             title={sidebarCollapsed ? "Expandir menu" : "Recolher menu"}
           >
             {sidebarCollapsed ? <ChevronRight /> : <ChevronLeft />}
