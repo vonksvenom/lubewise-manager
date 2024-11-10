@@ -13,10 +13,10 @@ const SidebarNav = ({ navItems, sidebarCollapsed }) => {
             location.pathname === item.to
               ? "bg-primary text-background translate-x-2"
               : "text-catYellow hover:bg-accent bg-gradient-to-br from-muted to-accent/10"
-          } ${sidebarCollapsed ? 'justify-center w-auto' : 'w-full'}`}
+          } ${sidebarCollapsed ? 'w-10 p-0 justify-center aspect-square' : 'w-full'}`}
           title={item.title}
         >
-          <span className="flex-shrink-0">
+          <span className={`flex-shrink-0 ${sidebarCollapsed ? 'p-2' : ''}`}>
             {item.icon}
           </span>
           <span className={`transition-all duration-200 ${
