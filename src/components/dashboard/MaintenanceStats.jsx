@@ -3,7 +3,7 @@ import { DashboardCard } from "@/components/DashboardCard";
 import { Clock, AlertTriangle, CheckCircle2, Calendar } from "lucide-react";
 import { format, isThisWeek, isAfter, isBefore, addWeeks, startOfWeek } from "date-fns";
 
-const MaintenanceStats = ({ ordensServico = [] }) => {
+const MaintenanceStats = ({ ordensServico }) => {
   const { t } = useTranslation();
   const today = new Date();
   const nextWeekStart = startOfWeek(addWeeks(today, 1));
@@ -15,20 +15,10 @@ const MaintenanceStats = ({ ordensServico = [] }) => {
       preditivas: { vencidas: 0, essaSemana: 0, proximaSemana: 0 }
     };
 
-    if (!Array.isArray(ordensServico)) {
-      console.warn('ordensServico is not an array:', ordensServico);
-      return stats;
-    }
-
     ordensServico.forEach(ordem => {
       const dataFim = new Date(ordem.dataFim);
-      const categoria = ordem.tipo?.toLowerCase() + 's';
+      const categoria = ordem.tipo.toLowerCase() + 's';
       
-      if (!stats[categoria]) {
-        console.warn('Invalid categoria:', categoria);
-        return;
-      }
-
       if (isBefore(dataFim, today) && ordem.status !== "Concluída") {
         stats[categoria].vencidas++;
       } else if (isThisWeek(dataFim)) {
