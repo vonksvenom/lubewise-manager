@@ -55,6 +55,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const canCreateUsers = () => hasPermission('createUsers');
+  const canEditUsers = () => hasPermission('editUsers');  // Added editUsers permission check
   const canDeleteUsers = () => hasPermission('deleteUsers');
   const canEditSettings = () => hasPermission('editSettings');
   const canManageCompany = () => hasPermission('manageCompany');
@@ -75,6 +76,7 @@ export const AuthProvider = ({ children }) => {
       isTechnician,
       hasPermission,
       canCreateUsers,
+      canEditUsers,     // Added to context value
       canDeleteUsers,
       canEditSettings,
       canManageCompany,

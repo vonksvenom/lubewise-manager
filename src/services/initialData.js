@@ -155,6 +155,7 @@ export const initialUsers = [
     systemOwner: true, // Dono do sistema com acesso total
     permissions: {
       createUsers: true,
+      editUsers: true,   // Added editUsers permission
       deleteUsers: true,
       editSettings: true,
       manageCompany: true,
@@ -226,3 +227,5 @@ export const initialUsers = [
     }
   }
 ];
+
+// ... keep existing code (other initial data)
