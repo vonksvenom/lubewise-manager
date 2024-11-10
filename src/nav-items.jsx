@@ -1,4 +1,4 @@
-import { HomeIcon, Wrench, Settings, Calendar, Package, Users, Factory, Cog, Drop } from "lucide-react";
+import { HomeIcon, Wrench, Settings, Calendar, Package, Users, Factory, Cog, Droplet } from "lucide-react";
 import Dashboard from "./pages/Dashboard";
 import Equipamentos from "./pages/Equipamentos";
 import OrdensServico from "./pages/OrdensServico";
@@ -37,7 +37,7 @@ export const navItems = [
   {
     title: "Lubrificantes",
     to: "/lubrificantes",
-    icon: <Drop className="h-4 w-4" />,
+    icon: <Droplet className="h-4 w-4" />,
     page: <Lubrificantes />,
   },
   {
