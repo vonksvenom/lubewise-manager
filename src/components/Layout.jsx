@@ -32,14 +32,15 @@ const Layout = ({ children }) => {
     if (savedTheme) {
       handleThemeChange(savedTheme);
     } else {
-      // Se não houver tema salvo, usa o Standard Gray como padrão
       handleThemeChange('default');
     }
-  }, [currentUser]);
 
-  const filteredNavItems = navItems.filter(item => 
-    !item.adminOnly || (item.adminOnly && isAdmin())
-  );
+    // Tenta carregar o logo salvo
+    const savedLogo = localStorage.getItem('logoUrl');
+    if (savedLogo) {
+      setLogoUrl(savedLogo);
+    }
+  }, [currentUser]);
 
   const handleThemeChange = (theme) => {
     setCurrentTheme(theme);
@@ -60,6 +61,10 @@ const Layout = ({ children }) => {
       }
     }
   };
+
+  const filteredNavItems = navItems.filter(item => 
+    !item.adminOnly || (item.adminOnly && isAdmin())
+  );
 
   return (
     <div className="min-h-screen bg-background bg-gradient-to-br from-background to-accent/5">
@@ -113,6 +118,10 @@ const Layout = ({ children }) => {
               src={logoUrl}
               alt="Sotreq Industrial Logo"
               className={`${sidebarCollapsed ? 'h-8' : 'h-16'} object-contain transition-all duration-200`}
+              onError={(e) => {
+                e.target.src = "/placeholder.svg";
+                toast.error("Erro ao carregar o logo");
+              }}
             />
           </div>
           
@@ -145,7 +154,10 @@ const Layout = ({ children }) => {
               <LogoUploader 
                 isAdmin={isAdmin} 
                 isPowerUser={isPowerUser} 
-                onLogoChange={setLogoUrl}
+                onLogoChange={(newLogo) => {
+                  setLogoUrl(newLogo);
+                  localStorage.setItem('logoUrl', newLogo);
+                }}
               />
             </div>
           )}
