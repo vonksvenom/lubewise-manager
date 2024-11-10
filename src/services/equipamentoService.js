@@ -3,12 +3,18 @@ import { initialEquipamentos } from './initialData';
 const STORAGE_KEY = 'equipamentos';
 
 const getAll = () => {
-  let data = localStorage.getItem(STORAGE_KEY);
-  if (!data) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialEquipamentos));
+  try {
+    let data = localStorage.getItem(STORAGE_KEY);
+    if (!data) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(initialEquipamentos));
+      return initialEquipamentos;
+    }
+    const parsedData = JSON.parse(data);
+    return Array.isArray(parsedData) ? parsedData : initialEquipamentos;
+  } catch (error) {
+    console.error('Error getting equipamentos:', error);
     return initialEquipamentos;
   }
-  return JSON.parse(data);
 };
 
 const getById = (id) => {

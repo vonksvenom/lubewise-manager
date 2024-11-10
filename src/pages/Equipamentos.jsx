@@ -25,41 +25,74 @@ const Equipamentos = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    setEquipamentos(equipamentoService.getAll());
-  }, []);
+    const loadEquipamentos = () => {
+      try {
+        const data = equipamentoService.getAll();
+        setEquipamentos(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error('Error loading equipamentos:', error);
+        setEquipamentos([]);
+        toast({
+          title: "Erro ao carregar equipamentos",
+          description: "Não foi possível carregar a lista de equipamentos.",
+          variant: "destructive",
+        });
+      }
+    };
+    
+    loadEquipamentos();
+  }, [toast]);
 
   const handleDelete = (id) => {
-    equipamentoService.delete(id);
-    setEquipamentos(equipamentoService.getAll());
-    toast({
-      title: "Equipamento excluído",
-      description: "O equipamento foi removido com sucesso.",
-    });
+    try {
+      equipamentoService.delete(id);
+      setEquipamentos(equipamentoService.getAll());
+      toast({
+        title: "Equipamento excluído",
+        description: "O equipamento foi removido com sucesso.",
+      });
+    } catch (error) {
+      console.error('Error deleting equipamento:', error);
+      toast({
+        title: "Erro ao excluir",
+        description: "Não foi possível excluir o equipamento.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleSave = (data) => {
-    if (selectedEquipamento) {
-      equipamentoService.update(selectedEquipamento.id, data);
+    try {
+      if (selectedEquipamento) {
+        equipamentoService.update(selectedEquipamento.id, data);
+        toast({
+          title: "Equipamento atualizado",
+          description: "As alterações foram salvas com sucesso.",
+        });
+      } else {
+        equipamentoService.add(data);
+        toast({
+          title: "Equipamento adicionado",
+          description: "O novo equipamento foi cadastrado com sucesso.",
+        });
+      }
+      setEquipamentos(equipamentoService.getAll());
+      setSelectedEquipamento(null);
+      setIsDialogOpen(false);
+    } catch (error) {
+      console.error('Error saving equipamento:', error);
       toast({
-        title: "Equipamento atualizado",
-        description: "As alterações foram salvas com sucesso.",
-      });
-    } else {
-      equipamentoService.add(data);
-      toast({
-        title: "Equipamento adicionado",
-        description: "O novo equipamento foi cadastrado com sucesso.",
+        title: "Erro ao salvar",
+        description: "Não foi possível salvar as alterações.",
+        variant: "destructive",
       });
     }
-    setEquipamentos(equipamentoService.getAll());
-    setSelectedEquipamento(null);
-    setIsDialogOpen(false); // Fecha o modal após salvar
   };
 
   const filteredEquipamentos = equipamentos.filter(
     (eq) =>
-      eq.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      eq.modelo.toLowerCase().includes(searchTerm.toLowerCase())
+      eq.nome?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      eq.modelo?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
