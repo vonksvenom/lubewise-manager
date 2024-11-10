@@ -101,7 +101,7 @@ const Layout = ({ children }) => {
             <img
               src={logoUrl}
               alt="Sotreq Industrial Logo"
-              className={`${sidebarCollapsed ? 'h-16 w-16 object-contain' : 'h-20'} transition-all duration-200 transform hover:scale-110 hover:rotate-3 shadow-neo-3d hover:shadow-neo-3d-hover rounded-xl`}
+              className={`${sidebarCollapsed ? 'h-12 w-12 object-contain' : 'h-14'} transition-all duration-200 transform hover:scale-110 hover:rotate-3 shadow-neo-3d hover:shadow-neo-3d-hover rounded-xl`}
               style={{ transform: 'translateZ(20px)' }}
               onError={(e) => {
                 e.target.src = "/placeholder.svg";
