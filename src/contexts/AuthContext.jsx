@@ -33,39 +33,56 @@ export const AuthProvider = ({ children }) => {
   };
 
   const isAdmin = () => {
-    return user?.role === 'admin' || user?.systemOwner === true;
-  };
-
-  const isPowerUser = () => {
-    return user?.role === 'powerUser';
+    return user?.isAdmin === true;
   };
 
   const isSystemOwner = () => {
     return user?.systemOwner === true;
   };
 
-  const hasPermission = (action) => {
-    if (isSystemOwner()) return true;
-    if (isAdmin()) return true;
-    // Power users só têm acesso aos dados da própria empresa
-    if (isPowerUser() && user?.companyId === action.companyId) return true;
-    return false;
+  const isManager = () => {
+    return user?.role === 'manager';
   };
 
-  const canManageCompany = () => {
-    return isAdmin() || isSystemOwner();
+  const isTechnician = () => {
+    return user?.role === 'technician';
   };
+
+  const hasPermission = (permission) => {
+    if (!user) return false;
+    if (isSystemOwner()) return true;
+    return user.permissions?.[permission] === true;
+  };
+
+  const canCreateUsers = () => hasPermission('createUsers');
+  const canDeleteUsers = () => hasPermission('deleteUsers');
+  const canEditSettings = () => hasPermission('editSettings');
+  const canManageCompany = () => hasPermission('manageCompany');
+  const canViewReports = () => hasPermission('viewReports');
+  const canEditEquipments = () => hasPermission('editEquipments');
+  const canEditWorkOrders = () => hasPermission('editWorkOrders');
+  const canEditInventory = () => hasPermission('editInventory');
+  const canEditAreas = () => hasPermission('editAreas');
 
   return (
     <AuthContext.Provider value={{ 
-      user, 
-      login, 
-      logout, 
-      isAdmin, 
-      isPowerUser, 
+      user,
+      login,
+      logout,
+      isAdmin,
       isSystemOwner,
+      isManager,
+      isTechnician,
       hasPermission,
-      canManageCompany
+      canCreateUsers,
+      canDeleteUsers,
+      canEditSettings,
+      canManageCompany,
+      canViewReports,
+      canEditEquipments,
+      canEditWorkOrders,
+      canEditInventory,
+      canEditAreas
     }}>
       {children}
     </AuthContext.Provider>

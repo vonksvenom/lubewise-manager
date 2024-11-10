@@ -150,28 +150,79 @@ export const initialUsers = [
     email: "admin@admin.com",
     password: "admin123",
     role: "admin",
-    department: "TI",
+    department: "Diretoria",
     isAdmin: true,
-    systemOwner: true // Indica que é o dono do sistema
+    systemOwner: true, // Dono do sistema com acesso total
+    permissions: {
+      createUsers: true,
+      deleteUsers: true,
+      editSettings: true,
+      manageCompany: true,
+      viewReports: true,
+      editEquipments: true,
+      editWorkOrders: true,
+      editInventory: true,
+      editAreas: true
+    }
   },
   {
     id: "2",
-    name: "Power User",
-    email: "pwr@pwr.com",
-    password: "pwr123",
-    role: "powerUser",
-    department: "Gestão",
-    isPowerUser: true,
-    companyId: "1", // Vinculado à empresa exemplo
-    companyName: "Empresa Exemplo"
+    name: "Gerente",
+    email: "gerente@exemplo.com",
+    password: "ger123",
+    role: "manager",
+    department: "Manutenção",
+    isAdmin: false,
+    permissions: {
+      createUsers: false,
+      deleteUsers: false,
+      editSettings: false,
+      manageCompany: false,
+      viewReports: true,
+      editEquipments: true,
+      editWorkOrders: true,
+      editInventory: true,
+      editAreas: true
+    }
   },
   {
     id: "3",
-    name: "Usuário Comum",
-    email: "user@exemplo.com",
-    password: "user123",
-    role: "user",
-    department: "Operacional",
-    companyId: "1"
+    name: "Técnico",
+    email: "tecnico@exemplo.com",
+    password: "tec123",
+    role: "technician",
+    department: "Manutenção",
+    isAdmin: false,
+    permissions: {
+      createUsers: false,
+      deleteUsers: false,
+      editSettings: false,
+      manageCompany: false,
+      viewReports: false,
+      editEquipments: false,
+      editWorkOrders: true,
+      editInventory: true,
+      editAreas: false
+    }
+  },
+  {
+    id: "4",
+    name: "Operador",
+    email: "operador@exemplo.com",
+    password: "op123",
+    role: "operator",
+    department: "Produção",
+    isAdmin: false,
+    permissions: {
+      createUsers: false,
+      deleteUsers: false,
+      editSettings: false,
+      manageCompany: false,
+      viewReports: false,
+      editEquipments: false,
+      editWorkOrders: false,
+      editInventory: false,
+      editAreas: false
+    }
   }
 ];
