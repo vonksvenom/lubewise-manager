@@ -17,7 +17,8 @@ import {
   Users,
   Upload,
   LogOut,
-  Palette
+  Palette,
+  Cog
 } from "lucide-react";
 import { Button } from "./ui/button";
 import {
@@ -30,6 +31,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "./ui/input";
 import { userService } from "@/services/dataService";
 import { toast } from "sonner";
+import { navItems } from "../nav-items"; // Importando navItems
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -41,14 +43,9 @@ const Layout = ({ children }) => {
   const { logout, isAdmin, isPowerUser } = useAuth();
   const currentUser = userService.getCurrentUser();
 
-  const navItems = [
-    { title: t('dashboard'), icon: <BarChart3 />, path: "/" },
-    { title: t('equipment'), icon: <Wrench />, path: "/equipamentos" },
-    { title: t('workOrders'), icon: <Settings />, path: "/ordens" },
-    { title: t('users'), icon: <Users />, path: "/usuarios" },
-    { title: t('inventory'), icon: <Package />, path: "/inventario" },
-    { title: t('calendar'), icon: <Calendar />, path: "/calendario" },
-  ];
+  const filteredNavItems = navItems.filter(item => 
+    !item.adminOnly || (item.adminOnly && isAdmin())
+  );
 
   const handleThemeChange = (theme) => {
     if (isAdmin() || isPowerUser()) {
@@ -174,12 +171,12 @@ const Layout = ({ children }) => {
             />
           </div>
           <nav className="flex-1 p-4">
-            {navItems.map((item) => (
+            {filteredNavItems.map((item) => (
               <Link
-                key={item.path}
-                to={item.path}
+                key={item.to}
+                to={item.to}
                 className={`flex items-center gap-3 px-4 py-3 mb-2 rounded-md transition-colors ${
-                  location.pathname === item.path
+                  location.pathname === item.to
                     ? "bg-primary text-background"
                     : "text-catYellow hover:bg-accent"
                 }`}
