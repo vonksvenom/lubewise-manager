@@ -40,6 +40,7 @@ inventario = [
     type: "Óleo", 
     quantity: 200, 
     unit: "L",
+    location: "Almoxarifado A - Prateleira 1",
     dataRegistro: "2024-03-01T10:00:00.000Z"
   },
   { 
@@ -48,6 +49,7 @@ inventario = [
     type: "Graxa", 
     quantity: 50, 
     unit: "Kg",
+    location: "Almoxarifado B - Prateleira 3",
     dataRegistro: "2024-03-01T10:00:00.000Z"
   },
   { 
@@ -56,6 +58,7 @@ inventario = [
     type: "Óleo", 
     quantity: 150, 
     unit: "L",
+    location: "Almoxarifado A - Prateleira 2",
     dataRegistro: "2024-03-01T10:00:00.000Z"
   },
 ];

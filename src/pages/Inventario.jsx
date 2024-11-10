@@ -17,7 +17,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
+import { Plus, Pencil, Trash2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { InventoryChart } from "@/components/InventoryChart";
 import { inventarioService } from "@/services/dataService";
@@ -26,6 +26,7 @@ import { format } from "date-fns";
 const Inventario = () => {
   const [items, setItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedItem, setSelectedItem] = useState(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -41,19 +42,32 @@ const Inventario = () => {
     });
   };
 
-  const handleUpdateItem = (id, quantity) => {
-    inventarioService.update(id, { quantity });
+  const handleUpdateItem = (id, data) => {
+    inventarioService.update(id, data);
     setItems(inventarioService.getAll());
     toast({
       title: "Inventário atualizado",
-      description: "A quantidade foi atualizada com sucesso.",
+      description: "O item foi atualizado com sucesso.",
     });
+    setSelectedItem(null);
+  };
+
+  const handleDeleteItem = (id) => {
+    if (window.confirm("Tem certeza que deseja excluir este item?")) {
+      inventarioService.delete(id);
+      setItems(inventarioService.getAll());
+      toast({
+        title: "Item excluído",
+        description: "O item foi removido do inventário com sucesso.",
+      });
+    }
   };
 
   const filteredItems = items.filter(
     (item) =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.type.toLowerCase().includes(searchTerm.toLowerCase())
+      item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.type?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.location?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -69,30 +83,61 @@ const Inventario = () => {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Adicionar Item ao Inventário</DialogTitle>
+              <DialogTitle>
+                {selectedItem ? "Editar Item" : "Adicionar Item ao Inventário"}
+              </DialogTitle>
             </DialogHeader>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 const formData = new FormData(e.target);
-                handleAddItem({
+                const data = {
                   name: formData.get("name"),
                   type: formData.get("type"),
                   quantity: Number(formData.get("quantity")),
                   unit: formData.get("unit"),
-                });
+                  location: formData.get("location"),
+                };
+                
+                if (selectedItem) {
+                  handleUpdateItem(selectedItem.id, data);
+                } else {
+                  handleAddItem(data);
+                }
               }}
               className="space-y-4"
             >
-              <Input name="name" placeholder="Nome do item" required />
-              <Input name="type" placeholder="Tipo (Óleo/Graxa)" required />
+              <Input 
+                name="name" 
+                placeholder="Nome do item" 
+                defaultValue={selectedItem?.name} 
+                required 
+              />
+              <Input 
+                name="type" 
+                placeholder="Tipo (Óleo/Graxa)" 
+                defaultValue={selectedItem?.type} 
+                required 
+              />
               <Input
                 name="quantity"
                 type="number"
                 placeholder="Quantidade"
+                defaultValue={selectedItem?.quantity}
                 required
               />
-              <Input name="unit" placeholder="Unidade (L/Kg)" required />
+              <Input 
+                name="unit" 
+                placeholder="Unidade (L/Kg)" 
+                defaultValue={selectedItem?.unit} 
+                required 
+              />
+              <Input 
+                name="location" 
+                placeholder="Local de Armazenamento" 
+                defaultValue={selectedItem?.location} 
+                required 
+              />
               <Button type="submit">Salvar</Button>
             </form>
           </DialogContent>
@@ -115,6 +160,7 @@ const Inventario = () => {
               <TableHead>Tipo</TableHead>
               <TableHead>Quantidade</TableHead>
               <TableHead>Unidade</TableHead>
+              <TableHead>Local</TableHead>
               <TableHead>Data Registro</TableHead>
               <TableHead>Ações</TableHead>
             </TableRow>
@@ -126,24 +172,28 @@ const Inventario = () => {
                 <TableCell>{item.type}</TableCell>
                 <TableCell>{item.quantity}</TableCell>
                 <TableCell>{item.unit}</TableCell>
+                <TableCell>{item.location}</TableCell>
                 <TableCell>
                   {format(new Date(item.dataRegistro), 'dd/MM/yyyy HH:mm')}
                 </TableCell>
                 <TableCell>
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      const newQuantity = prompt(
-                        "Digite a nova quantidade:",
-                        item.quantity
-                      );
-                      if (newQuantity !== null) {
-                        handleUpdateItem(item.id, Number(newQuantity));
-                      }
-                    }}
-                  >
-                    Atualizar Quantidade
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => setSelectedItem(item)}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => handleDeleteItem(item.id)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

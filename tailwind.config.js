@@ -23,11 +23,11 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "#000000",
+        background: "#1a1a1a", // Changed from black to dark gray
         foreground: "#E4941A",
         primary: {
           DEFAULT: "#E4941A",
-          foreground: "#000000",
+          foreground: "#1a1a1a",
         },
         secondary: {
           DEFAULT: "#4A4A4A",
@@ -35,7 +35,7 @@ export default {
         },
         destructive: {
           DEFAULT: "#EF4444",
-          foreground: "#000000",
+          foreground: "#1a1a1a",
         },
         muted: {
           DEFAULT: "#2A2A2A",

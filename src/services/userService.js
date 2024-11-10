@@ -27,7 +27,7 @@ users = [
   { 
     id: 1, 
     name: "Admin", 
-    email: "admin@example.com", 
+    email: "admin@admin.com", 
     password: "admin123", 
     role: "Administrador", 
     department: "TI", 
@@ -35,19 +35,19 @@ users = [
   },
   { 
     id: 2, 
-    name: "João Silva", 
-    email: "joao@example.com", 
-    password: "joao123", 
-    role: "Técnico", 
+    name: "User", 
+    email: "user@user.com", 
+    password: "user123", 
+    role: "Usuário", 
     department: "Manutenção", 
     isAdmin: false 
   },
   { 
     id: 3, 
-    name: "Maria Santos", 
-    email: "maria@example.com", 
-    password: "maria123", 
-    role: "Analista", 
+    name: "Operador", 
+    email: "opr@opr.com", 
+    password: "opr123", 
+    role: "Operador", 
     department: "Operações", 
     isAdmin: false 
   },
