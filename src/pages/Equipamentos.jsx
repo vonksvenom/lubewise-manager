@@ -21,13 +21,15 @@ const Equipamentos = () => {
   const [equipamentos, setEquipamentos] = useState([]);
   const [selectedEquipamento, setSelectedEquipamento] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { t } = useTranslation();
   const { toast } = useToast();
 
   useEffect(() => {
-    const loadEquipamentos = () => {
+    const loadEquipamentos = async () => {
+      setIsLoading(true);
       try {
-        const data = equipamentoService.getAll();
+        const data = await equipamentoService.getAll();
         setEquipamentos(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error('Error loading equipamentos:', error);
@@ -37,16 +39,19 @@ const Equipamentos = () => {
           description: "Não foi possível carregar a lista de equipamentos.",
           variant: "destructive",
         });
+      } finally {
+        setIsLoading(false);
       }
     };
     
     loadEquipamentos();
   }, [toast]);
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     try {
-      equipamentoService.delete(id);
-      setEquipamentos(equipamentoService.getAll());
+      await equipamentoService.delete(id);
+      const updatedEquipamentos = await equipamentoService.getAll();
+      setEquipamentos(updatedEquipamentos);
       toast({
         title: "Equipamento excluído",
         description: "O equipamento foi removido com sucesso.",
@@ -61,22 +66,23 @@ const Equipamentos = () => {
     }
   };
 
-  const handleSave = (data) => {
+  const handleSave = async (data) => {
     try {
       if (selectedEquipamento) {
-        equipamentoService.update(selectedEquipamento.id, data);
+        await equipamentoService.update(selectedEquipamento.id, data);
         toast({
           title: "Equipamento atualizado",
           description: "As alterações foram salvas com sucesso.",
         });
       } else {
-        equipamentoService.add(data);
+        await equipamentoService.add(data);
         toast({
           title: "Equipamento adicionado",
           description: "O novo equipamento foi cadastrado com sucesso.",
         });
       }
-      setEquipamentos(equipamentoService.getAll());
+      const updatedEquipamentos = await equipamentoService.getAll();
+      setEquipamentos(updatedEquipamentos);
       setSelectedEquipamento(null);
       setIsDialogOpen(false);
     } catch (error) {
@@ -140,6 +146,7 @@ const Equipamentos = () => {
           equipamentos={filteredEquipamentos}
           onEdit={setSelectedEquipamento}
           onDelete={handleDelete}
+          isLoading={isLoading}
         />
       </Card>
     </div>
