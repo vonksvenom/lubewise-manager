@@ -6,7 +6,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const OrdemServicoSelects = ({ formData, handleChange, equipamentos }) => {
+const OrdemServicoSelects = ({ formData, handleChange, equipamentos = [] }) => {
+  // Ensure equipamentos is always an array
+  const equipamentosList = Array.isArray(equipamentos) ? equipamentos : [];
+
   return (
     <div className="space-y-4">
       <div className="space-y-2">
@@ -40,7 +43,7 @@ const OrdemServicoSelects = ({ formData, handleChange, equipamentos }) => {
             <SelectValue placeholder="Selecione o equipamento" />
           </SelectTrigger>
           <SelectContent>
-            {equipamentos.map((equip) => (
+            {equipamentosList.map((equip) => (
               <SelectItem key={equip.id} value={equip.id.toString()}>
                 {equip.nome}
               </SelectItem>

@@ -6,7 +6,7 @@ const getAll = async () => {
     const response = await fetch(`${API_BASE_URL}/equipamentos`);
     if (!response.ok) throw new Error('Network response was not ok');
     const data = await response.json();
-    return data;
+    return Array.isArray(data) ? data : initialEquipamentos;
   } catch (error) {
     console.warn('Falling back to initial data:', error);
     return initialEquipamentos;

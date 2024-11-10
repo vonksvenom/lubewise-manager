@@ -25,9 +25,26 @@ const OrdensServico = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    setOrdensServico(ordemServicoService.getAll());
-    setEquipamentos(equipamentoService.getAll());
-  }, []);
+    const loadData = async () => {
+      try {
+        const [ordensData, equipamentosData] = await Promise.all([
+          ordemServicoService.getAll(),
+          equipamentoService.getAll()
+        ]);
+        setOrdensServico(ordensData);
+        setEquipamentos(equipamentosData);
+      } catch (error) {
+        console.error('Error loading data:', error);
+        toast({
+          title: "Erro ao carregar dados",
+          description: "Houve um problema ao carregar os dados. Usando dados locais.",
+          variant: "destructive",
+        });
+      }
+    };
+    
+    loadData();
+  }, [toast]);
 
   const handleDelete = (id) => {
     ordemServicoService.delete(id);
