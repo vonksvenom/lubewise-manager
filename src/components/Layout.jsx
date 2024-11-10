@@ -63,7 +63,7 @@ const Layout = ({ children }) => {
   };
 
   const filteredNavItems = navItems.filter(item => 
-    !item.adminOnly || (item.adminOnly && isAdmin())
+    !item.adminOnly || (item.adminOnly && isAdmin)
   );
 
   return (
@@ -143,7 +143,7 @@ const Layout = ({ children }) => {
       <div className={`transition-all duration-200 ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'} min-h-screen`}>
         <main className="p-6">
           {children}
-          {(isAdmin() || isPowerUser()) && (
+          {(isAdmin || isPowerUser) && (
             <div className="fixed bottom-4 right-4 flex gap-2">
               <ThemeSelector 
                 isAdmin={isAdmin} 
