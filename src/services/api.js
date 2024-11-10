@@ -9,7 +9,13 @@ const handleResponse = async (response) => {
 
 const fetchWithFallback = async (endpoint, fallbackData = []) => {
   try {
-    const response = await fetch(`${API_URL}${endpoint}`);
+    const response = await fetch(`${API_URL}${endpoint}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      mode: 'cors',
+    });
     return await handleResponse(response);
   } catch (error) {
     console.warn(`Failed to fetch ${endpoint}, using fallback data:`, error);
@@ -28,7 +34,9 @@ export const api = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
+        mode: 'cors',
         body: JSON.stringify(userData),
       });
       return handleResponse(response);
