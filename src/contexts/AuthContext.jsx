@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
     if (foundUser) {
       setUser(foundUser);
       localStorage.setItem("user", JSON.stringify(foundUser));
-      toast.success("Login realizado com sucesso!");
+      toast.success(`Bem-vindo, ${foundUser.name}!`);
       navigate("/");
       return true;
     }
@@ -33,21 +33,40 @@ export const AuthProvider = ({ children }) => {
   };
 
   const isAdmin = () => {
-    return user?.role === 'admin';
+    const currentUser = user || JSON.parse(localStorage.getItem("user"));
+    return currentUser?.role === 'admin';
   };
 
   const isPowerUser = () => {
-    return user?.role === 'powerUser';
+    const currentUser = user || JSON.parse(localStorage.getItem("user"));
+    return currentUser?.role === 'powerUser';
   };
 
   const hasPermission = (action) => {
-    if (isAdmin()) return true;
-    if (isPowerUser() && user?.companyId === action.companyId) return true;
+    const currentUser = user || JSON.parse(localStorage.getItem("user"));
+    if (currentUser?.role === 'admin') return true;
+    if (currentUser?.role === 'powerUser' && action.companyId === currentUser.companyId) return true;
     return false;
   };
 
+  const getUserCompany = () => {
+    const currentUser = user || JSON.parse(localStorage.getItem("user"));
+    return currentUser?.companyId ? {
+      id: currentUser.companyId,
+      name: currentUser.companyName
+    } : null;
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAdmin, isPowerUser, hasPermission }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      login, 
+      logout, 
+      isAdmin, 
+      isPowerUser, 
+      hasPermission,
+      getUserCompany 
+    }}>
       {children}
     </AuthContext.Provider>
   );

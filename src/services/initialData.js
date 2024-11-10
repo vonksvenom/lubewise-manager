@@ -121,28 +121,33 @@ export const initialUsers = [
   {
     id: "1",
     name: "Administrador",
-    email: "admin@exemplo.com",
+    email: "admin@admin.com",
     password: "admin123",
-    role: "Administrador",
+    role: "admin",
     department: "TI",
-    isAdmin: true
+    isAdmin: true,
+    companyId: null // Admin não está vinculado a uma empresa específica
   },
   {
     id: "2",
-    name: "Técnico",
-    email: "tecnico@exemplo.com",
-    password: "tecnico123",
-    role: "Técnico",
-    department: "Manutenção",
-    isAdmin: false
+    name: "Power User",
+    email: "pwr@pwr.com",
+    password: "pwr123",
+    role: "powerUser",
+    department: "Gestão",
+    isPowerUser: true,
+    companyId: "1", // ID da empresa que este power user gerencia
+    companyName: "Empresa Exemplo" // Nome da empresa que este power user gerencia
   },
   {
     id: "3",
-    name: "Supervisor",
-    email: "supervisor@exemplo.com",
-    password: "supervisor123",
-    role: "Supervisor",
-    department: "Produção",
-    isPowerUser: true
+    name: "Técnico",
+    email: "tecnico@exemplo.com",
+    password: "tecnico123",
+    role: "tecnico",
+    department: "Manutenção",
+    isAdmin: false,
+    isPowerUser: false,
+    companyId: "1"
   }
 ];
