@@ -60,9 +60,10 @@ export default {
         "2xl": "1.5rem",
       },
       boxShadow: {
-        'neo': '8px 8px 16px rgba(0, 0, 0, 0.25), -8px -8px 16px rgba(255, 255, 255, 0.1)',
-        'neo-inset': 'inset 8px 8px 16px rgba(0, 0, 0, 0.25), inset -8px -8px 16px rgba(255, 255, 255, 0.1)',
-        'neo-sm': '4px 4px 8px rgba(0, 0, 0, 0.25), -4px -4px 8px rgba(255, 255, 255, 0.1)',
+        'neo': '12px 12px 24px rgba(0, 0, 0, 0.3), -8px -8px 16px rgba(255, 255, 255, 0.1)',
+        'neo-inset': 'inset 12px 12px 24px rgba(0, 0, 0, 0.3), inset -8px -8px 16px rgba(255, 255, 255, 0.1)',
+        'neo-sm': '6px 6px 12px rgba(0, 0, 0, 0.3), -4px -4px 8px rgba(255, 255, 255, 0.1)',
+        'neo-hover': '16px 16px 32px rgba(0, 0, 0, 0.35), -12px -12px 24px rgba(255, 255, 255, 0.15)',
       },
     },
   },

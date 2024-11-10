@@ -73,4 +73,21 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Enhanced dropdown and select styles */
+  select,
+  .select-trigger,
+  .combobox-trigger {
+    @apply bg-background/95 backdrop-blur-sm shadow-neo hover:shadow-neo-hover !important;
+  }
+
+  /* Enhanced table styles */
+  table {
+    @apply bg-background/95 backdrop-blur-sm shadow-neo;
+  }
+
+  /* Enhanced chart container styles */
+  .recharts-wrapper {
+    @apply bg-background/95 backdrop-blur-sm shadow-neo rounded-lg p-4;
+  }
 }
