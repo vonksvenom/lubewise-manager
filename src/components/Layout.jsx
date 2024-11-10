@@ -124,7 +124,7 @@ const Layout = ({ children }) => {
         } rounded-r-2xl`}
       >
         <div className="flex flex-col h-full">
-          <div className="p-4 flex justify-center items-center bg-black/10 rounded-tr-2xl backdrop-blur-sm">
+          <div className="p-6 flex justify-center items-center bg-black/10 rounded-tr-2xl backdrop-blur-sm">
             <img
               src={logoUrl}
               alt="Sotreq Industrial Logo"
