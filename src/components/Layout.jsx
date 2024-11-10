@@ -49,12 +49,15 @@ const Layout = ({ children }) => {
 
   const handleThemeChange = (theme, isInitialLoad = false) => {
     setCurrentTheme(theme);
-    document.documentElement.style.setProperty('--background', themes[theme].colors.background);
-    document.documentElement.style.setProperty('--foreground', themes[theme].colors.foreground);
-    document.documentElement.style.setProperty('--primary', themes[theme].colors.primary);
-    document.documentElement.style.setProperty('--secondary', themes[theme].colors.secondary);
-    document.documentElement.style.setProperty('--accent', themes[theme].colors.accent);
-    document.documentElement.style.setProperty('--muted', themes[theme].colors.muted);
+    const themeColors = themes[theme].colors;
+    
+    document.documentElement.style.setProperty('--background', themeColors.background);
+    document.documentElement.style.setProperty('--foreground', themeColors.foreground);
+    document.documentElement.style.setProperty('--primary', themeColors.primary);
+    document.documentElement.style.setProperty('--primary-rgb', themeColors["primary-rgb"]);
+    document.documentElement.style.setProperty('--secondary', themeColors.secondary);
+    document.documentElement.style.setProperty('--accent', themeColors.accent);
+    document.documentElement.style.setProperty('--muted', themeColors.muted);
 
     if (!isInitialLoad && (isAdmin || isPowerUser) && theme !== currentTheme) {
       const setAsDefault = window.confirm("Deseja definir este tema como padrão para todos os usuários?");
