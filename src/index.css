@@ -78,16 +78,16 @@
   select,
   .select-trigger,
   .combobox-trigger {
-    @apply bg-background/95 backdrop-blur-sm shadow-neo hover:shadow-neo-hover !important;
+    @apply bg-white/95 backdrop-blur-sm shadow-neo hover:shadow-neo-hover !important;
   }
 
   /* Enhanced table styles */
   table {
-    @apply bg-background/95 backdrop-blur-sm shadow-neo;
+    @apply bg-white/95 backdrop-blur-sm shadow-neo;
   }
 
   /* Enhanced chart container styles */
   .recharts-wrapper {
-    @apply bg-background/95 backdrop-blur-sm shadow-neo rounded-lg p-4;
+    @apply bg-white/95 backdrop-blur-sm shadow-neo rounded-lg p-4;
   }
 }
