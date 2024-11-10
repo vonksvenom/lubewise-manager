@@ -17,7 +17,18 @@ const getById = (id) => {
   return inventario.find(item => item.id === id);
 };
 
+const validateItem = (item) => {
+  if (!item.name || !item.type || !item.quantity || !item.unit || !item.area) {
+    throw new Error('Dados inválidos: todos os campos obrigatórios devem ser preenchidos');
+  }
+  if (item.quantity < 0) {
+    throw new Error('Quantidade não pode ser negativa');
+  }
+  return true;
+};
+
 const add = (item) => {
+  validateItem(item);
   const inventario = getAll();
   const newItem = {
     ...item,
@@ -27,7 +38,6 @@ const add = (item) => {
   inventario.push(newItem);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(inventario));
   
-  // Adiciona ao histórico
   addToHistorico({
     ...newItem,
     historicoId: Date.now().toString(),
@@ -38,6 +48,7 @@ const add = (item) => {
 };
 
 const update = (id, item) => {
+  validateItem(item);
   const inventario = getAll();
   const index = inventario.findIndex(i => i.id === id);
   if (index !== -1) {
@@ -46,7 +57,6 @@ const update = (id, item) => {
     inventario[index] = updatedItem;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(inventario));
     
-    // Adiciona ao histórico se houver mudança na quantidade
     if (oldItem.quantity !== item.quantity) {
       addToHistorico({
         ...updatedItem,
@@ -67,7 +77,6 @@ const remove = (id) => {
     const filtered = inventario.filter(i => i.id !== id);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
     
-    // Adiciona ao histórico
     addToHistorico({
       ...item,
       historicoId: Date.now().toString(),

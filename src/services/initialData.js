@@ -10,6 +10,10 @@ const generateEquipamentos = () => {
   const areas = ["Produção", "Manutenção", "Almoxarifado", "Expedição", "Qualidade"];
   
   for (let i = 1; i <= 100; i++) {
+    const dataFabricacao = generateRandomDate(new Date(2015, 0, 1), new Date());
+    const ultimaManutencao = generateRandomDate(new Date(2023, 0, 1), new Date());
+    const proximaManutencao = generateRandomDate(new Date(), new Date(2024, 11, 31));
+
     equipamentos.push({
       id: i.toString(),
       nome: `Equipamento ${i}`,
@@ -21,9 +25,9 @@ const generateEquipamentos = () => {
       descricao: `Descrição detalhada do equipamento ${i}`,
       fabricante: `Fabricante ${Math.floor(i/4)}`,
       numeroSerie: `NS${i.toString().padStart(6, '0')}`,
-      dataFabricacao: generateRandomDate(new Date(2015, 0, 1), new Date()).toISOString().split('T')[0],
-      ultimaManutencao: generateRandomDate(new Date(2023, 0, 1), new Date()).toISOString().split('T')[0],
-      proximaManutencao: generateRandomDate(new Date(), new Date(2024, 11, 31)).toISOString().split('T')[0],
+      dataFabricacao: dataFabricacao.toISOString().split('T')[0],
+      ultimaManutencao: ultimaManutencao.toISOString().split('T')[0],
+      proximaManutencao: proximaManutencao.toISOString().split('T')[0],
       potencia: `${Math.floor(Math.random() * 100)}kW`,
       tensao: `${[220, 380, 440][Math.floor(Math.random() * 3)]}V`,
       corrente: `${Math.floor(Math.random() * 100)}A`
@@ -34,20 +38,33 @@ const generateEquipamentos = () => {
 
 const generateInventario = () => {
   const items = [];
-  const types = ["Óleo", "Graxa", "Filtro", "Correia", "Rolamento", "Parafuso", "Porca", "Arruela"];
-  const units = ["L", "Kg", "Un", "m", "pc"];
+  const types = [
+    "Óleo Mineral", "Óleo Sintético", "Óleo Semi-Sintético",
+    "Graxa Mineral", "Graxa Sintética", "Graxa de Alta Temperatura",
+    "Óleo Hidráulico", "Óleo de Engrenagens", "Óleo de Turbina",
+    "Graxa de Rolamentos"
+  ];
+  const units = {
+    "Óleo": "L",
+    "Graxa": "Kg"
+  };
   const areas = ["Almoxarifado", "Manutenção", "Produção"];
   
   for (let i = 1; i <= 100; i++) {
+    const type = types[Math.floor(Math.random() * types.length)];
+    const unit = type.toLowerCase().includes('óleo') ? units["Óleo"] : units["Graxa"];
+    
     items.push({
       id: i.toString(),
-      name: `Item ${i}`,
-      type: types[Math.floor(Math.random() * types.length)],
+      name: `${type} ${i}`,
+      type,
       quantity: Math.floor(Math.random() * 1000),
-      unit: units[Math.floor(Math.random() * units.length)],
+      unit,
       location: `Prateleira ${String.fromCharCode(65 + Math.floor(i/20))}${Math.floor(i%20)}`,
       area: areas[Math.floor(Math.random() * areas.length)],
-      dataRegistro: generateRandomDate(new Date(2023, 0, 1), new Date()).toISOString()
+      dataRegistro: generateRandomDate(new Date(2023, 0, 1), new Date()).toISOString(),
+      minimumStock: Math.floor(Math.random() * 100),
+      reorderPoint: Math.floor(Math.random() * 200)
     });
   }
   return items;
