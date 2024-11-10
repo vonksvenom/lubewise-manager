@@ -1,44 +1,47 @@
-let equipamentos = [];
+const STORAGE_KEY = 'equipamentos';
 
-export const equipamentoService = {
-  getAll: () => equipamentos,
-  add: (equipamento) => {
-    const newEquipamento = { ...equipamento, id: Date.now() };
-    equipamentos.push(newEquipamento);
-    return newEquipamento;
-  },
-  update: (id, data) => {
-    equipamentos = equipamentos.map((eq) =>
-      eq.id === id ? { ...eq, ...data } : eq
-    );
-    return equipamentos.find((eq) => eq.id === id);
-  },
-  delete: (id) => {
-    equipamentos = equipamentos.filter((eq) => eq.id !== id);
-  },
+const getAll = () => {
+  const data = localStorage.getItem(STORAGE_KEY);
+  return data ? JSON.parse(data) : [];
 };
 
-// Initialize sample data - 100 equipamentos
-const areas = ["Mineração", "Construção", "Terraplanagem", "Manutenção", "Produção"];
-const modelos = ["Escavadeira CAT 336", "Carregadeira 980H", "Trator D6T", "Retroescavadeira 416F2", "Motoniveladora 140K"];
-const responsaveis = ["João Silva", "Maria Santos", "Pedro Oliveira", "Ana Beatriz", "Carlos Eduardo"];
-const fabricantes = ["Caterpillar", "Volvo", "Komatsu", "John Deere", "Liebherr"];
-const status = ["Operacional", "Em Manutenção", "Inativo"];
+const getById = (id) => {
+  const equipamentos = getAll();
+  return equipamentos.find(equip => equip.id === id);
+};
 
-equipamentos = Array.from({ length: 100 }, (_, index) => ({
-  id: index + 1,
-  nome: `${modelos[Math.floor(Math.random() * modelos.length)]} - ${String(index + 1).padStart(3, '0')}`,
-  tag: `EQP-${String(index + 1).padStart(3, '0')}`,
-  modelo: modelos[Math.floor(Math.random() * modelos.length)],
-  fabricante: fabricantes[Math.floor(Math.random() * fabricantes.length)],
-  area: areas[Math.floor(Math.random() * areas.length)],
-  responsavel: responsaveis[Math.floor(Math.random() * responsaveis.length)],
-  status: status[Math.floor(Math.random() * status.length)],
-  numeroSerie: `SN${Math.floor(Math.random() * 1000000)}`,
-  dataFabricacao: new Date(2015 + Math.floor(Math.random() * 9), Math.floor(Math.random() * 12), Math.floor(Math.random() * 28)).toISOString().split('T')[0],
-  potencia: `${Math.floor(Math.random() * 500 + 100)}hp`,
-  tensao: `${Math.floor(Math.random() * 3 + 1) * 120}V`,
-  corrente: `${Math.floor(Math.random() * 100 + 20)}A`,
-  ultimaManutencao: new Date(2023, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28)).toISOString().split('T')[0],
-  proximaManutencao: new Date(2024, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28)).toISOString().split('T')[0],
-}));
+const add = (equipamento) => {
+  const equipamentos = getAll();
+  const newEquipamento = {
+    ...equipamento,
+    id: Date.now().toString(),
+  };
+  equipamentos.push(newEquipamento);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(equipamentos));
+  return newEquipamento;
+};
+
+const update = (id, equipamento) => {
+  const equipamentos = getAll();
+  const index = equipamentos.findIndex(equip => equip.id === id);
+  if (index !== -1) {
+    equipamentos[index] = { ...equipamentos[index], ...equipamento };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(equipamentos));
+    return equipamentos[index];
+  }
+  return null;
+};
+
+const remove = (id) => {
+  const equipamentos = getAll();
+  const filtered = equipamentos.filter(equip => equip.id !== id);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+};
+
+export const equipamentoService = {
+  getAll,
+  getById,
+  add,
+  update,
+  delete: remove
+};

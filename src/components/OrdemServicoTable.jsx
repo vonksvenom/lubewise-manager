@@ -86,20 +86,22 @@ const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) =>
                 {format(new Date(ordem.dataFim), "dd/MM/yyyy")}
               </TableCell>
               <TableCell className="text-right">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => onEdit(ordem)}
-                >
-                  <Edit className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => onDelete(ordem.id)}
-                >
-                  <Trash2 className="h-4 w-4 text-red-500" />
-                </Button>
+                <div className="flex gap-2 justify-end">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => onEdit(ordem)}
+                  >
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => onDelete(ordem.id)}
+                  >
+                    <Trash2 className="h-4 w-4 text-red-500" />
+                  </Button>
+                </div>
               </TableCell>
             </TableRow>
           ))}

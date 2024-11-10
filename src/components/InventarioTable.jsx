@@ -13,7 +13,7 @@ import { inventarioService } from "@/services/dataService";
 import { format } from "date-fns";
 import { useState, useEffect } from "react";
 
-const InventarioTable = ({ searchTerm }) => {
+const InventarioTable = ({ searchTerm, onEdit }) => {
   const [items, setItems] = useState([]);
   const { toast } = useToast();
 
@@ -28,6 +28,17 @@ const InventarioTable = ({ searchTerm }) => {
       toast({
         title: "Item excluído",
         description: "O item foi removido do inventário com sucesso.",
+      });
+    }
+  };
+
+  const handleEdit = (item) => {
+    if (onEdit) {
+      onEdit(item);
+    } else {
+      toast({
+        title: "Em desenvolvimento",
+        description: "A funcionalidade de edição será implementada em breve.",
       });
     }
   };
@@ -70,13 +81,7 @@ const InventarioTable = ({ searchTerm }) => {
                 <Button
                   variant="outline"
                   size="icon"
-                  onClick={() => {
-                    // TODO: Implement edit functionality
-                    toast({
-                      title: "Em desenvolvimento",
-                      description: "A funcionalidade de edição será implementada em breve.",
-                    });
-                  }}
+                  onClick={() => handleEdit(item)}
                 >
                   <Pencil className="h-4 w-4" />
                 </Button>
