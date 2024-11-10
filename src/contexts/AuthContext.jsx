@@ -40,6 +40,10 @@ export const AuthProvider = ({ children }) => {
     return user?.systemOwner === true;
   };
 
+  const isPowerUser = () => {
+    return user?.role === 'manager' || isAdmin();
+  };
+
   const isManager = () => {
     return user?.role === 'manager';
   };
@@ -55,7 +59,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const canCreateUsers = () => hasPermission('createUsers');
-  const canEditUsers = () => hasPermission('editUsers');  // Added editUsers permission check
+  const canEditUsers = () => hasPermission('editUsers');
   const canDeleteUsers = () => hasPermission('deleteUsers');
   const canEditSettings = () => hasPermission('editSettings');
   const canManageCompany = () => hasPermission('manageCompany');
@@ -72,11 +76,12 @@ export const AuthProvider = ({ children }) => {
       logout,
       isAdmin,
       isSystemOwner,
+      isPowerUser,
       isManager,
       isTechnician,
       hasPermission,
       canCreateUsers,
-      canEditUsers,     // Added to context value
+      canEditUsers,
       canDeleteUsers,
       canEditSettings,
       canManageCompany,
