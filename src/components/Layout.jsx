@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   Settings, 
   Wrench, 
@@ -13,7 +14,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Users,
-  Upload
+  Upload,
+  LogOut
 } from "lucide-react";
 import { Button } from "./ui/button";
 import {
@@ -32,6 +34,7 @@ const Layout = ({ children }) => {
   const [logoUrl, setLogoUrl] = useState("https://images.cws.digital/fornecedores/m/sotreq-industrial.jpg");
   const location = useLocation();
   const { t, i18n } = useTranslation();
+  const { logout } = useAuth();
   const currentUser = userService.getCurrentUser();
 
   const navItems = [
@@ -64,6 +67,15 @@ const Layout = ({ children }) => {
       </button>
 
       <div className="fixed top-4 right-4 z-50 flex gap-2">
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={logout}
+          className="text-red-500 hover:text-red-700"
+        >
+          <LogOut className="h-4 w-4" />
+        </Button>
+
         {currentUser?.isAdmin && (
           <Dialog>
             <DialogTrigger asChild>

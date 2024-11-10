@@ -17,13 +17,38 @@ export const userService = {
     users = users.filter((user) => user.id !== id);
   },
   getCurrentUser: () => {
-    return users.find((user) => user.isAdmin) || null;
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
   },
 };
 
 // Initialize sample data
 users = [
-  { id: 1, name: "Admin", email: "admin@example.com", role: "Administrador", department: "TI", isAdmin: true },
-  { id: 2, name: "João Silva", email: "joao@example.com", role: "Técnico", department: "Manutenção", isAdmin: false },
-  { id: 3, name: "Maria Santos", email: "maria@example.com", role: "Analista", department: "Operações", isAdmin: false },
+  { 
+    id: 1, 
+    name: "Admin", 
+    email: "admin@example.com", 
+    password: "admin123", 
+    role: "Administrador", 
+    department: "TI", 
+    isAdmin: true 
+  },
+  { 
+    id: 2, 
+    name: "João Silva", 
+    email: "joao@example.com", 
+    password: "joao123", 
+    role: "Técnico", 
+    department: "Manutenção", 
+    isAdmin: false 
+  },
+  { 
+    id: 3, 
+    name: "Maria Santos", 
+    email: "maria@example.com", 
+    password: "maria123", 
+    role: "Analista", 
+    department: "Operações", 
+    isAdmin: false 
+  },
 ];
