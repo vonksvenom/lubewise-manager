@@ -117,7 +117,7 @@ const Layout = ({ children }) => {
             <img
               src={logoUrl}
               alt="Sotreq Industrial Logo"
-              className={`${sidebarCollapsed ? 'h-8' : 'h-16'} object-contain transition-all duration-200`}
+              className={`${sidebarCollapsed ? 'h-12 w-12 object-contain' : 'h-16'} transition-all duration-200`}
               onError={(e) => {
                 e.target.src = "/placeholder.svg";
                 toast.error("Erro ao carregar o logo");
