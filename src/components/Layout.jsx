@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
+import { themes } from "@/config/themes";
 import { 
   Settings, 
   Wrench, 
@@ -15,7 +16,8 @@ import {
   ChevronRight,
   Users,
   Upload,
-  LogOut
+  LogOut,
+  Palette
 } from "lucide-react";
 import { Button } from "./ui/button";
 import {
@@ -27,14 +29,16 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { userService } from "@/services/dataService";
+import { toast } from "sonner";
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState('default');
   const [logoUrl, setLogoUrl] = useState("https://images.cws.digital/fornecedores/m/sotreq-industrial.jpg");
   const location = useLocation();
   const { t, i18n } = useTranslation();
-  const { logout } = useAuth();
+  const { logout, isAdmin, isPowerUser } = useAuth();
   const currentUser = userService.getCurrentUser();
 
   const navItems = [
@@ -46,14 +50,34 @@ const Layout = ({ children }) => {
     { title: t('calendar'), icon: <Calendar />, path: "/calendario" },
   ];
 
+  const handleThemeChange = (theme) => {
+    if (isAdmin() || isPowerUser()) {
+      setCurrentTheme(theme);
+      document.documentElement.style.setProperty('--background', themes[theme].colors.background);
+      document.documentElement.style.setProperty('--foreground', themes[theme].colors.foreground);
+      document.documentElement.style.setProperty('--primary', themes[theme].colors.primary);
+      document.documentElement.style.setProperty('--secondary', themes[theme].colors.secondary);
+      document.documentElement.style.setProperty('--accent', themes[theme].colors.accent);
+      document.documentElement.style.setProperty('--muted', themes[theme].colors.muted);
+      toast.success("Tema atualizado com sucesso!");
+    } else {
+      toast.error("Apenas administradores podem alterar o tema!");
+    }
+  };
+
   const handleLogoChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setLogoUrl(reader.result);
-      };
-      reader.readAsDataURL(file);
+    if (isAdmin() || isPowerUser()) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setLogoUrl(reader.result);
+          toast.success("Logo atualizado com sucesso!");
+        };
+        reader.readAsDataURL(file);
+      }
+    } else {
+      toast.error("Apenas administradores podem alterar o logo!");
     }
   };
 
@@ -67,6 +91,23 @@ const Layout = ({ children }) => {
       </button>
 
       <div className="fixed top-4 right-4 z-50 flex gap-2">
+        {(isAdmin() || isPowerUser()) && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon">
+                <Palette className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {Object.entries(themes).map(([key, theme]) => (
+                <DropdownMenuItem key={key} onClick={() => handleThemeChange(key)}>
+                  {theme.name}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+
         <Button
           variant="outline"
           size="icon"
@@ -76,7 +117,7 @@ const Layout = ({ children }) => {
           <LogOut className="h-4 w-4" />
         </Button>
 
-        {currentUser?.isAdmin && (
+        {(isAdmin() || isPowerUser()) && (
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="outline" size="icon">
@@ -112,15 +153,6 @@ const Layout = ({ children }) => {
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => i18n.changeLanguage('es')}>
               Español
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => i18n.changeLanguage('it')}>
-              Italiano
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => i18n.changeLanguage('da')}>
-              Dansk
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => i18n.changeLanguage('fr')}>
-              Français
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

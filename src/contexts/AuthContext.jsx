@@ -32,8 +32,22 @@ export const AuthProvider = ({ children }) => {
     navigate("/login");
   };
 
+  const isAdmin = () => {
+    return user?.role === 'admin';
+  };
+
+  const isPowerUser = () => {
+    return user?.role === 'powerUser';
+  };
+
+  const hasPermission = (action) => {
+    if (isAdmin()) return true;
+    if (isPowerUser() && user?.companyId === action.companyId) return true;
+    return false;
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, isAdmin, isPowerUser, hasPermission }}>
       {children}
     </AuthContext.Provider>
   );
