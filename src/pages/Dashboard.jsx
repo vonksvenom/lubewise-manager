@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import { Card } from "@/components/ui/card";
 import {
   Wrench,
   AlertTriangle,
@@ -14,6 +13,7 @@ import { ordemServicoService, equipamentoService, inventarioService } from "@/se
 import { format } from "date-fns";
 import { InventoryChart } from "@/components/InventoryChart";
 import { InventarioSummary } from "@/components/InventarioSummary";
+import { DashboardCard } from "@/components/DashboardCard";
 import {
   LineChart,
   Line,
@@ -129,11 +129,10 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card className="p-6 bg-gradient-to-br from-muted to-accent border-none">
+        <DashboardCard>
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-primary/10 rounded-lg">
+            <div className="p-3 bg-primary/10 rounded-lg shadow-neo-sm">
               <Wrench className="h-6 w-6 text-primary" />
             </div>
             <div>
@@ -141,11 +140,11 @@ const Dashboard = () => {
               <p className="text-2xl font-bold text-primary">{kpiData.equipmentTotal}</p>
             </div>
           </div>
-        </Card>
+        </DashboardCard>
 
-        <Card className="p-6 bg-gradient-to-br from-muted to-accent border-none">
+        <DashboardCard>
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-yellow-500/10 rounded-lg">
+            <div className="p-3 bg-yellow-500/10 rounded-lg shadow-neo-sm">
               <AlertTriangle className="h-6 w-6 text-yellow-500" />
             </div>
             <div>
@@ -153,11 +152,11 @@ const Dashboard = () => {
               <p className="text-2xl font-bold text-yellow-500">{kpiData.pendingMaintenance}</p>
             </div>
           </div>
-        </Card>
+        </DashboardCard>
 
-        <Card className="p-6 bg-gradient-to-br from-muted to-accent border-none">
+        <DashboardCard>
           <div className="flex items-center gap-4">
-            <div className="p-3 bg-green-500/10 rounded-lg">
+            <div className="p-3 bg-green-500/10 rounded-lg shadow-neo-sm">
               <Activity className="h-6 w-6 text-green-500" />
             </div>
             <div>
@@ -165,14 +164,11 @@ const Dashboard = () => {
               <p className="text-2xl font-bold text-green-500">{kpiData.efficiency}%</p>
             </div>
           </div>
-        </Card>
+        </DashboardCard>
       </div>
 
-      {/* Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-        {/* Equipment Status */}
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4 text-catYellow">Status dos Equipamentos</h2>
+        <DashboardCard title="Status dos Equipamentos">
           <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -194,11 +190,9 @@ const Dashboard = () => {
               </PieChart>
             </ResponsiveContainer>
           </div>
-        </Card>
+        </DashboardCard>
 
-        {/* Maintenance Efficiency */}
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4 text-catYellow">Eficiência da Manutenção</h2>
+        <DashboardCard title="Eficiência da Manutenção">
           <div className="h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={efficiencyData}>
@@ -218,18 +212,13 @@ const Dashboard = () => {
               </BarChart>
             </ResponsiveContainer>
           </div>
-        </Card>
+        </DashboardCard>
 
-        {/* Inventory Chart */}
-        <Card className="p-6">
-          <h2 className="text-xl font-semibold mb-4 text-catYellow">Consumo de Lubrificantes</h2>
+        <DashboardCard title="Consumo de Lubrificantes">
           <InventoryChart />
-        </Card>
+        </DashboardCard>
 
-        {/* Inventory Summary */}
-        <Card className="p-6">
-          <InventarioSummary />
-        </Card>
+        <InventarioSummary />
       </div>
     </div>
   );

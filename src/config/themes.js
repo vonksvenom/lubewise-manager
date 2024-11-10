@@ -1,13 +1,13 @@
 export const themes = {
   default: {
-    name: "Default Dark",
+    name: "Standard Gray",
     colors: {
-      background: "#1a1a1a",
-      foreground: "#E4941A",
-      primary: "#E4941A",
-      secondary: "#4A4A4A",
-      accent: "#333333",
-      muted: "#2A2A2A"
+      background: "#1f2937",
+      foreground: "#9ca3af", 
+      primary: "#9ca3af",
+      secondary: "#374151",
+      accent: "#374151",
+      muted: "#374151"
     }
   },
   modern: {

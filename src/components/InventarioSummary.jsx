@@ -26,26 +26,36 @@ export const InventarioSummary = () => {
   });
 
   useEffect(() => {
-    setAreas(areaService.getAll());
-    updateSummary();
+    const loadData = () => {
+      setAreas(areaService.getAll());
+      const inventory = inventarioService.getAll();
+      const area = selectedArea === "todas" ? null : selectedArea;
+      
+      const totals = inventory.reduce((acc, item) => {
+        if (!area || item.area === area) {
+          if (item.type.toLowerCase().includes('óleo')) {
+            acc.oleo += item.quantity;
+          } else if (item.type.toLowerCase().includes('graxa')) {
+            acc.graxa += item.quantity;
+          }
+        }
+        return acc;
+      }, { oleo: 0, graxa: 0 });
+
+      setSummary(totals);
+    };
+
+    loadData();
   }, [selectedArea]);
 
-  const updateSummary = () => {
-    const area = selectedArea === "todas" ? null : selectedArea;
-    setSummary({
-      oleo: inventarioService.getTotalByType("Óleo", area),
-      graxa: inventarioService.getTotalByType("Graxa", area)
-    });
-  };
-
   return (
-    <Card className="p-6">
+    <Card className="p-6 shadow-neo bg-gradient-to-br from-muted to-accent/10 backdrop-blur-sm">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold text-catYellow">
           Sumário do Inventário
         </h2>
         <Select value={selectedArea} onValueChange={setSelectedArea}>
-          <SelectTrigger className="w-[200px]">
+          <SelectTrigger className="w-[200px] shadow-neo">
             <SelectValue placeholder="Selecione a área" />
           </SelectTrigger>
           <SelectContent>
