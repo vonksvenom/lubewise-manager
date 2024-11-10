@@ -99,4 +99,34 @@ ordensServico = [
       { type: "Graxa", quantity: 3 },
     ],
   },
+  {
+    id: 4,
+    titulo: "Calibração EQP-004",
+    descricao: "Calibração de sensores e instrumentos",
+    equipamentoId: "4",
+    responsavel: "Ana Beatriz",
+    status: "Pendente",
+    dataInicio: new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000),
+    dataFim: new Date(today.getTime() + 4 * 24 * 60 * 60 * 1000),
+    prioridade: "Baixa",
+    horasEstimadas: 3,
+    consumables: [
+      { type: "Óleo", quantity: 20 },
+    ],
+  },
+  {
+    id: 5,
+    titulo: "Manutenção Preditiva EQP-005",
+    descricao: "Análise de vibração e termografia",
+    equipamentoId: "5",
+    responsavel: "Carlos Eduardo",
+    status: "Em Andamento",
+    dataInicio: new Date(today.getTime() - 2 * 24 * 60 * 60 * 1000),
+    dataFim: new Date(today.getTime() + 1 * 24 * 60 * 60 * 1000),
+    prioridade: "Media",
+    horasEstimadas: 6,
+    consumables: [
+      { type: "Graxa", quantity: 4 },
+    ],
+  }
 ];

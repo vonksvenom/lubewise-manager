@@ -107,11 +107,57 @@ inventario = [
     area: "Almoxarifado",
     dataRegistro: "2024-03-01T10:00:00.000Z"
   },
+  { 
+    id: 4, 
+    name: "Graxa de Alta Performance", 
+    type: "Graxa", 
+    quantity: 75, 
+    unit: "Kg",
+    location: "Almoxarifado B - Prateleira 2",
+    area: "Almoxarifado",
+    dataRegistro: "2024-03-01T10:00:00.000Z"
+  },
+  { 
+    id: 5, 
+    name: "Óleo Sintético 5W30", 
+    type: "Óleo", 
+    quantity: 100, 
+    unit: "L",
+    location: "Almoxarifado A - Prateleira 3",
+    area: "Almoxarifado",
+    dataRegistro: "2024-03-01T10:00:00.000Z"
+  }
 ];
 
 // Initialize history with initial inventory
-historicoInventario = inventario.map(item => ({
-  ...item,
-  historicoId: Date.now(),
-  tipoOperacao: 'inicial'
-}));
+historicoInventario = [
+  ...inventario.map(item => ({
+    ...item,
+    historicoId: Date.now(),
+    tipoOperacao: 'inicial'
+  })),
+  {
+    historicoId: Date.now() + 1,
+    id: 1,
+    name: "Óleo Hidráulico CAT HYDO",
+    type: "Óleo",
+    quantity: 50,
+    unit: "L",
+    location: "Almoxarifado A - Prateleira 1",
+    area: "Almoxarifado",
+    dataRegistro: "2024-03-05T14:30:00.000Z",
+    tipoOperacao: 'saída'
+  },
+  {
+    historicoId: Date.now() + 2,
+    id: 2,
+    name: "Graxa MP",
+    type: "Graxa",
+    quantity: 25,
+    unit: "Kg",
+    location: "Almoxarifado B - Prateleira 3",
+    area: "Almoxarifado",
+    dataRegistro: "2024-03-07T09:15:00.000Z",
+    tipoOperacao: 'entrada'
+  }
+];
