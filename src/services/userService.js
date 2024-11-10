@@ -71,17 +71,6 @@ const setCurrentUser = (user) => {
   }
 };
 
-// Inicializa os dados no localStorage se ainda não existirem
-const init = () => {
-  const users = localStorage.getItem(STORAGE_KEY);
-  if (!users) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialUsers));
-  }
-};
-
-// Executa a inicialização
-init();
-
 export const userService = {
   getAll,
   getById,
