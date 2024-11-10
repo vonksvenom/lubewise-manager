@@ -55,14 +55,13 @@ const status = ["Pendente", "Em Andamento", "Concluída", "Cancelada"];
 const prioridades = ["Baixa", "Media", "Alta", "Urgente"];
 const responsaveis = ["João Silva", "Maria Santos", "Pedro Oliveira", "Ana Beatriz", "Carlos Eduardo"];
 
-const today = new Date();
 const getRandomDate = (start, end) => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
 
 ordensServico = Array.from({ length: 300 }, (_, index) => {
   const tipoManutencao = tiposManutencao[Math.floor(Math.random() * tiposManutencao.length)];
-  const dataInicio = getRandomDate(new Date(2023, 0, 1), new Date(2024, 11, 31));
+  const dataInicio = getRandomDate(new Date(2023, 0, 1), new Date(2025, 11, 31)); // Atualizado para incluir até dezembro de 2025
   const dataFim = new Date(dataInicio);
   dataFim.setDate(dataFim.getDate() + Math.floor(Math.random() * 14) + 1);
   
