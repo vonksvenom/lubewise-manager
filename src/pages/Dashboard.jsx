@@ -1,17 +1,46 @@
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { Clock } from "lucide-react";
-import { ordemServicoService, equipamentoService, inventarioService } from "@/services/dataService";
+import { ordemServicoService } from "@/services/dataService";
 import { InventoryChart } from "@/components/InventoryChart";
 import { InventarioSummary } from "@/components/InventarioSummary";
 import MaintenanceStats from "@/components/dashboard/MaintenanceStats";
 import WorkloadStats from "@/components/dashboard/WorkloadStats";
+import { useState, useEffect } from "react";
+import { useToast } from "@/components/ui/use-toast";
 
 const Dashboard = () => {
   const { t } = useTranslation();
-  const ordensServico = ordemServicoService.getAll();
-  const equipamentos = equipamentoService.getAll();
-  const inventario = inventarioService.getAll();
+  const [ordensServico, setOrdensServico] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await ordemServicoService.getAll();
+        setOrdensServico(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+        toast({
+          variant: "destructive",
+          title: "Erro ao carregar dados",
+          description: "Usando dados em cache local."
+        });
+        // Fallback to localStorage data
+        const localData = ordemServicoService.getAllLocal();
+        setOrdensServico(Array.isArray(localData) ? localData : []);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (isLoading) {
+    return <div>Carregando...</div>;
+  }
 
   return (
     <div className="space-y-6">
