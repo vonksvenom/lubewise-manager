@@ -21,6 +21,7 @@ import { Plus } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { InventoryChart } from "@/components/InventoryChart";
 import { inventarioService } from "@/services/dataService";
+import { format } from "date-fns";
 
 const Inventario = () => {
   const [items, setItems] = useState([]);
@@ -114,6 +115,7 @@ const Inventario = () => {
               <TableHead>Tipo</TableHead>
               <TableHead>Quantidade</TableHead>
               <TableHead>Unidade</TableHead>
+              <TableHead>Data Registro</TableHead>
               <TableHead>Ações</TableHead>
             </TableRow>
           </TableHeader>
@@ -124,6 +126,9 @@ const Inventario = () => {
                 <TableCell>{item.type}</TableCell>
                 <TableCell>{item.quantity}</TableCell>
                 <TableCell>{item.unit}</TableCell>
+                <TableCell>
+                  {format(new Date(item.dataRegistro), 'dd/MM/yyyy HH:mm')}
+                </TableCell>
                 <TableCell>
                   <Button
                     variant="outline"

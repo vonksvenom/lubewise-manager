@@ -28,6 +28,18 @@ export const InventoryChart = () => {
       };
     });
 
+    // Add inventory data
+    inventory.forEach((item) => {
+      const monthIndex = new Date(item.dataRegistro).getMonth();
+      if (monthIndex < 6) {
+        const type = item.type.toLowerCase();
+        if (type === "oleo" || type === "graxa") {
+          next6Months[monthIndex][type] += item.quantity;
+        }
+      }
+    });
+
+    // Subtract consumed quantities from orders
     orders.forEach((order) => {
       if (order.consumables) {
         const monthIndex = new Date(order.dataInicio).getMonth();
@@ -35,7 +47,7 @@ export const InventoryChart = () => {
           order.consumables.forEach((consumable) => {
             const type = consumable.type.toLowerCase();
             if (type === "oleo" || type === "graxa") {
-              next6Months[monthIndex][type] += consumable.quantity;
+              next6Months[monthIndex][type] -= consumable.quantity;
             }
           });
         }
