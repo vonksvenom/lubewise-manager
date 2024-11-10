@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -9,8 +10,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, Edit, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useToast } from "@/components/ui/use-toast";
+import EquipamentoForm from "@/components/EquipamentoForm";
 
 const equipamentosMock = [
   {
@@ -41,15 +45,75 @@ const equipamentosMock = [
 
 const Equipamentos = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [equipamentos, setEquipamentos] = useState(equipamentosMock);
+  const [selectedEquipamento, setSelectedEquipamento] = useState(null);
+  const { t } = useTranslation();
+  const { toast } = useToast();
+
+  const handleDelete = (id) => {
+    setEquipamentos(equipamentos.filter((eq) => eq.id !== id));
+    toast({
+      title: "Equipamento excluído",
+      description: "O equipamento foi removido com sucesso.",
+    });
+  };
+
+  const handleSave = (data) => {
+    if (selectedEquipamento) {
+      setEquipamentos(
+        equipamentos.map((eq) =>
+          eq.id === selectedEquipamento.id ? { ...eq, ...data } : eq
+        )
+      );
+      toast({
+        title: "Equipamento atualizado",
+        description: "As alterações foram salvas com sucesso.",
+      });
+    } else {
+      setEquipamentos([
+        ...equipamentos,
+        { ...data, id: equipamentos.length + 1 },
+      ]);
+      toast({
+        title: "Equipamento adicionado",
+        description: "O novo equipamento foi cadastrado com sucesso.",
+      });
+    }
+    setSelectedEquipamento(null);
+  };
+
+  const filteredEquipamentos = equipamentos.filter(
+    (eq) =>
+      eq.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      eq.modelo.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Equipamentos</h1>
-        <Button className="bg-primary hover:bg-primary/90">
-          <Plus className="h-4 w-4 mr-2" />
-          Novo Equipamento
-        </Button>
+        <h1 className="text-3xl font-bold">{t('equipment')}</h1>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              className="bg-primary hover:bg-primary/90"
+              onClick={() => setSelectedEquipamento(null)}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Novo Equipamento
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>
+                {selectedEquipamento ? "Editar Equipamento" : "Novo Equipamento"}
+              </DialogTitle>
+            </DialogHeader>
+            <EquipamentoForm
+              initialData={selectedEquipamento}
+              onSave={handleSave}
+            />
+          </DialogContent>
+        </Dialog>
       </div>
 
       <Card className="p-6">
@@ -74,10 +138,11 @@ const Equipamentos = () => {
                 <TableHead>Status</TableHead>
                 <TableHead>Última Manutenção</TableHead>
                 <TableHead>Próxima Manutenção</TableHead>
+                <TableHead className="text-right">Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {equipamentosMock.map((equip) => (
+              {filteredEquipamentos.map((equip) => (
                 <TableRow key={equip.id}>
                   <TableCell className="font-medium">{equip.nome}</TableCell>
                   <TableCell>{equip.modelo}</TableCell>
@@ -94,6 +159,35 @@ const Equipamentos = () => {
                   </TableCell>
                   <TableCell>{equip.ultimaManutencao}</TableCell>
                   <TableCell>{equip.proximaManutencao}</TableCell>
+                  <TableCell className="text-right">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setSelectedEquipamento(equip)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Editar Equipamento</DialogTitle>
+                        </DialogHeader>
+                        <EquipamentoForm
+                          initialData={equip}
+                          onSave={handleSave}
+                        />
+                      </DialogContent>
+                    </Dialog>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDelete(equip.id)}
+                    >
+                      <Trash2 className="h-4 w-4 text-red-500" />
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
