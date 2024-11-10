@@ -49,84 +49,49 @@ export const ordemServicoService = {
   },
 };
 
-// Initialize sample data
+// Initialize sample data - 300 ordens de serviço
+const tiposManutencao = ["Preventiva", "Corretiva", "Preditiva", "Calibração", "Inspeção"];
+const status = ["Pendente", "Em Andamento", "Concluída", "Cancelada"];
+const prioridades = ["Baixa", "Media", "Alta", "Urgente"];
+const responsaveis = ["João Silva", "Maria Santos", "Pedro Oliveira", "Ana Beatriz", "Carlos Eduardo"];
+
 const today = new Date();
-ordensServico = [
-  {
-    id: 1,
-    titulo: "Manutenção Preventiva EQP-001",
-    descricao: "Troca de óleo e filtros",
-    equipamentoId: "1",
-    responsavel: "João Silva",
-    status: "Concluída",
-    dataInicio: new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000),
-    dataFim: today,
-    prioridade: "Alta",
-    horasEstimadas: 4,
-    consumables: [
-      { type: "Óleo", quantity: 40 },
-      { type: "Graxa", quantity: 2 },
-    ],
-  },
-  {
-    id: 2,
-    titulo: "Inspeção EQP-002",
-    descricao: "Inspeção geral dos componentes",
-    equipamentoId: "2",
-    responsavel: "Maria Santos",
-    status: "Em Andamento",
-    dataInicio: today,
-    dataFim: new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000),
-    prioridade: "Media",
-    horasEstimadas: 2,
-    consumables: [
-      { type: "Graxa", quantity: 1 },
-    ],
-  },
-  {
-    id: 3,
-    titulo: "Manutenção Corretiva EQP-003",
-    descricao: "Reparo no sistema hidráulico",
-    equipamentoId: "3",
-    responsavel: "Pedro Oliveira",
-    status: "Pendente",
-    dataInicio: new Date(today.getTime() + 5 * 24 * 60 * 60 * 1000),
-    dataFim: new Date(today.getTime() + 6 * 24 * 60 * 60 * 1000),
-    prioridade: "Urgente",
-    horasEstimadas: 8,
-    consumables: [
-      { type: "Óleo", quantity: 60 },
-      { type: "Graxa", quantity: 3 },
-    ],
-  },
-  {
-    id: 4,
-    titulo: "Calibração EQP-004",
-    descricao: "Calibração de sensores e instrumentos",
-    equipamentoId: "4",
-    responsavel: "Ana Beatriz",
-    status: "Pendente",
-    dataInicio: new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000),
-    dataFim: new Date(today.getTime() + 4 * 24 * 60 * 60 * 1000),
-    prioridade: "Baixa",
-    horasEstimadas: 3,
-    consumables: [
-      { type: "Óleo", quantity: 20 },
-    ],
-  },
-  {
-    id: 5,
-    titulo: "Manutenção Preditiva EQP-005",
-    descricao: "Análise de vibração e termografia",
-    equipamentoId: "5",
-    responsavel: "Carlos Eduardo",
-    status: "Em Andamento",
-    dataInicio: new Date(today.getTime() - 2 * 24 * 60 * 60 * 1000),
-    dataFim: new Date(today.getTime() + 1 * 24 * 60 * 60 * 1000),
-    prioridade: "Media",
-    horasEstimadas: 6,
-    consumables: [
-      { type: "Graxa", quantity: 4 },
-    ],
+const getRandomDate = (start, end) => {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+};
+
+ordensServico = Array.from({ length: 300 }, (_, index) => {
+  const tipoManutencao = tiposManutencao[Math.floor(Math.random() * tiposManutencao.length)];
+  const dataInicio = getRandomDate(new Date(2023, 0, 1), new Date(2024, 11, 31));
+  const dataFim = new Date(dataInicio);
+  dataFim.setDate(dataFim.getDate() + Math.floor(Math.random() * 14) + 1);
+  
+  const equipamentoId = String(Math.floor(Math.random() * 100) + 1);
+  const responsavel = responsaveis[Math.floor(Math.random() * responsaveis.length)];
+  
+  // Gerar consumíveis realistas baseados no tipo de manutenção
+  const consumables = [];
+  if (tipoManutencao === "Preventiva" || tipoManutencao === "Corretiva") {
+    consumables.push(
+      { type: "Óleo", quantity: Math.floor(Math.random() * 100) + 20 },
+      { type: "Graxa", quantity: Math.floor(Math.random() * 10) + 1 }
+    );
   }
-];
+  
+  return {
+    id: index + 1,
+    titulo: `${tipoManutencao} - EQP-${String(equipamentoId).padStart(3, '0')}`,
+    descricao: `Manutenção ${tipoManutencao.toLowerCase()} no equipamento EQP-${String(equipamentoId).padStart(3, '0')}`,
+    equipamentoId,
+    responsavel,
+    status: status[Math.floor(Math.random() * status.length)],
+    dataInicio,
+    dataFim,
+    prioridade: prioridades[Math.floor(Math.random() * prioridades.length)],
+    horasEstimadas: Math.floor(Math.random() * 24) + 1,
+    consumables,
+    observacoes: `Observações da manutenção ${tipoManutencao.toLowerCase()}`,
+    custoEstimado: Math.floor(Math.random() * 10000) + 500,
+    custoReal: Math.floor(Math.random() * 12000) + 500,
+  };
+});
