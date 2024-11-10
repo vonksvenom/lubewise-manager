@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -14,39 +14,24 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import OrdemServicoForm from "@/components/OrdemServicoForm";
 import OrdemServicoTable from "@/components/OrdemServicoTable";
-
-// Mock data for demonstration
-const ordensServicoMock = [
-  {
-    id: 1,
-    titulo: "Manutenção Preventiva",
-    descricao: "Realizar manutenção preventiva no equipamento",
-    equipamentoId: "1",
-    status: "Pendente",
-    dataInicio: new Date(),
-    dataFim: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    prioridade: "Media",
-  },
-];
-
-const equipamentosMock = [
-  {
-    id: 1,
-    nome: "Torno CNC",
-    modelo: "TCN-2000",
-    status: "Operacional",
-  },
-];
+import { ordemServicoService, equipamentoService } from "@/services/dataService";
 
 const OrdensServico = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [ordensServico, setOrdensServico] = useState(ordensServicoMock);
+  const [ordensServico, setOrdensServico] = useState([]);
   const [selectedOrdem, setSelectedOrdem] = useState(null);
+  const [equipamentos, setEquipamentos] = useState([]);
   const { t } = useTranslation();
   const { toast } = useToast();
 
+  useEffect(() => {
+    setOrdensServico(ordemServicoService.getAll());
+    setEquipamentos(equipamentoService.getAll());
+  }, []);
+
   const handleDelete = (id) => {
-    setOrdensServico(ordensServico.filter((ordem) => ordem.id !== id));
+    ordemServicoService.delete(id);
+    setOrdensServico(ordemServicoService.getAll());
     toast({
       title: "Ordem de serviço excluída",
       description: "A ordem de serviço foi removida com sucesso.",
@@ -55,22 +40,19 @@ const OrdensServico = () => {
 
   const handleSave = (data) => {
     if (selectedOrdem) {
-      setOrdensServico(
-        ordensServico.map((ordem) =>
-          ordem.id === selectedOrdem.id ? { ...ordem, ...data } : ordem
-        )
-      );
+      ordemServicoService.update(selectedOrdem.id, data);
       toast({
         title: "Ordem de serviço atualizada",
         description: "As alterações foram salvas com sucesso.",
       });
     } else {
-      setOrdensServico([...ordensServico, { ...data, id: Date.now() }]);
+      ordemServicoService.add(data);
       toast({
         title: "Ordem de serviço criada",
         description: "A nova ordem de serviço foi cadastrada com sucesso.",
       });
     }
+    setOrdensServico(ordemServicoService.getAll());
     setSelectedOrdem(null);
   };
 
@@ -105,7 +87,7 @@ const OrdensServico = () => {
             <OrdemServicoForm
               initialData={selectedOrdem}
               onSave={handleSave}
-              equipamentos={equipamentosMock}
+              equipamentos={equipamentos}
             />
           </DialogContent>
         </Dialog>
@@ -128,7 +110,7 @@ const OrdensServico = () => {
           ordensServico={filteredOrdensServico}
           onEdit={setSelectedOrdem}
           onDelete={handleDelete}
-          equipamentos={equipamentosMock}
+          equipamentos={equipamentos}
         />
       </Card>
     </div>

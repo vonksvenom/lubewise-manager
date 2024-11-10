@@ -1,57 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Plus, Search, Edit, Trash2 } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
 import EquipamentoForm from "@/components/EquipamentoForm";
-
-const equipamentosMock = [
-  {
-    id: 1,
-    nome: "Torno CNC",
-    modelo: "TCN-2000",
-    status: "Operacional",
-    ultimaManutencao: "2024-03-15",
-    proximaManutencao: "2024-04-15",
-  },
-  {
-    id: 2,
-    nome: "Fresadora",
-    modelo: "FR-500",
-    status: "Em Manutenção",
-    ultimaManutencao: "2024-03-10",
-    proximaManutencao: "2024-04-10",
-  },
-  {
-    id: 3,
-    nome: "Prensa Hidráulica",
-    modelo: "PH-100",
-    status: "Operacional",
-    ultimaManutencao: "2024-03-05",
-    proximaManutencao: "2024-04-05",
-  },
-];
+import EquipamentoTable from "@/components/EquipamentoTable";
+import { equipamentoService } from "@/services/dataService";
 
 const Equipamentos = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [equipamentos, setEquipamentos] = useState(equipamentosMock);
+  const [equipamentos, setEquipamentos] = useState([]);
   const [selectedEquipamento, setSelectedEquipamento] = useState(null);
   const { t } = useTranslation();
   const { toast } = useToast();
 
+  useEffect(() => {
+    setEquipamentos(equipamentoService.getAll());
+  }, []);
+
   const handleDelete = (id) => {
-    setEquipamentos(equipamentos.filter((eq) => eq.id !== id));
+    equipamentoService.delete(id);
+    setEquipamentos(equipamentoService.getAll());
     toast({
       title: "Equipamento excluído",
       description: "O equipamento foi removido com sucesso.",
@@ -60,25 +38,19 @@ const Equipamentos = () => {
 
   const handleSave = (data) => {
     if (selectedEquipamento) {
-      setEquipamentos(
-        equipamentos.map((eq) =>
-          eq.id === selectedEquipamento.id ? { ...eq, ...data } : eq
-        )
-      );
+      equipamentoService.update(selectedEquipamento.id, data);
       toast({
         title: "Equipamento atualizado",
         description: "As alterações foram salvas com sucesso.",
       });
     } else {
-      setEquipamentos([
-        ...equipamentos,
-        { ...data, id: equipamentos.length + 1 },
-      ]);
+      equipamentoService.add(data);
       toast({
         title: "Equipamento adicionado",
         description: "O novo equipamento foi cadastrado com sucesso.",
       });
     }
+    setEquipamentos(equipamentoService.getAll());
     setSelectedEquipamento(null);
   };
 
@@ -91,7 +63,7 @@ const Equipamentos = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">{t('equipment')}</h1>
+        <h1 className="text-3xl font-bold">{t("equipment")}</h1>
         <Dialog>
           <DialogTrigger asChild>
             <Button
@@ -129,70 +101,11 @@ const Equipamentos = () => {
           </div>
         </div>
 
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nome</TableHead>
-                <TableHead>Modelo</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Última Manutenção</TableHead>
-                <TableHead>Próxima Manutenção</TableHead>
-                <TableHead className="text-right">Ações</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredEquipamentos.map((equip) => (
-                <TableRow key={equip.id}>
-                  <TableCell className="font-medium">{equip.nome}</TableCell>
-                  <TableCell>{equip.modelo}</TableCell>
-                  <TableCell>
-                    <span
-                      className={`px-2 py-1 rounded-full text-sm ${
-                        equip.status === "Operacional"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-yellow-100 text-yellow-800"
-                      }`}
-                    >
-                      {equip.status}
-                    </span>
-                  </TableCell>
-                  <TableCell>{equip.ultimaManutencao}</TableCell>
-                  <TableCell>{equip.proximaManutencao}</TableCell>
-                  <TableCell className="text-right">
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => setSelectedEquipamento(equip)}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Editar Equipamento</DialogTitle>
-                        </DialogHeader>
-                        <EquipamentoForm
-                          initialData={equip}
-                          onSave={handleSave}
-                        />
-                      </DialogContent>
-                    </Dialog>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => handleDelete(equip.id)}
-                    >
-                      <Trash2 className="h-4 w-4 text-red-500" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+        <EquipamentoTable
+          equipamentos={filteredEquipamentos}
+          onEdit={setSelectedEquipamento}
+          onDelete={handleDelete}
+        />
       </Card>
     </div>
   );
