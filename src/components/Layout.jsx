@@ -29,7 +29,7 @@ const Layout = ({ children }) => {
     { title: t('equipment'), icon: <Wrench />, path: "/equipamentos" },
     { title: t('workOrders'), icon: <Settings />, path: "/ordens" },
     { title: t('maintenance'), icon: <Calendar />, path: "/manutencoes" },
-    { title: t('inventory'), icon: <Package />, path: "/estoque" },
+    { title: t('inventory'), icon: <Package />, path: "/inventario" },
   ];
 
   const changeLanguage = (lng) => {
@@ -37,12 +37,12 @@ const Layout = ({ children }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-background">
       <button
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-md shadow-md"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-muted rounded-md shadow-md"
         onClick={() => setSidebarOpen(!sidebarOpen)}
       >
-        {sidebarOpen ? <X /> : <Menu />}
+        {sidebarOpen ? <X className="text-catYellow" /> : <Menu className="text-catYellow" />}
       </button>
 
       <div className="fixed top-4 right-4 z-50">
@@ -76,13 +76,17 @@ const Layout = ({ children }) => {
       </div>
 
       <div
-        className={`fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-lg transform transition-transform duration-200 ease-in-out lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 w-64 bg-muted shadow-lg transform transition-transform duration-200 ease-in-out lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div className="flex flex-col h-full">
-          <div className="p-4">
-            <h1 className="text-2xl font-bold text-primary">LubriCMMS</h1>
+          <div className="p-4 flex justify-center">
+            <img
+              src="https://images.cws.digital/fornecedores/m/sotreq-industrial.jpg"
+              alt="Sotreq Logo"
+              className="h-16 object-contain"
+            />
           </div>
           <nav className="flex-1 p-4">
             {navItems.map((item) => (
@@ -91,8 +95,8 @@ const Layout = ({ children }) => {
                 to={item.path}
                 className={`flex items-center gap-3 px-4 py-3 mb-2 rounded-md transition-colors ${
                   location.pathname === item.path
-                    ? "bg-primary text-white"
-                    : "text-gray-600 hover:bg-gray-100"
+                    ? "bg-primary text-background"
+                    : "text-catYellow hover:bg-accent"
                 }`}
               >
                 {item.icon}

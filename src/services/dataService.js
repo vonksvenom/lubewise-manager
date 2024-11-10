@@ -1,6 +1,7 @@
 // Simple in-memory data store until we have a proper backend
 let equipamentos = [];
 let ordensServico = [];
+let inventario = [];
 
 export const equipamentoService = {
   getAll: () => equipamentos,
@@ -35,5 +36,29 @@ export const ordemServicoService = {
   },
   delete: (id) => {
     ordensServico = ordensServico.filter((os) => os.id !== id);
+  },
+};
+
+export const inventarioService = {
+  getAll: () => inventario,
+  add: (item) => {
+    const newItem = { ...item, id: Date.now() };
+    inventario.push(newItem);
+    return newItem;
+  },
+  update: (id, data) => {
+    inventario = inventario.map((item) =>
+      item.id === id ? { ...item, ...data } : item
+    );
+    return inventario.find((item) => item.id === id);
+  },
+  delete: (id) => {
+    inventario = inventario.filter((item) => item.id !== id);
+  },
+  checkAvailability: (type, quantity) => {
+    const item = inventario.find(
+      (i) => i.type.toLowerCase() === type.toLowerCase()
+    );
+    return item ? item.quantity >= quantity : false;
   },
 };

@@ -3,7 +3,7 @@ import Dashboard from "./pages/Dashboard";
 import Equipamentos from "./pages/Equipamentos";
 import OrdensServico from "./pages/OrdensServico";
 import Manutencoes from "./pages/Manutencoes";
-import Estoque from "./pages/Estoque";
+import Inventario from "./pages/Inventario";
 import Calendario from "./pages/Calendario";
 
 export const navItems = [
@@ -32,10 +32,10 @@ export const navItems = [
     page: <Manutencoes />,
   },
   {
-    title: "Estoque",
-    to: "/estoque",
+    title: "Inventário",
+    to: "/inventario",
     icon: <Package className="h-4 w-4" />,
-    page: <Estoque />,
+    page: <Inventario />,
   },
   {
     title: "Calendário",
