@@ -82,6 +82,14 @@ function createTables() {
       minimumStock INTEGER,
       reorderPoint INTEGER
     )`);
+
+    // Tabela de áreas
+    db.run(`CREATE TABLE IF NOT EXISTS areas (
+      id TEXT PRIMARY KEY,
+      nome TEXT,
+      descricao TEXT,
+      responsavel TEXT
+    )`);
   });
 }
 
@@ -198,6 +206,32 @@ app.post('/api/inventario', (req, res) => {
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [id, name, type, quantity, unit, location, area, 
      dataRegistro, minimumStock, reorderPoint],
+    function(err) {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+      res.json({ id: this.lastID });
+    }
+  );
+});
+
+// Areas
+app.get('/api/areas', (req, res) => {
+  db.all('SELECT * FROM areas', [], (err, rows) => {
+    if (err) {
+      res.status(500).json({ error: err.message });
+      return;
+    }
+    res.json(rows);
+  });
+});
+
+app.post('/api/areas', (req, res) => {
+  const { id, nome, descricao, responsavel } = req.body;
+  db.run(
+    'INSERT INTO areas (id, nome, descricao, responsavel) VALUES (?, ?, ?, ?)',
+    [id, nome, descricao, responsavel],
     function(err) {
       if (err) {
         res.status(500).json({ error: err.message });

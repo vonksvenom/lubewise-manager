@@ -3,7 +3,7 @@ import { DashboardCard } from "@/components/DashboardCard";
 import { Clock, AlertTriangle, Timer } from "lucide-react";
 import { isAfter, isBefore, addWeeks, startOfWeek } from "date-fns";
 
-const WorkloadStats = ({ ordensServico }) => {
+const WorkloadStats = ({ ordensServico = [] }) => {
   const { t } = useTranslation();
   const today = new Date();
   const nextWeekStart = startOfWeek(addWeeks(today, 1));
@@ -12,7 +12,14 @@ const WorkloadStats = ({ ordensServico }) => {
     let horasVencidas = 0;
     let horasProximaSemana = 0;
 
+    if (!Array.isArray(ordensServico)) {
+      console.warn('ordensServico is not an array:', ordensServico);
+      return { horasVencidas, horasProximaSemana };
+    }
+
     ordensServico.forEach(ordem => {
+      if (!ordem) return;
+      
       const dataFim = new Date(ordem.dataFim);
       const horasEstimadas = ordem.horasEstimadas || 0;
 

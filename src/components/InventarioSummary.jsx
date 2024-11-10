@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { inventarioService, areaService } from "@/services/dataService";
+import { useToast } from "@/components/ui/use-toast";
 
 export const InventarioSummary = () => {
   const [selectedArea, setSelectedArea] = useState("todas");
@@ -24,29 +25,48 @@ export const InventarioSummary = () => {
     oleo: 0,
     graxa: 0
   });
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
 
   useEffect(() => {
-    const loadData = () => {
-      setAreas(areaService.getAll());
-      const inventory = inventarioService.getAll();
-      const area = selectedArea === "todas" ? null : selectedArea;
-      
-      const totals = inventory.reduce((acc, item) => {
-        if (!area || item.area === area) {
-          if (item.type.toLowerCase().includes('óleo')) {
-            acc.oleo += item.quantity;
-          } else if (item.type.toLowerCase().includes('graxa')) {
-            acc.graxa += item.quantity;
+    const loadData = async () => {
+      try {
+        const areasData = await areaService.getAll();
+        setAreas(Array.isArray(areasData) ? areasData : []);
+        
+        const inventory = await inventarioService.getAll();
+        const area = selectedArea === "todas" ? null : selectedArea;
+        
+        const totals = Array.isArray(inventory) ? inventory.reduce((acc, item) => {
+          if (!area || item.area === area) {
+            if (item.type?.toLowerCase().includes('óleo')) {
+              acc.oleo += item.quantity;
+            } else if (item.type?.toLowerCase().includes('graxa')) {
+              acc.graxa += item.quantity;
+            }
           }
-        }
-        return acc;
-      }, { oleo: 0, graxa: 0 });
+          return acc;
+        }, { oleo: 0, graxa: 0 }) : { oleo: 0, graxa: 0 };
 
-      setSummary(totals);
+        setSummary(totals);
+      } catch (error) {
+        console.error("Error loading data:", error);
+        toast({
+          variant: "destructive",
+          title: "Erro ao carregar dados",
+          description: "Não foi possível carregar o sumário do inventário."
+        });
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     loadData();
   }, [selectedArea]);
+
+  if (isLoading) {
+    return <div>Carregando...</div>;
+  }
 
   return (
     <Card className="p-6 shadow-neo bg-gradient-to-br from-muted to-accent/10 backdrop-blur-sm">

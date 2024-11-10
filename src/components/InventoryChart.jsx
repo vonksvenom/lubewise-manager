@@ -11,74 +11,100 @@ import {
 import { ordemServicoService, inventarioService } from "@/services/dataService";
 import { useState, useEffect } from "react";
 import { format, addMonths, startOfMonth, isSameMonth } from "date-fns";
+import { useToast } from "@/components/ui/use-toast";
 
 export const InventoryChart = () => {
   const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
 
   useEffect(() => {
-    const orders = ordemServicoService.getAll();
-    const inventory = inventarioService.getAll();
+    const fetchData = async () => {
+      try {
+        const orders = await ordemServicoService.getAll();
+        const inventory = await inventarioService.getAll();
 
-    const next6Months = Array.from({ length: 6 }, (_, i) => {
-      const date = addMonths(startOfMonth(new Date()), i);
-      return {
-        month: format(date, "MMM/yyyy"),
-        date: date,
-        oleo: 0,
-        graxa: 0,
-        oleoPrevisao: 0,
-        graxaPrevisao: 0,
-      };
-    });
+        const next6Months = Array.from({ length: 6 }, (_, i) => {
+          const date = addMonths(startOfMonth(new Date()), i);
+          return {
+            month: format(date, "MMM/yyyy"),
+            date: date,
+            oleo: 0,
+            graxa: 0,
+            oleoPrevisao: 0,
+            graxaPrevisao: 0,
+          };
+        });
 
-    // Adiciona dados do inventário
-    inventory.forEach((item) => {
-      const monthIndex = next6Months.findIndex((m) =>
-        isSameMonth(new Date(item.dataRegistro), m.date)
-      );
-      if (monthIndex >= 0) {
-        if (item.type.toLowerCase() === "óleo") {
-          next6Months[monthIndex].oleo += item.quantity;
-        } else if (item.type.toLowerCase() === "graxa") {
-          next6Months[monthIndex].graxa += item.quantity;
-        }
-      }
-    });
-
-    // Adiciona consumo previsto das ordens de serviço
-    orders.forEach((order) => {
-      if (order.consumables && order.status !== "Cancelada") {
-        const monthIndex = next6Months.findIndex((m) =>
-          isSameMonth(new Date(order.dataInicio), m.date)
-        );
-        if (monthIndex >= 0) {
-          order.consumables.forEach((consumable) => {
-            if (consumable.type.toLowerCase() === "óleo") {
-              next6Months[monthIndex].oleoPrevisao += consumable.quantity;
-            } else if (consumable.type.toLowerCase() === "graxa") {
-              next6Months[monthIndex].graxaPrevisao += consumable.quantity;
+        // Adiciona dados do inventário
+        if (Array.isArray(inventory)) {
+          inventory.forEach((item) => {
+            const monthIndex = next6Months.findIndex((m) =>
+              isSameMonth(new Date(item.dataRegistro), m.date)
+            );
+            if (monthIndex >= 0) {
+              if (item.type?.toLowerCase() === "óleo") {
+                next6Months[monthIndex].oleo += item.quantity;
+              } else if (item.type?.toLowerCase() === "graxa") {
+                next6Months[monthIndex].graxa += item.quantity;
+              }
             }
           });
         }
-      }
-    });
 
-    // Calcula inventário restante após consumo
-    next6Months.forEach((month, index) => {
-      if (index > 0) {
-        month.oleo = Math.max(
-          0,
-          next6Months[index - 1].oleo - next6Months[index - 1].oleoPrevisao
-        );
-        month.graxa = Math.max(
-          0,
-          next6Months[index - 1].graxa - next6Months[index - 1].graxaPrevisao
-        );
-      }
-    });
+        // Adiciona consumo previsto das ordens de serviço
+        if (Array.isArray(orders)) {
+          orders.forEach((order) => {
+            if (order.consumables && order.status !== "Cancelada") {
+              const monthIndex = next6Months.findIndex((m) =>
+                isSameMonth(new Date(order.dataInicio), m.date)
+              );
+              if (monthIndex >= 0) {
+                order.consumables.forEach((consumable) => {
+                  if (consumable.type?.toLowerCase() === "óleo") {
+                    next6Months[monthIndex].oleoPrevisao += consumable.quantity;
+                  } else if (consumable.type?.toLowerCase() === "graxa") {
+                    next6Months[monthIndex].graxaPrevisao += consumable.quantity;
+                  }
+                });
+              }
+            }
+          });
+        }
 
-    setData(next6Months);
+        // Calcula inventário restante após consumo
+        next6Months.forEach((month, index) => {
+          if (index > 0) {
+            month.oleo = Math.max(
+              0,
+              next6Months[index - 1].oleo - next6Months[index - 1].oleoPrevisao
+            );
+            month.graxa = Math.max(
+              0,
+              next6Months[index - 1].graxa - next6Months[index - 1].graxaPrevisao
+            );
+          }
+        });
+
+        setData(next6Months);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        toast({
+          variant: "destructive",
+          title: "Erro ao carregar dados",
+          description: "Não foi possível carregar os dados do gráfico."
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
+
+  if (isLoading) {
+    return <div>Carregando...</div>;
+  }
 
   return (
     <div className="rounded-xl shadow-neo-3d bg-gradient-to-br from-muted to-accent/10 p-4">

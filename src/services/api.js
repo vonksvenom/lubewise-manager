@@ -68,4 +68,21 @@ export const api = {
     });
     return response.json();
   },
+
+  // Areas
+  async getAreas() {
+    const response = await fetch(`${API_URL}/areas`);
+    return response.json();
+  },
+
+  async createArea(areaData) {
+    const response = await fetch(`${API_URL}/areas`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(areaData),
+    });
+    return response.json();
+  },
 };
