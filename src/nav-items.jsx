@@ -1,4 +1,4 @@
-import { HomeIcon, Tool, Settings, Calendar, Package } from "lucide-react";
+import { HomeIcon, Wrench, Settings, Calendar, Package } from "lucide-react";
 import Dashboard from "./pages/Dashboard";
 import Equipamentos from "./pages/Equipamentos";
 import OrdensServico from "./pages/OrdensServico";
@@ -15,7 +15,7 @@ export const navItems = [
   {
     title: "Equipamentos",
     to: "/equipamentos",
-    icon: <Tool className="h-4 w-4" />,
+    icon: <Wrench className="h-4 w-4" />,
     page: <Equipamentos />,
   },
   {

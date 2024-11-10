@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import {
-  Tool,
+  Wrench,
   AlertTriangle,
   CheckCircle,
   Clock,
@@ -17,7 +17,7 @@ const Dashboard = () => {
         <Card className="p-4">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-blue-100 rounded-lg">
-              <Tool className="h-6 w-6 text-primary" />
+              <Wrench className="h-6 w-6 text-primary" />
             </div>
             <div>
               <p className="text-sm text-gray-500">Equipamentos</p>
