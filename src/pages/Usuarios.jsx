@@ -17,26 +17,48 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, Edit, Trash2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { userService } from "@/services/dataService";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Usuarios = () => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedUser, setSelectedUser] = useState(null);
   const { toast } = useToast();
+  const { isAdmin, isPowerUser } = useAuth();
 
   useEffect(() => {
     setUsers(userService.getAll());
   }, []);
 
-  const handleAddUser = (userData) => {
-    userService.add(userData);
+  const handleSave = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      role: formData.get("role"),
+      department: formData.get("department"),
+      isAdmin: formData.get("isAdmin") === "true",
+    };
+
+    if (selectedUser) {
+      userService.update(selectedUser.id, data);
+      toast({
+        title: "Usuário atualizado",
+        description: "As alterações foram salvas com sucesso.",
+      });
+    } else {
+      userService.add(data);
+      toast({
+        title: "Usuário adicionado",
+        description: "O usuário foi adicionado com sucesso.",
+      });
+    }
     setUsers(userService.getAll());
-    toast({
-      title: "Usuário adicionado",
-      description: "O usuário foi adicionado com sucesso.",
-    });
+    setSelectedUser(null);
   };
 
   const handleDeleteUser = (id) => {
@@ -57,6 +79,8 @@ const Usuarios = () => {
     );
   });
 
+  const canEdit = isAdmin() || isPowerUser();
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -70,31 +94,62 @@ const Usuarios = () => {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Adicionar Novo Usuário</DialogTitle>
+              <DialogTitle>
+                {selectedUser ? "Editar Usuário" : "Novo Usuário"}
+              </DialogTitle>
             </DialogHeader>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const formData = new FormData(e.target);
-                handleAddUser({
-                  name: formData.get("name"),
-                  email: formData.get("email"),
-                  role: formData.get("role"),
-                  department: formData.get("department"),
-                  isAdmin: formData.get("isAdmin") === "true",
-                });
-              }}
-              className="space-y-4"
-            >
-              <Input name="name" placeholder="Nome completo" required />
-              <Input name="email" type="email" placeholder="Email" required />
-              <Input name="role" placeholder="Cargo" required />
-              <Input name="department" placeholder="Departamento" required />
+            <form onSubmit={handleSave} className="space-y-4">
+              <div className="space-y-2">
+                <label htmlFor="name" className="text-sm font-medium">
+                  Nome completo
+                </label>
+                <Input
+                  id="name"
+                  name="name"
+                  defaultValue={selectedUser?.name}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="email" className="text-sm font-medium">
+                  Email
+                </label>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  defaultValue={selectedUser?.email}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="role" className="text-sm font-medium">
+                  Cargo
+                </label>
+                <Input
+                  id="role"
+                  name="role"
+                  defaultValue={selectedUser?.role}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="department" className="text-sm font-medium">
+                  Departamento
+                </label>
+                <Input
+                  id="department"
+                  name="department"
+                  defaultValue={selectedUser?.department}
+                  required
+                />
+              </div>
               <div className="flex items-center space-x-2">
                 <input
                   type="checkbox"
                   name="isAdmin"
                   value="true"
+                  defaultChecked={selectedUser?.isAdmin}
                   className="rounded border-gray-300"
                 />
                 <label className="text-sm">Administrador</label>
@@ -138,14 +193,25 @@ const Usuarios = () => {
                 <TableCell>{user.department}</TableCell>
                 <TableCell>{user.isAdmin ? "Sim" : "Não"}</TableCell>
                 <TableCell>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleDeleteUser(user.id)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    Remover
-                  </Button>
+                  <div className="flex gap-2">
+                    {canEdit && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setSelectedUser(user)}
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDeleteUser(user.id)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
