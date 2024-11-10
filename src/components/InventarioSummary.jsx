@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/select";
 import { inventarioService, areaService } from "@/services/dataService";
 
-const InventarioSummary = () => {
+export const InventarioSummary = () => {
   const [selectedArea, setSelectedArea] = useState("todas");
   const [areas, setAreas] = useState([]);
   const [summary, setSummary] = useState({
