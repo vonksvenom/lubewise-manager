@@ -35,7 +35,7 @@ const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [currentTheme, setCurrentTheme] = useState('default');
-  const [logoUrl, setLogoUrl] = useState("https://images.cws.digital/fornecedores/m/sotreq-industrial.jpg");
+  const [logoUrl, setLogoUrl] = useState("/sotreq-industrial-logo.png"); // Atualizado para o novo logo
   const location = useLocation();
   const { t, i18n } = useTranslation();
   const { logout, isAdmin, isPowerUser } = useAuth();
@@ -169,7 +169,7 @@ const Layout = ({ children }) => {
           <div className="p-4 flex justify-center items-center bg-black/20">
             <img
               src={logoUrl}
-              alt="Company Logo"
+              alt="Sotreq Industrial Logo"
               className={`${sidebarCollapsed ? 'h-8' : 'h-16'} object-contain transition-all duration-200`}
             />
           </div>
