@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { DialogClose } from "@/components/ui/dialog";
 import { DatePicker } from "@/components/ui/date-picker";
 import OrdemServicoBasicInfo from "./ordem-servico/OrdemServicoBasicInfo";
 import OrdemServicoSelects from "./ordem-servico/OrdemServicoSelects";
 
-const OrdemServicoForm = ({ initialData, onSave, equipamentos }) => {
+const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
   const [formData, setFormData] = useState(
     initialData || {
       titulo: "",
