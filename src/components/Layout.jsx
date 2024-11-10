@@ -4,21 +4,14 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 import { themes } from "@/config/themes";
 import { 
-  Settings, 
-  Wrench, 
-  Calendar, 
-  Package, 
-  BarChart3, 
   Menu,
   X,
   Globe,
   ChevronLeft,
   ChevronRight,
-  Users,
   Upload,
   LogOut,
   Palette,
-  Cog
 } from "lucide-react";
 import { Button } from "./ui/button";
 import {
@@ -31,13 +24,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Input } from "./ui/input";
 import { userService } from "@/services/dataService";
 import { toast } from "sonner";
-import { navItems } from "../nav-items"; // Importando navItems
+import { navItems } from "../nav-items";
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [currentTheme, setCurrentTheme] = useState('default');
-  const [logoUrl, setLogoUrl] = useState("/sotreq-industrial-logo.png"); // Atualizado para o novo logo
+  const [logoUrl, setLogoUrl] = useState("/sotreq-industrial-logo.png");
   const location = useLocation();
   const { t, i18n } = useTranslation();
   const { logout, isAdmin, isPowerUser } = useAuth();
