@@ -1,4 +1,3 @@
-import { addDays, subDays } from 'date-fns';
 import { generateRandomDate } from './utils';
 
 const defaultEquipmentImage = '/placeholder.svg';
@@ -27,9 +26,6 @@ const generateEquipamentos = () => {
       dataFabricacao: dataFabricacao.toISOString().split('T')[0],
       ultimaManutencao: ultimaManutencao.toISOString().split('T')[0],
       proximaManutencao: proximaManutencao.toISOString().split('T')[0],
-      potencia: `${Math.floor(Math.random() * 100)}kW`,
-      tensao: `${[220, 380, 440][Math.floor(Math.random() * 3)]}V`,
-      corrente: `${Math.floor(Math.random() * 100)}A`,
       imagem: defaultEquipmentImage
     });
   }

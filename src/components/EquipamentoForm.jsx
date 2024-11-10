@@ -4,7 +4,6 @@ import { Input } from "@/components/ui/input";
 import { DialogClose } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import EquipamentoBasicInfo from "./equipamento/EquipamentoBasicInfo";
-import EquipamentoTechnicalInfo from "./equipamento/EquipamentoTechnicalInfo";
 import EquipamentoStatusSelect from "./equipamento/EquipamentoStatusSelect";
 
 const EquipamentoForm = ({ initialData, onSave }) => {
@@ -20,9 +19,6 @@ const EquipamentoForm = ({ initialData, onSave }) => {
       fabricante: "",
       numeroSerie: "",
       dataFabricacao: "",
-      potencia: "",
-      tensao: "",
-      corrente: "",
     }
   );
 
@@ -73,8 +69,6 @@ const EquipamentoForm = ({ initialData, onSave }) => {
           rows={3}
         />
       </div>
-
-      <EquipamentoTechnicalInfo formData={formData} handleChange={handleChange} />
 
       <div className="flex justify-end gap-2">
         <DialogClose asChild>
