@@ -46,7 +46,7 @@ export const SystemSettings = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Button
           variant="outline"
-          className="w-full flex items-center gap-2"
+          className="w-full flex items-center gap-2 bg-background hover:bg-accent/10"
           onClick={handleBackup}
         >
           <Download className="h-4 w-4" />
@@ -54,7 +54,7 @@ export const SystemSettings = () => {
         </Button>
         <Button
           variant="outline"
-          className="w-full flex items-center gap-2"
+          className="w-full flex items-center gap-2 bg-background hover:bg-accent/10"
           onClick={handleRestore}
         >
           <Upload className="h-4 w-4" />
@@ -62,7 +62,7 @@ export const SystemSettings = () => {
         </Button>
         <Button
           variant="outline"
-          className="w-full flex items-center gap-2"
+          className="w-full flex items-center gap-2 bg-background hover:bg-accent/10"
           onClick={handleExportLogs}
         >
           <FileJson className="h-4 w-4" />
@@ -70,7 +70,7 @@ export const SystemSettings = () => {
         </Button>
         <Button
           variant="outline"
-          className="w-full flex items-center gap-2"
+          className="w-full flex items-center gap-2 bg-background hover:bg-accent/10"
           onClick={handleDatabaseOptimize}
         >
           <Database className="h-4 w-4" />

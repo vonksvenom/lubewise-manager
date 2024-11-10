@@ -75,5 +75,61 @@ export const themes = {
       accent: "#1d3a5c",
       muted: "#15243b"
     }
+  },
+  // New Light Themes
+  light: {
+    name: "Light Mode",
+    colors: {
+      background: "#ffffff",
+      foreground: "#374151",
+      primary: "#3b82f6",
+      secondary: "#f3f4f6",
+      accent: "#e5e7eb",
+      muted: "#f3f4f6"
+    }
+  },
+  softBlue: {
+    name: "Soft Blue",
+    colors: {
+      background: "#f0f9ff",
+      foreground: "#0369a1",
+      primary: "#0ea5e9",
+      secondary: "#e0f2fe",
+      accent: "#bae6fd",
+      muted: "#e0f2fe"
+    }
+  },
+  warmBeige: {
+    name: "Warm Beige",
+    colors: {
+      background: "#fef6e4",
+      foreground: "#27241d",
+      primary: "#f582ae",
+      secondary: "#faecd6",
+      accent: "#e3d7bf",
+      muted: "#faecd6"
+    }
+  },
+  mintFresh: {
+    name: "Mint Fresh",
+    colors: {
+      background: "#f0fdf4",
+      foreground: "#166534",
+      primary: "#22c55e",
+      secondary: "#dcfce7",
+      accent: "#bbf7d0",
+      muted: "#dcfce7"
+    }
+  },
+  lavender: {
+    name: "Lavender Light",
+    colors: {
+      background: "#faf5ff",
+      foreground: "#6b21a8",
+      primary: "#a855f7",
+      secondary: "#f3e8ff",
+      accent: "#e9d5ff",
+      muted: "#f3e8ff"
+    }
   }
 };
