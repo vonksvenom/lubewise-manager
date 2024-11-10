@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { ThemeSettings } from "@/components/admin/ThemeSettings";
 import { SystemSettings } from "@/components/admin/SystemSettings";
+import { themes } from "@/config/themes";
 
 const ConfiguracoesAdmin = () => {
   const [currentTheme, setCurrentTheme] = useState('default');
