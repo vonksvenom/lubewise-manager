@@ -4,6 +4,7 @@ import Equipamentos from "./pages/Equipamentos";
 import OrdensServico from "./pages/OrdensServico";
 import Manutencoes from "./pages/Manutencoes";
 import Estoque from "./pages/Estoque";
+import Calendario from "./pages/Calendario";
 
 export const navItems = [
   {
@@ -35,5 +36,11 @@ export const navItems = [
     to: "/estoque",
     icon: <Package className="h-4 w-4" />,
     page: <Estoque />,
+  },
+  {
+    title: "Calendário",
+    to: "/calendario",
+    icon: <Calendar className="h-4 w-4" />,
+    page: <Calendario />,
   },
 ];
