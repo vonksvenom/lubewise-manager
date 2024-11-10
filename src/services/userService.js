@@ -24,10 +24,12 @@ const getById = (id) => {
 const add = (user) => {
   const users = getAll();
   
-  // Verifica se já existe um usuário com o mesmo email
-  const existingUser = users.find(u => u.email.toLowerCase() === user.email.toLowerCase());
-  if (existingUser) {
-    throw new Error('Já existe um usuário cadastrado com este email');
+  // Verifica se o email existe e se já existe um usuário com o mesmo email
+  if (user.email) {
+    const existingUser = users.find(u => u.email?.toLowerCase() === user.email.toLowerCase());
+    if (existingUser) {
+      throw new Error('Já existe um usuário cadastrado com este email');
+    }
   }
 
   const newUser = {
@@ -43,12 +45,14 @@ const update = (id, user) => {
   const users = getAll();
   const index = users.findIndex(u => u.id === id);
   
-  // Verifica se o email já está em uso por outro usuário
-  const existingUser = users.find(u => 
-    u.email.toLowerCase() === user.email.toLowerCase() && u.id !== id
-  );
-  if (existingUser) {
-    throw new Error('Este email já está em uso por outro usuário');
+  // Verifica se o email existe e se já está em uso por outro usuário
+  if (user.email) {
+    const existingUser = users.find(u => 
+      u.email?.toLowerCase() === user.email.toLowerCase() && u.id !== id
+    );
+    if (existingUser) {
+      throw new Error('Este email já está em uso por outro usuário');
+    }
   }
 
   if (index !== -1) {
