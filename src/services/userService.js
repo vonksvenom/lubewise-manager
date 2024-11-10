@@ -23,7 +23,7 @@ export const userService = {
 
 // Initialize sample data
 users = [
-  { id: 1, nome: "Admin", email: "admin@example.com", isAdmin: true },
-  { id: 2, nome: "João Silva", email: "joao@example.com", isAdmin: false },
-  { id: 3, nome: "Maria Santos", email: "maria@example.com", isAdmin: false },
+  { id: 1, name: "Admin", email: "admin@example.com", role: "Administrador", department: "TI", isAdmin: true },
+  { id: 2, name: "João Silva", email: "joao@example.com", role: "Técnico", department: "Manutenção", isAdmin: false },
+  { id: 3, name: "Maria Santos", email: "maria@example.com", role: "Analista", department: "Operações", isAdmin: false },
 ];

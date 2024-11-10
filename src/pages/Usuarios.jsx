@@ -48,11 +48,14 @@ const Usuarios = () => {
     });
   };
 
-  const filteredUsers = users.filter(
-    (user) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.role.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredUsers = users.filter((user) => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      (user.name?.toLowerCase() || "").includes(searchLower) ||
+      (user.role?.toLowerCase() || "").includes(searchLower) ||
+      (user.department?.toLowerCase() || "").includes(searchLower)
+    );
+  });
 
   return (
     <div className="space-y-6">
