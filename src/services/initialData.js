@@ -75,6 +75,7 @@ export const initialOrdensServico = [
     dataInicio: "2024-03-15",
     dataFim: "2024-03-15",
     prioridade: "Media",
+    horasEstimadas: 4,
     consumables: [
       { type: "Óleo", quantity: 5 },
       { type: "Graxa", quantity: 2 }
@@ -90,6 +91,7 @@ export const initialOrdensServico = [
     dataInicio: "2024-03-10",
     dataFim: "2024-03-12",
     prioridade: "Alta",
+    horasEstimadas: 8,
     consumables: [
       { type: "Óleo", quantity: 10 },
       { type: "Graxa", quantity: 1 }
@@ -99,12 +101,13 @@ export const initialOrdensServico = [
     id: "3",
     titulo: "Inspeção Compressor",
     descricao: "Inspeção de rotina no compressor",
-    tipo: "Preventiva",
+    tipo: "Preditiva",
     equipamentoId: "3",
     status: "Concluída",
     dataInicio: "2024-03-05",
     dataFim: "2024-03-05",
     prioridade: "Baixa",
+    horasEstimadas: 2,
     consumables: [
       { type: "Óleo", quantity: 2 },
       { type: "Graxa", quantity: 1 }
