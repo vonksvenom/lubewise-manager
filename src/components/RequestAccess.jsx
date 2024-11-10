@@ -27,7 +27,10 @@ const RequestAccess = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 p-4">
+    <form 
+      onSubmit={handleSubmit} 
+      className="space-y-4 p-4 bg-gray-800 text-white rounded-lg"
+    >
       <h2 className="text-lg font-semibold mb-4">Solicitar Acesso</h2>
       
       <div>
@@ -37,6 +40,7 @@ const RequestAccess = () => {
           value={formData.name}
           onChange={handleChange}
           required
+          className="bg-gray-700 text-white"
         />
       </div>
       
@@ -48,6 +52,7 @@ const RequestAccess = () => {
           value={formData.email}
           onChange={handleChange}
           required
+          className="bg-gray-700 text-white"
         />
       </div>
       
@@ -58,6 +63,7 @@ const RequestAccess = () => {
           value={formData.department}
           onChange={handleChange}
           required
+          className="bg-gray-700 text-white"
         />
       </div>
       
@@ -68,6 +74,7 @@ const RequestAccess = () => {
           value={formData.role}
           onChange={handleChange}
           required
+          className="bg-gray-700 text-white"
         />
       </div>
       
@@ -78,11 +85,11 @@ const RequestAccess = () => {
           value={formData.justification}
           onChange={handleChange}
           required
-          className="w-full min-h-[100px] p-2 border rounded-md"
+          className="w-full min-h-[100px] p-2 bg-gray-700 text-white rounded-md"
         />
       </div>
       
-      <Button type="submit" className="w-full">
+      <Button type="submit" className="w-full bg-gray-600 hover:bg-gray-700">
         Enviar Solicitação
       </Button>
     </form>
