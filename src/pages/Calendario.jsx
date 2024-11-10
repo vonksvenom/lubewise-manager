@@ -3,19 +3,31 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { Card } from "@/components/ui/card";
 import { ordemServicoService, equipamentoService } from "@/services/dataService";
+import { initialEquipamentos } from "@/services/data/equipmentData";
 
 const Calendario = () => {
   const [ordensServico, setOrdensServico] = useState([]);
-  const [equipamentos, setEquipamentos] = useState([]);
+  const [equipamentos, setEquipamentos] = useState(initialEquipamentos);
 
   useEffect(() => {
-    setOrdensServico(ordemServicoService.getAll());
-    setEquipamentos(equipamentoService.getAll());
+    const loadData = async () => {
+      try {
+        const equipData = await equipamentoService.getAll();
+        setEquipamentos(Array.isArray(equipData) ? equipData : initialEquipamentos);
+        setOrdensServico(ordemServicoService.getAll());
+      } catch (error) {
+        console.error("Error loading data:", error);
+        setEquipamentos(initialEquipamentos);
+      }
+    };
+    
+    loadData();
   }, []);
 
   const getEquipamentoNome = (equipamentoId) => {
+    if (!Array.isArray(equipamentos)) return "N/A";
     const equipamento = equipamentos.find(
-      (e) => e.id.toString() === equipamentoId
+      (e) => e.id?.toString() === equipamentoId?.toString()
     );
     return equipamento ? equipamento.nome : "N/A";
   };

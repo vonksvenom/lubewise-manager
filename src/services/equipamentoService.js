@@ -1,5 +1,5 @@
 import { API_BASE_URL } from '../config/api';
-import { initialEquipamentos } from './initialData';
+import { initialEquipamentos } from './data/equipmentData';
 
 const getAll = async () => {
   try {
