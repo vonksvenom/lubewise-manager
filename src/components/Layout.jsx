@@ -1,18 +1,8 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 import { themes } from "@/config/themes";
-import { 
-  Menu,
-  X,
-  Globe,
-  ChevronLeft,
-  ChevronRight,
-  Upload,
-  LogOut,
-  Palette,
-} from "lucide-react";
+import { Menu, X, Globe, ChevronLeft, ChevronRight, LogOut } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -20,18 +10,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
-import { Input } from "./ui/input";
 import { userService } from "@/services/dataService";
 import { toast } from "sonner";
 import { navItems } from "../nav-items";
+import SidebarNav from "./layout/SidebarNav";
+import ThemeSelector from "./layout/ThemeSelector";
+import LogoUploader from "./layout/LogoUploader";
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [currentTheme, setCurrentTheme] = useState('default');
   const [logoUrl, setLogoUrl] = useState("/sotreq-industrial-logo.png");
-  const location = useLocation();
   const { t, i18n } = useTranslation();
   const { logout, isAdmin, isPowerUser } = useAuth();
   const currentUser = userService.getCurrentUser();
@@ -41,34 +31,14 @@ const Layout = ({ children }) => {
   );
 
   const handleThemeChange = (theme) => {
-    if (isAdmin() || isPowerUser()) {
-      setCurrentTheme(theme);
-      document.documentElement.style.setProperty('--background', themes[theme].colors.background);
-      document.documentElement.style.setProperty('--foreground', themes[theme].colors.foreground);
-      document.documentElement.style.setProperty('--primary', themes[theme].colors.primary);
-      document.documentElement.style.setProperty('--secondary', themes[theme].colors.secondary);
-      document.documentElement.style.setProperty('--accent', themes[theme].colors.accent);
-      document.documentElement.style.setProperty('--muted', themes[theme].colors.muted);
-      toast.success("Tema atualizado com sucesso!");
-    } else {
-      toast.error("Apenas administradores podem alterar o tema!");
-    }
-  };
-
-  const handleLogoChange = (event) => {
-    if (isAdmin() || isPowerUser()) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setLogoUrl(reader.result);
-          toast.success("Logo atualizado com sucesso!");
-        };
-        reader.readAsDataURL(file);
-      }
-    } else {
-      toast.error("Apenas administradores podem alterar o logo!");
-    }
+    setCurrentTheme(theme);
+    document.documentElement.style.setProperty('--background', themes[theme].colors.background);
+    document.documentElement.style.setProperty('--foreground', themes[theme].colors.foreground);
+    document.documentElement.style.setProperty('--primary', themes[theme].colors.primary);
+    document.documentElement.style.setProperty('--secondary', themes[theme].colors.secondary);
+    document.documentElement.style.setProperty('--accent', themes[theme].colors.accent);
+    document.documentElement.style.setProperty('--muted', themes[theme].colors.muted);
+    toast.success("Tema atualizado com sucesso!");
   };
 
   return (
@@ -125,23 +95,12 @@ const Layout = ({ children }) => {
               className={`${sidebarCollapsed ? 'h-8' : 'h-16'} object-contain transition-all duration-200`}
             />
           </div>
-          <nav className="flex-1 p-4">
-            {filteredNavItems.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={`flex items-center gap-3 px-4 py-3 mb-2 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg ${
-                  location.pathname === item.to
-                    ? "bg-primary text-background translate-x-2"
-                    : "text-catYellow hover:bg-accent bg-gradient-to-br from-muted to-accent/10"
-                } ${sidebarCollapsed ? 'justify-center' : ''}`}
-                title={item.title}
-              >
-                {item.icon}
-                {!sidebarCollapsed && <span>{item.title}</span>}
-              </Link>
-            ))}
-          </nav>
+          
+          <SidebarNav 
+            navItems={filteredNavItems} 
+            sidebarCollapsed={sidebarCollapsed} 
+          />
+
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
             className="p-4 text-catYellow hover:bg-accent rounded-xl mx-2 mb-2 flex items-center justify-center transform transition hover:scale-105 shadow-lg bg-gradient-to-br from-muted to-accent/10"
@@ -157,39 +116,16 @@ const Layout = ({ children }) => {
           {children}
           {(isAdmin() || isPowerUser()) && (
             <div className="fixed bottom-4 right-4 flex gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="icon" className="rounded-xl shadow-lg transform transition hover:scale-105 hover:shadow-xl bg-gradient-to-br from-muted to-accent/10">
-                    <Palette className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="rounded-xl shadow-lg backdrop-blur-sm bg-background/95">
-                  {Object.entries(themes).map(([key, theme]) => (
-                    <DropdownMenuItem key={key} onClick={() => handleThemeChange(key)}>
-                      {theme.name}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline" size="icon" className="rounded-xl shadow-lg transform transition hover:scale-105 hover:shadow-xl bg-gradient-to-br from-muted to-accent/10">
-                    <Upload className="h-4 w-4" />
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="rounded-xl shadow-lg backdrop-blur-sm bg-background/95">
-                  <DialogHeader>
-                    <DialogTitle>Alterar Logo</DialogTitle>
-                  </DialogHeader>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleLogoChange}
-                    className="mt-4 rounded-xl"
-                  />
-                </DialogContent>
-              </Dialog>
+              <ThemeSelector 
+                isAdmin={isAdmin} 
+                isPowerUser={isPowerUser} 
+                onThemeChange={handleThemeChange}
+              />
+              <LogoUploader 
+                isAdmin={isAdmin} 
+                isPowerUser={isPowerUser} 
+                onLogoChange={setLogoUrl}
+              />
             </div>
           )}
         </main>
