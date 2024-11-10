@@ -81,7 +81,8 @@ export const InventoryChart = () => {
   }, []);
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
+    <div className="rounded-xl shadow-neo-3d bg-gradient-to-br from-muted to-accent/10 p-4">
+      <ResponsiveContainer width="100%" height={400}>
       <LineChart data={data}>
         <CartesianGrid strokeDasharray="3 3" stroke="#666" />
         <XAxis
@@ -129,6 +130,7 @@ export const InventoryChart = () => {
           strokeDasharray="5 5"
         />
       </LineChart>
-    </ResponsiveContainer>
+      </ResponsiveContainer>
+    </div>
   );
 };

@@ -80,7 +80,7 @@ const Layout = ({ children }) => {
   return (
     <div className="min-h-screen bg-background bg-gradient-to-br from-background to-accent/5">
       <button
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-muted rounded-xl shadow-lg transform transition hover:scale-105 hover:shadow-xl"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-muted rounded-xl shadow-neo-xl transform transition hover:scale-105 hover:shadow-neo-3d"
         onClick={() => setSidebarOpen(!sidebarOpen)}
       >
         {sidebarOpen ? <X className="text-catYellow" /> : <Menu className="text-catYellow" />}
@@ -89,11 +89,11 @@ const Layout = ({ children }) => {
       <div className="fixed top-4 right-4 z-50 flex gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon" className="rounded-xl shadow-lg transform transition hover:scale-105 hover:shadow-xl bg-gradient-to-br from-muted to-accent/10">
+            <Button variant="outline" size="icon" className="rounded-xl shadow-neo-xl transform transition hover:scale-105 hover:shadow-neo-3d bg-gradient-to-br from-muted to-accent/10">
               <Globe className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="rounded-xl shadow-lg backdrop-blur-sm bg-background/95">
+          <DropdownMenuContent className="rounded-xl shadow-neo-xl backdrop-blur-sm bg-background/95">
             <DropdownMenuItem onClick={() => i18n.changeLanguage('pt')}>
               Português
             </DropdownMenuItem>
@@ -110,7 +110,7 @@ const Layout = ({ children }) => {
           variant="outline"
           size="icon"
           onClick={auth.logout}
-          className="text-red-500 hover:text-red-700 rounded-xl shadow-lg transform transition hover:scale-105 hover:shadow-xl bg-gradient-to-br from-muted to-accent/10"
+          className="text-red-500 hover:text-red-700 rounded-xl shadow-neo-xl transform transition hover:scale-105 hover:shadow-neo-3d bg-gradient-to-br from-muted to-accent/10"
         >
           <LogOut className="h-4 w-4" />
         </Button>
@@ -119,7 +119,7 @@ const Layout = ({ children }) => {
       <div
         className={`fixed inset-y-0 left-0 z-40 ${
           sidebarCollapsed ? 'w-16' : 'w-64'
-        } bg-gradient-to-br from-muted to-accent/10 backdrop-blur-sm shadow-xl transform transition-all duration-200 ease-in-out lg:translate-x-0 ${
+        } bg-gradient-to-br from-muted to-accent/10 backdrop-blur-sm shadow-neo-xl transform transition-all duration-200 ease-in-out lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } rounded-r-2xl`}
       >
@@ -128,7 +128,7 @@ const Layout = ({ children }) => {
             <img
               src={logoUrl}
               alt="Sotreq Industrial Logo"
-              className={`${sidebarCollapsed ? 'h-12 w-12 object-contain' : 'h-16'} transition-all duration-200`}
+              className={`${sidebarCollapsed ? 'h-12 w-12 object-contain' : 'h-16'} transition-all duration-200 transform hover:scale-110 hover:rotate-3 shadow-neo-3d rounded-xl`}
               onError={(e) => {
                 e.target.src = "/placeholder.svg";
                 toast.error("Erro ao carregar o logo");

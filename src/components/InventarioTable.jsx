@@ -51,54 +51,56 @@ const InventarioTable = ({ searchTerm, onEdit }) => {
   );
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Nome</TableHead>
-          <TableHead>Tipo</TableHead>
-          <TableHead>Quantidade</TableHead>
-          <TableHead>Unidade</TableHead>
-          <TableHead>Local</TableHead>
-          <TableHead>Área</TableHead>
-          <TableHead>Data Registro</TableHead>
-          <TableHead>Ações</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {filteredItems.map((item) => (
-          <TableRow key={item.id}>
-            <TableCell>{item.name}</TableCell>
-            <TableCell>{item.type}</TableCell>
-            <TableCell>{item.quantity}</TableCell>
-            <TableCell>{item.unit}</TableCell>
-            <TableCell>{item.location}</TableCell>
-            <TableCell>{item.area}</TableCell>
-            <TableCell>
-              {format(new Date(item.dataRegistro), "dd/MM/yyyy HH:mm")}
-            </TableCell>
-            <TableCell>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleEdit(item)}
-                >
-                  <Pencil className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => handleDelete(item.id)}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </TableCell>
+    <div className="rounded-xl shadow-neo-3d bg-gradient-to-br from-muted to-accent/10 p-4">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Nome</TableHead>
+            <TableHead>Tipo</TableHead>
+            <TableHead>Quantidade</TableHead>
+            <TableHead>Unidade</TableHead>
+            <TableHead>Local</TableHead>
+            <TableHead>Área</TableHead>
+            <TableHead>Data Registro</TableHead>
+            <TableHead>Ações</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {filteredItems.map((item) => (
+            <TableRow key={item.id}>
+              <TableCell>{item.name}</TableCell>
+              <TableCell>{item.type}</TableCell>
+              <TableCell>{item.quantity}</TableCell>
+              <TableCell>{item.unit}</TableCell>
+              <TableCell>{item.location}</TableCell>
+              <TableCell>{item.area}</TableCell>
+              <TableCell>
+                {format(new Date(item.dataRegistro), "dd/MM/yyyy HH:mm")}
+              </TableCell>
+              <TableCell>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => handleEdit(item)}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => handleDelete(item.id)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
 
