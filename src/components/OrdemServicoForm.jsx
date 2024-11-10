@@ -22,6 +22,7 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos }) => {
       dataInicio: new Date(),
       dataFim: new Date(),
       prioridade: "Media",
+      tipo: "Preventiva",
       consumables: [
         { type: "Óleo", quantity: 0 },
         { type: "Graxa", quantity: 0 },
@@ -71,6 +72,25 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos }) => {
           onChange={(e) => handleChange("descricao", e.target.value)}
           required
         />
+      </div>
+
+      <div className="space-y-2">
+        <label htmlFor="tipo" className="text-sm font-medium">
+          Tipo de Ordem
+        </label>
+        <Select
+          value={formData.tipo}
+          onValueChange={(value) => handleChange("tipo", value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Selecione o tipo" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Preventiva">Preventiva</SelectItem>
+            <SelectItem value="Corretiva">Corretiva</SelectItem>
+            <SelectItem value="Preditiva">Preditiva</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="space-y-2">

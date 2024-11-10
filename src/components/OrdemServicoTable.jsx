@@ -24,6 +24,7 @@ const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) =>
         <TableHeader>
           <TableRow>
             <TableHead>Título</TableHead>
+            <TableHead>Tipo</TableHead>
             <TableHead>Equipamento</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Prioridade</TableHead>
@@ -36,6 +37,19 @@ const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) =>
           {ordensServico.map((ordem) => (
             <TableRow key={ordem.id}>
               <TableCell className="font-medium">{ordem.titulo}</TableCell>
+              <TableCell>
+                <span
+                  className={`px-2 py-1 rounded-full text-sm ${
+                    ordem.tipo === "Preventiva"
+                      ? "bg-blue-100 text-blue-800"
+                      : ordem.tipo === "Corretiva"
+                      ? "bg-orange-100 text-orange-800"
+                      : "bg-purple-100 text-purple-800"
+                  }`}
+                >
+                  {ordem.tipo}
+                </span>
+              </TableCell>
               <TableCell>{getEquipamentoNome(ordem.equipamentoId)}</TableCell>
               <TableCell>
                 <span
