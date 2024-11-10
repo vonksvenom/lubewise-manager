@@ -10,7 +10,7 @@ import {
   Activity,
   Calendar
 } from "lucide-react";
-import { ordemServicoService } from "@/services/dataService";
+import { ordemServicoService, equipamentoService, inventarioService } from "@/services/dataService";
 import { format } from "date-fns";
 import { InventoryChart } from "@/components/InventoryChart";
 import { InventarioSummary } from "@/components/InventarioSummary";
@@ -33,33 +33,89 @@ import {
 const Dashboard = () => {
   const { t } = useTranslation();
   const ordensServico = ordemServicoService.getAll();
+  const equipamentos = equipamentoService.getAll();
+  const inventario = inventarioService.getAll();
 
-  // KPI Data
+  // KPI Data calculado a partir dos serviços
   const kpiData = {
-    equipmentTotal: 48,
-    pendingMaintenance: 7,
-    completedMonth: 23,
-    nextScheduled: 5,
-    efficiency: 92,
-    uptime: 98.5
+    equipmentTotal: equipamentos.length,
+    pendingMaintenance: ordensServico.filter(os => os.status === "Pendente").length,
+    completedMonth: ordensServico.filter(os => os.status === "Concluída").length,
+    nextScheduled: ordensServico.filter(os => os.status === "Agendada").length,
+    efficiency: calculateEfficiency(ordensServico),
+    uptime: calculateUptime(ordensServico)
   };
 
-  // Equipment Status Data for Pie Chart
+  // Calcula eficiência baseada nas ordens de serviço
+  function calculateEfficiency(orders) {
+    const completed = orders.filter(o => o.status === "Concluída").length;
+    const total = orders.length;
+    return total > 0 ? Math.round((completed / total) * 100) : 0;
+  }
+
+  // Calcula uptime baseado nas ordens de serviço
+  function calculateUptime(orders) {
+    const totalHours = 24 * 30; // Horas no mês
+    const maintenanceHours = orders
+      .filter(o => o.status === "Em Andamento" || o.status === "Concluída")
+      .reduce((acc, order) => acc + (order.horasEstimadas || 0), 0);
+    return Math.round(((totalHours - maintenanceHours) / totalHours) * 100);
+  }
+
+  // Equipment Status Data calculado a partir dos equipamentos
   const equipmentStatusData = [
-    { name: "Operacional", value: 38, color: "#22c55e" },
-    { name: "Em Manutenção", value: 7, color: "#eab308" },
-    { name: "Crítico", value: 3, color: "#ef4444" }
+    { 
+      name: "Operacional", 
+      value: equipamentos.filter(eq => !ordensServico.some(os => 
+        os.equipamentoId === eq.id && 
+        (os.status === "Em Andamento" || os.status === "Pendente")
+      )).length,
+      color: "#22c55e" 
+    },
+    { 
+      name: "Em Manutenção", 
+      value: ordensServico.filter(os => 
+        os.status === "Em Andamento"
+      ).length,
+      color: "#eab308" 
+    },
+    { 
+      name: "Crítico", 
+      value: ordensServico.filter(os => 
+        os.status === "Pendente" && 
+        os.prioridade === "Urgente"
+      ).length,
+      color: "#ef4444" 
+    }
   ];
 
-  // Maintenance Efficiency Data
-  const efficiencyData = [
-    { month: "Jan", preventive: 85, corrective: 15 },
-    { month: "Fev", preventive: 82, corrective: 18 },
-    { month: "Mar", preventive: 88, corrective: 12 },
-    { month: "Abr", preventive: 90, corrective: 10 },
-    { month: "Mai", preventive: 92, corrective: 8 },
-    { month: "Jun", preventive: 91, corrective: 9 }
-  ];
+  // Maintenance Efficiency Data calculado a partir das ordens de serviço
+  const efficiencyData = calculateMaintenanceEfficiency(ordensServico);
+
+  function calculateMaintenanceEfficiency(orders) {
+    const last6Months = Array.from({ length: 6 }, (_, i) => {
+      const date = new Date();
+      date.setMonth(date.getMonth() - i);
+      return format(date, "MMM");
+    }).reverse();
+
+    return last6Months.map(month => {
+      const monthOrders = orders.filter(order => 
+        format(new Date(order.dataInicio), "MMM") === month
+      );
+      
+      const total = monthOrders.length;
+      const preventive = monthOrders.filter(order => 
+        order.tipo === "Preventiva"
+      ).length;
+      
+      return {
+        month,
+        preventive: total ? Math.round((preventive / total) * 100) : 0,
+        corrective: total ? Math.round(((total - preventive) / total) * 100) : 0
+      };
+    });
+  }
 
   return (
     <div className="space-y-6 p-6">

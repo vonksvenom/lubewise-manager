@@ -31,20 +31,21 @@ export const InventoryChart = () => {
       };
     });
 
-    // Add inventory data
+    // Adiciona dados do inventário
     inventory.forEach((item) => {
       const monthIndex = next6Months.findIndex((m) =>
         isSameMonth(new Date(item.dataRegistro), m.date)
       );
       if (monthIndex >= 0) {
-        const type = item.type.toLowerCase();
-        if (type === "oleo" || type === "graxa") {
-          next6Months[monthIndex][type] += item.quantity;
+        if (item.type.toLowerCase() === "óleo") {
+          next6Months[monthIndex].oleo += item.quantity;
+        } else if (item.type.toLowerCase() === "graxa") {
+          next6Months[monthIndex].graxa += item.quantity;
         }
       }
     });
 
-    // Add predicted consumption from orders
+    // Adiciona consumo previsto das ordens de serviço
     orders.forEach((order) => {
       if (order.consumables && order.status !== "Cancelada") {
         const monthIndex = next6Months.findIndex((m) =>
@@ -52,10 +53,9 @@ export const InventoryChart = () => {
         );
         if (monthIndex >= 0) {
           order.consumables.forEach((consumable) => {
-            const type = consumable.type.toLowerCase();
-            if (type === "óleo") {
+            if (consumable.type.toLowerCase() === "óleo") {
               next6Months[monthIndex].oleoPrevisao += consumable.quantity;
-            } else if (type === "graxa") {
+            } else if (consumable.type.toLowerCase() === "graxa") {
               next6Months[monthIndex].graxaPrevisao += consumable.quantity;
             }
           });
@@ -63,7 +63,7 @@ export const InventoryChart = () => {
       }
     });
 
-    // Calculate remaining inventory after consumption
+    // Calcula inventário restante após consumo
     next6Months.forEach((month, index) => {
       if (index > 0) {
         month.oleo = Math.max(
