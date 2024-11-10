@@ -89,36 +89,6 @@ const Layout = ({ children }) => {
         {sidebarOpen ? <X className="text-catYellow" /> : <Menu className="text-catYellow" />}
       </button>
 
-      <div className="fixed top-4 right-4 z-50 flex gap-2">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon" className="rounded-xl shadow-neo-xl transform transition hover:scale-105 hover:shadow-neo-3d bg-gradient-to-br from-muted to-accent/10">
-              <Globe className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="rounded-xl shadow-neo-xl backdrop-blur-sm bg-background/95">
-            <DropdownMenuItem onClick={() => i18n.changeLanguage('pt')}>
-              Português
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => i18n.changeLanguage('en')}>
-              English
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => i18n.changeLanguage('es')}>
-              Español
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={logout}
-          className="text-red-500 hover:text-red-700 rounded-xl shadow-neo-xl transform transition hover:scale-105 hover:shadow-neo-3d bg-gradient-to-br from-muted to-accent/10"
-        >
-          <LogOut className="h-4 w-4" />
-        </Button>
-      </div>
-
       <div
         className={`fixed inset-y-0 left-0 z-40 ${
           sidebarCollapsed ? 'w-16' : 'w-64'
@@ -154,27 +124,57 @@ const Layout = ({ children }) => {
           </button>
         </div>
       </div>
+
       <div className={`transition-all duration-200 ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'} min-h-screen`}>
         <main className="p-6">
           {children}
-          {(isAdmin || isPowerUser) && (
-            <div className="fixed bottom-4 right-4 flex gap-2">
-              <ThemeSelector 
-                isAdmin={isAdmin} 
-                isPowerUser={isPowerUser} 
-                onThemeChange={handleThemeChange}
-                currentTheme={currentTheme}
-              />
-              <LogoUploader 
-                isAdmin={isAdmin} 
-                isPowerUser={isPowerUser} 
-                onLogoChange={(newLogo) => {
-                  setLogoUrl(newLogo);
-                  localStorage.setItem('logoUrl', newLogo);
-                }}
-              />
-            </div>
-          )}
+          <div className="fixed bottom-4 right-4 flex gap-2">
+            {(isAdmin || isPowerUser) && (
+              <>
+                <ThemeSelector 
+                  isAdmin={isAdmin} 
+                  isPowerUser={isPowerUser} 
+                  onThemeChange={handleThemeChange}
+                  currentTheme={currentTheme}
+                />
+                <LogoUploader 
+                  isAdmin={isAdmin} 
+                  isPowerUser={isPowerUser} 
+                  onLogoChange={(newLogo) => {
+                    setLogoUrl(newLogo);
+                    localStorage.setItem('logoUrl', newLogo);
+                  }}
+                />
+              </>
+            )}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon" className="rounded-xl shadow-neo-xl transform transition hover:scale-105 hover:shadow-neo-3d bg-gradient-to-br from-muted to-accent/10">
+                  <Globe className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="rounded-xl shadow-neo-xl backdrop-blur-sm bg-background/95">
+                <DropdownMenuItem onClick={() => i18n.changeLanguage('pt')}>
+                  Português
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => i18n.changeLanguage('en')}>
+                  English
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => i18n.changeLanguage('es')}>
+                  Español
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={logout}
+              className="text-red-500 hover:text-red-700 rounded-xl shadow-neo-xl transform transition hover:scale-105 hover:shadow-neo-3d bg-gradient-to-br from-muted to-accent/10"
+            >
+              <LogOut className="h-4 w-4" />
+            </Button>
+          </div>
         </main>
       </div>
     </div>
