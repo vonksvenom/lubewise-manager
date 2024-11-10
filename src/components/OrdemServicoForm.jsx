@@ -22,6 +22,10 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos }) => {
       dataInicio: new Date(),
       dataFim: new Date(),
       prioridade: "Media",
+      consumables: [
+        { type: "Óleo", quantity: 0 },
+        { type: "Graxa", quantity: 0 },
+      ],
     }
   );
 
@@ -32,6 +36,15 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos }) => {
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleConsumableChange = (type, quantity) => {
+    setFormData((prev) => ({
+      ...prev,
+      consumables: prev.consumables.map((c) =>
+        c.type === type ? { ...c, quantity: Number(quantity) } : c
+      ),
+    }));
   };
 
   return (
@@ -135,6 +148,24 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos }) => {
             <SelectItem value="Urgente">Urgente</SelectItem>
           </SelectContent>
         </Select>
+      </div>
+
+      <div className="space-y-4">
+        <h3 className="text-sm font-medium">Consumíveis</h3>
+        {formData.consumables.map((consumable) => (
+          <div key={consumable.type} className="space-y-2">
+            <label className="text-sm font-medium">{consumable.type}</label>
+            <Input
+              type="number"
+              min="0"
+              value={consumable.quantity}
+              onChange={(e) =>
+                handleConsumableChange(consumable.type, e.target.value)
+              }
+              placeholder={`Quantidade de ${consumable.type}`}
+            />
+          </div>
+        ))}
       </div>
 
       <div className="flex justify-end gap-2">
