@@ -9,7 +9,7 @@ import {
 import { themes } from "@/config/themes";
 import { toast } from "sonner";
 
-const ThemeSelector = ({ isAdmin, isPowerUser, onThemeChange }) => {
+const ThemeSelector = ({ isAdmin, isPowerUser, onThemeChange, currentTheme }) => {
   const handleThemeChange = (theme) => {
     if (isAdmin() || isPowerUser()) {
       onThemeChange(theme);
@@ -31,8 +31,18 @@ const ThemeSelector = ({ isAdmin, isPowerUser, onThemeChange }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="rounded-xl shadow-lg backdrop-blur-sm bg-background/95">
         {Object.entries(themes).map(([key, theme]) => (
-          <DropdownMenuItem key={key} onClick={() => handleThemeChange(key)}>
-            {theme.name}
+          <DropdownMenuItem 
+            key={key} 
+            onClick={() => handleThemeChange(key)}
+            className={currentTheme === key ? "bg-accent" : ""}
+          >
+            <div className="flex items-center gap-2">
+              <div 
+                className="w-4 h-4 rounded-full" 
+                style={{ backgroundColor: theme.colors.primary }}
+              />
+              {theme.name}
+            </div>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

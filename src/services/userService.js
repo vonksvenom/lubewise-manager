@@ -3,7 +3,7 @@ let users = [];
 export const userService = {
   getAll: () => users,
   add: (user) => {
-    const newUser = { ...user, id: Date.now() };
+    const newUser = { ...user, id: Date.now(), theme: 'default' };
     users.push(newUser);
     return newUser;
   },
@@ -31,7 +31,8 @@ users = [
     password: "admin123", 
     role: "admin", 
     department: "TI", 
-    isAdmin: true 
+    isAdmin: true,
+    theme: 'default'
   },
   { 
     id: 2, 
@@ -40,7 +41,8 @@ users = [
     password: "user123", 
     role: "user", 
     department: "Manutenção", 
-    isAdmin: false 
+    isAdmin: false,
+    theme: 'default'
   },
   { 
     id: 3, 
@@ -49,6 +51,7 @@ users = [
     password: "opr123", 
     role: "operator", 
     department: "Operações", 
-    isAdmin: false 
+    isAdmin: false,
+    theme: 'default'
   },
 ];

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 import { themes } from "@/config/themes";
@@ -26,19 +26,39 @@ const Layout = ({ children }) => {
   const { logout, isAdmin, isPowerUser } = useAuth();
   const currentUser = userService.getCurrentUser();
 
+  useEffect(() => {
+    // Tenta carregar o tema salvo do usuário
+    const savedTheme = localStorage.getItem(`theme_${currentUser?.id}`);
+    if (savedTheme) {
+      handleThemeChange(savedTheme);
+    } else {
+      // Se não houver tema salvo, usa o Standard Gray como padrão
+      handleThemeChange('default');
+    }
+  }, [currentUser]);
+
   const filteredNavItems = navItems.filter(item => 
     !item.adminOnly || (item.adminOnly && isAdmin())
   );
 
   const handleThemeChange = (theme) => {
     setCurrentTheme(theme);
+    // Aplica o tema
     document.documentElement.style.setProperty('--background', themes[theme].colors.background);
     document.documentElement.style.setProperty('--foreground', themes[theme].colors.foreground);
     document.documentElement.style.setProperty('--primary', themes[theme].colors.primary);
     document.documentElement.style.setProperty('--secondary', themes[theme].colors.secondary);
     document.documentElement.style.setProperty('--accent', themes[theme].colors.accent);
     document.documentElement.style.setProperty('--muted', themes[theme].colors.muted);
-    toast.success("Tema atualizado com sucesso!");
+    
+    // Salva o tema escolhido para o usuário atual
+    if (currentUser) {
+      localStorage.setItem(`theme_${currentUser.id}`, theme);
+      userService.update(currentUser.id, { theme: theme });
+      if (theme !== 'default') {
+        toast.success("Tema atualizado e salvo com sucesso!");
+      }
+    }
   };
 
   return (
@@ -120,6 +140,7 @@ const Layout = ({ children }) => {
                 isAdmin={isAdmin} 
                 isPowerUser={isPowerUser} 
                 onThemeChange={handleThemeChange}
+                currentTheme={currentTheme}
               />
               <LogoUploader 
                 isAdmin={isAdmin} 
