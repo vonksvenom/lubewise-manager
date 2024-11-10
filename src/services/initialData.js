@@ -30,7 +30,8 @@ const generateEquipamentos = () => {
       proximaManutencao: proximaManutencao.toISOString().split('T')[0],
       potencia: `${Math.floor(Math.random() * 100)}kW`,
       tensao: `${[220, 380, 440][Math.floor(Math.random() * 3)]}V`,
-      corrente: `${Math.floor(Math.random() * 100)}A`
+      corrente: `${Math.floor(Math.random() * 100)}A`,
+      imagem: `https://source.unsplash.com/random/800x600?machinery,${i}`
     });
   }
   return equipamentos;
@@ -76,7 +77,6 @@ const generateOrdensServico = () => {
   const status = ["Pendente", "Em Andamento", "Concluída", "Cancelada"];
   const prioridades = ["Baixa", "Media", "Alta", "Urgente"];
   
-  // Data ranges for different types of orders
   const now = new Date();
   const oneMonthAgo = subDays(now, 30);
   const nextMonth = addDays(now, 30);
@@ -85,14 +85,13 @@ const generateOrdensServico = () => {
     const tipo = tipos[Math.floor(Math.random() * tipos.length)];
     let dataInicio, dataFim;
 
-    // Distribute orders across past, present and future
-    if (i <= 30) { // Vencidas
+    if (i <= 30) {
       dataInicio = generateRandomDate(oneMonthAgo, subDays(now, 5));
       dataFim = generateRandomDate(dataInicio, subDays(now, 1));
-    } else if (i <= 60) { // Atuais
+    } else if (i <= 60) {
       dataInicio = generateRandomDate(subDays(now, 4), addDays(now, 3));
       dataFim = generateRandomDate(dataInicio, addDays(dataInicio, 5));
-    } else { // Futuras
+    } else {
       dataInicio = generateRandomDate(addDays(now, 4), nextMonth);
       dataFim = generateRandomDate(dataInicio, addDays(dataInicio, 7));
     }
@@ -108,6 +107,7 @@ const generateOrdensServico = () => {
       dataFim: dataFim.toISOString(),
       prioridade: prioridades[Math.floor(Math.random() * prioridades.length)],
       horasEstimadas: Math.floor(Math.random() * 24) + 1,
+      cip: `CIP-${i.toString().padStart(4, '0')}`,
       consumables: [
         { type: "Óleo", quantity: Math.floor(Math.random() * 10) },
         { type: "Graxa", quantity: Math.floor(Math.random() * 5) }

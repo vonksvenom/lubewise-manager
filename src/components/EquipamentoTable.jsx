@@ -15,6 +15,7 @@ const EquipamentoTable = ({ equipamentos, onEdit, onDelete }) => {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead>Imagem</TableHead>
             <TableHead>Nome</TableHead>
             <TableHead>Modelo</TableHead>
             <TableHead>Status</TableHead>
@@ -26,6 +27,15 @@ const EquipamentoTable = ({ equipamentos, onEdit, onDelete }) => {
         <TableBody>
           {equipamentos.map((equip) => (
             <TableRow key={equip.id}>
+              <TableCell>
+                {equip.imagem && (
+                  <img
+                    src={equip.imagem}
+                    alt={equip.nome}
+                    className="w-16 h-16 object-cover rounded-md"
+                  />
+                )}
+              </TableCell>
               <TableCell className="font-medium">{equip.nome}</TableCell>
               <TableCell>{equip.modelo}</TableCell>
               <TableCell>
