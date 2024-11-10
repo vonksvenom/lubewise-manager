@@ -21,7 +21,7 @@ const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [currentTheme, setCurrentTheme] = useState('default');
-  const [logoUrl, setLogoUrl] = useState("/sotreq-industrial-logo.png");
+  const [logoUrl, setLogoUrl] = useState("https://images.cws.digital/fornecedores/m/sotreq-industrial.jpg");
   const { t, i18n } = useTranslation();
   const { logout, isAdmin, isPowerUser } = useAuth();
   const currentUser = userService.getCurrentUser();
