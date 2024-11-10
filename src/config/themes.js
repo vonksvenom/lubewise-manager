@@ -1,9 +1,20 @@
 export const themes = {
+  corporate: {
+    name: "Corporate Gray",
+    colors: {
+      background: "#1f2937",
+      foreground: "#9ca3af",
+      primary: "#9ca3af",
+      secondary: "#374151",
+      accent: "#374151",
+      muted: "#374151"
+    }
+  },
   default: {
     name: "Standard Gray",
     colors: {
       background: "#1f2937",
-      foreground: "#9ca3af", 
+      foreground: "#9ca3af",
       primary: "#9ca3af",
       secondary: "#374151",
       accent: "#374151",
@@ -19,28 +30,6 @@ export const themes = {
       secondary: "#334155",
       accent: "#1e293b",
       muted: "#1e293b"
-    }
-  },
-  corporate: {
-    name: "Corporate Gray",
-    colors: {
-      background: "#1f2937",
-      foreground: "#9ca3af",
-      primary: "#9ca3af",
-      secondary: "#374151",
-      accent: "#374151",
-      muted: "#374151"
-    }
-  },
-  neon: {
-    name: "Neon Night",
-    colors: {
-      background: "#0a0a0a",
-      foreground: "#00ff00",
-      primary: "#00ff00",
-      secondary: "#1a1a1a",
-      accent: "#222222",
-      muted: "#151515"
     }
   },
   sunset: {
