@@ -37,11 +37,11 @@ const Layout = ({ children }) => {
   const currentUser = userService.getCurrentUser();
 
   const filteredNavItems = navItems.filter(item => 
-    !item.adminOnly || (item.adminOnly && isAdmin())
+    !item.adminOnly || (item.adminOnly && isAdmin)
   );
 
   const handleThemeChange = (theme) => {
-    if (isAdmin() || isPowerUser()) {
+    if (isAdmin || isPowerUser) {
       setCurrentTheme(theme);
       document.documentElement.style.setProperty('--background', themes[theme].colors.background);
       document.documentElement.style.setProperty('--foreground', themes[theme].colors.foreground);
@@ -56,7 +56,7 @@ const Layout = ({ children }) => {
   };
 
   const handleLogoChange = (event) => {
-    if (isAdmin() || isPowerUser()) {
+    if (isAdmin || isPowerUser) {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
@@ -81,7 +81,7 @@ const Layout = ({ children }) => {
       </button>
 
       <div className="fixed top-4 right-4 z-50 flex gap-2">
-        {(isAdmin() || isPowerUser()) && (
+        {(isAdmin || isPowerUser) && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="icon">
@@ -107,7 +107,7 @@ const Layout = ({ children }) => {
           <LogOut className="h-4 w-4" />
         </Button>
 
-        {(isAdmin() || isPowerUser()) && (
+        {(isAdmin || isPowerUser) && (
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="outline" size="icon">
@@ -172,7 +172,8 @@ const Layout = ({ children }) => {
                   location.pathname === item.to
                     ? "bg-primary text-background"
                     : "text-catYellow hover:bg-accent"
-                }`}
+                } ${sidebarCollapsed ? 'justify-center' : ''}`}
+                title={sidebarCollapsed ? item.title : ''}
               >
                 {item.icon}
                 {!sidebarCollapsed && <span>{item.title}</span>}
