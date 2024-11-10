@@ -12,7 +12,8 @@ import {
   Globe,
   ChevronLeft,
   ChevronRight,
-  Users
+  Users,
+  Upload
 } from "lucide-react";
 import { Button } from "./ui/button";
 import {
@@ -21,12 +22,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
+import { Input } from "./ui/input";
+import { userService } from "@/services/dataService";
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [logoUrl, setLogoUrl] = useState("https://images.cws.digital/fornecedores/m/sotreq-industrial.jpg");
   const location = useLocation();
   const { t, i18n } = useTranslation();
+  const currentUser = userService.getCurrentUser();
 
   const navItems = [
     { title: t('dashboard'), icon: <BarChart3 />, path: "/" },
@@ -37,8 +43,15 @@ const Layout = ({ children }) => {
     { title: t('calendar'), icon: <Calendar />, path: "/calendario" },
   ];
 
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
+  const handleLogoChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogoUrl(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -50,7 +63,28 @@ const Layout = ({ children }) => {
         {sidebarOpen ? <X className="text-catYellow" /> : <Menu className="text-catYellow" />}
       </button>
 
-      <div className="fixed top-4 right-4 z-50">
+      <div className="fixed top-4 right-4 z-50 flex gap-2">
+        {currentUser?.isAdmin && (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="icon">
+                <Upload className="h-4 w-4" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Alterar Logo</DialogTitle>
+              </DialogHeader>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={handleLogoChange}
+                className="mt-4"
+              />
+            </DialogContent>
+          </Dialog>
+        )}
+        
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
@@ -58,22 +92,22 @@ const Layout = ({ children }) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={() => changeLanguage('pt')}>
+            <DropdownMenuItem onClick={() => i18n.changeLanguage('pt')}>
               Português
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => changeLanguage('en')}>
+            <DropdownMenuItem onClick={() => i18n.changeLanguage('en')}>
               English
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => changeLanguage('es')}>
+            <DropdownMenuItem onClick={() => i18n.changeLanguage('es')}>
               Español
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => changeLanguage('it')}>
+            <DropdownMenuItem onClick={() => i18n.changeLanguage('it')}>
               Italiano
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => changeLanguage('da')}>
+            <DropdownMenuItem onClick={() => i18n.changeLanguage('da')}>
               Dansk
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => changeLanguage('fr')}>
+            <DropdownMenuItem onClick={() => i18n.changeLanguage('fr')}>
               Français
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -88,10 +122,10 @@ const Layout = ({ children }) => {
         }`}
       >
         <div className="flex flex-col h-full">
-          <div className="p-4 flex justify-center">
+          <div className="p-4 flex justify-center items-center bg-black/20">
             <img
-              src="https://images.cws.digital/fornecedores/m/sotreq-industrial.jpg"
-              alt="Sotreq Logo"
+              src={logoUrl}
+              alt="Company Logo"
               className={`${sidebarCollapsed ? 'h-8' : 'h-16'} object-contain transition-all duration-200`}
             />
           </div>

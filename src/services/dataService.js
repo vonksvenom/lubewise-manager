@@ -118,3 +118,85 @@ export const userService = {
     return users.find((user) => user.isAdmin) || null;
   },
 };
+
+// Populate initial data
+const populateInitialData = () => {
+  // Sample equipment
+  equipamentos = [
+    { id: 1, nome: "Escavadeira CAT 336", tag: "EQP-001", area: "Mineração", responsavel: "João Silva" },
+    { id: 2, nome: "Carregadeira 980H", tag: "EQP-002", area: "Construção", responsavel: "Maria Santos" },
+    { id: 3, nome: "Trator D6T", tag: "EQP-003", area: "Terraplanagem", responsavel: "Pedro Oliveira" },
+  ];
+
+  // Sample users
+  users = [
+    { id: 1, nome: "Admin", email: "admin@example.com", isAdmin: true },
+    { id: 2, nome: "João Silva", email: "joao@example.com", isAdmin: false },
+    { id: 3, nome: "Maria Santos", email: "maria@example.com", isAdmin: false },
+  ];
+
+  // Sample inventory
+  inventario = [
+    { id: 1, name: "Óleo Hidráulico CAT HYDO", type: "Óleo", quantity: 200, unit: "L" },
+    { id: 2, name: "Graxa MP", type: "Graxa", quantity: 50, unit: "Kg" },
+    { id: 3, name: "Óleo de Motor SAE 15W40", type: "Óleo", quantity: 150, unit: "L" },
+  ];
+
+  // Sample work orders
+  const today = new Date();
+  ordensServico = [
+    {
+      id: 1,
+      titulo: "Manutenção Preventiva EQP-001",
+      descricao: "Troca de óleo e filtros",
+      equipamentoId: "1",
+      responsavel: "João Silva",
+      status: "Concluída",
+      dataInicio: new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000),
+      dataFim: today,
+      prioridade: "Alta",
+      horasEstimadas: 4,
+      consumables: [
+        { type: "Óleo", quantity: 40 },
+        { type: "Graxa", quantity: 2 },
+      ],
+    },
+    {
+      id: 2,
+      titulo: "Inspeção EQP-002",
+      descricao: "Inspeção geral dos componentes",
+      equipamentoId: "2",
+      responsavel: "Maria Santos",
+      status: "Em Andamento",
+      dataInicio: today,
+      dataFim: new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000),
+      prioridade: "Media",
+      horasEstimadas: 2,
+      consumables: [
+        { type: "Graxa", quantity: 1 },
+      ],
+    },
+    {
+      id: 3,
+      titulo: "Manutenção Corretiva EQP-003",
+      descricao: "Reparo no sistema hidráulico",
+      equipamentoId: "3",
+      responsavel: "Pedro Oliveira",
+      status: "Pendente",
+      dataInicio: new Date(today.getTime() + 5 * 24 * 60 * 60 * 1000),
+      dataFim: new Date(today.getTime() + 6 * 24 * 60 * 60 * 1000),
+      prioridade: "Urgente",
+      horasEstimadas: 8,
+      consumables: [
+        { type: "Óleo", quantity: 60 },
+        { type: "Graxa", quantity: 3 },
+      ],
+    },
+  ];
+};
+
+// Call the populate function when the module loads
+populateInitialData();
+
+// Export all services
+export { equipamentoService, ordemServicoService, inventarioService, userService };

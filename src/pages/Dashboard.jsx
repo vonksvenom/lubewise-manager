@@ -7,13 +7,56 @@ import {
   Clock,
   Droplet
 } from "lucide-react";
+import { ordemServicoService } from "@/services/dataService";
+import { format } from "date-fns";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+} from "recharts";
 
 const Dashboard = () => {
   const { t } = useTranslation();
+  const ordensServico = ordemServicoService.getAll();
+
+  // Calculate completion percentage
+  const calculateCompletionData = () => {
+    const today = new Date();
+    const monthsData = {};
+    
+    ordensServico.forEach(ordem => {
+      const month = format(new Date(ordem.dataInicio), 'MMM/yyyy');
+      if (!monthsData[month]) {
+        monthsData[month] = { total: 0, completed: 0 };
+      }
+      monthsData[month].total += 1;
+      if (ordem.status === 'Concluída') {
+        monthsData[month].completed += 1;
+      }
+    });
+
+    return Object.entries(monthsData).map(([month, data]) => ({
+      month,
+      percentual: (data.completed / data.total) * 100
+    }));
+  };
+
+  // Get recent activities
+  const recentActivities = ordensServico
+    .filter(ordem => ordem.status === 'Concluída')
+    .sort((a, b) => new Date(b.dataFim) - new Date(a.dataFim))
+    .slice(0, 5);
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">{t('dashboard')}</h1>
+      <h1 className="text-3xl font-bold text-catYellow">{t('dashboard')}</h1>
       
       {/* Status Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -66,16 +109,51 @@ const Dashboard = () => {
         </Card>
       </div>
 
+      {/* Execution Chart */}
+      <Card className="p-6">
+        <h2 className="text-xl font-semibold mb-4 text-catYellow">
+          Percentual de Execução das Ordens de Serviço
+        </h2>
+        <div className="h-[400px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={calculateCompletionData()}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#666" />
+              <XAxis dataKey="month" stroke="#E4941A" />
+              <YAxis stroke="#E4941A" />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#333",
+                  border: "1px solid #666",
+                  color: "#E4941A",
+                }}
+              />
+              <Bar
+                dataKey="percentual"
+                fill="#E4941A"
+                name="Percentual de Conclusão"
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </Card>
+
       {/* Recent Activities */}
       <Card className="p-6">
-        <h2 className="text-xl font-semibold mb-4">{t('recentActivities')}</h2>
+        <h2 className="text-xl font-semibold mb-4 text-catYellow">
+          {t('recentActivities')}
+        </h2>
         <div className="space-y-4">
-          {[1, 2, 3].map((_, i) => (
-            <div key={i} className="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-lg">
-              <Clock className="h-5 w-5 text-gray-400" />
+          {recentActivities.map((ordem) => (
+            <div
+              key={ordem.id}
+              className="flex items-center gap-4 p-3 bg-muted rounded-lg"
+            >
+              <CheckCircle className="h-5 w-5 text-catYellow" />
               <div>
-                <p className="font-medium">{t('scheduledMaintenance')}</p>
-                <p className="text-sm text-gray-500">{t('scheduledFor')}</p>
+                <p className="font-medium text-catYellow">{ordem.titulo}</p>
+                <p className="text-sm text-gray-400">
+                  Concluída em {format(new Date(ordem.dataFim), 'dd/MM/yyyy')}
+                </p>
               </div>
             </div>
           ))}
