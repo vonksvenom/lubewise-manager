@@ -22,6 +22,7 @@ const OrdensServico = () => {
   const [ordensServico, setOrdensServico] = useState([]);
   const [selectedOrdem, setSelectedOrdem] = useState(null);
   const [equipamentos, setEquipamentos] = useState([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const { t } = useTranslation();
   const { toast } = useToast();
 
@@ -72,6 +73,12 @@ const OrdensServico = () => {
     }
     setOrdensServico(ordemServicoService.getAll());
     setSelectedOrdem(null);
+    setDialogOpen(false);
+  };
+
+  const handleEdit = (ordem) => {
+    setSelectedOrdem(ordem);
+    setDialogOpen(true);
   };
 
   const handleImport = (data) => {
@@ -105,7 +112,7 @@ const OrdensServico = () => {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">{t("workOrders")}</h1>
         <div className="flex gap-2">
-          <Dialog>
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
               <Button
                 className="bg-primary hover:bg-primary/90"
@@ -154,7 +161,7 @@ const OrdensServico = () => {
 
         <OrdemServicoTable
           ordensServico={filteredOrdensServico}
-          onEdit={setSelectedOrdem}
+          onEdit={handleEdit}
           onDelete={handleDelete}
           equipamentos={equipamentos}
         />
