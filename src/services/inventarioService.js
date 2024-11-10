@@ -1,7 +1,9 @@
 let inventario = [];
+let historicoInventario = [];
 
 export const inventarioService = {
   getAll: () => inventario,
+  getAllHistory: () => historicoInventario,
   add: (item) => {
     const newItem = { 
       ...item, 
@@ -9,9 +11,24 @@ export const inventarioService = {
       dataRegistro: new Date().toISOString()
     };
     inventario.push(newItem);
+    historicoInventario.push({
+      ...newItem,
+      historicoId: Date.now(),
+      tipoOperacao: 'entrada'
+    });
     return newItem;
   },
   update: (id, data) => {
+    const oldItem = inventario.find(item => item.id === id);
+    if (oldItem) {
+      historicoInventario.push({
+        ...oldItem,
+        historicoId: Date.now(),
+        tipoOperacao: 'atualização',
+        quantidadeAnterior: oldItem.quantity
+      });
+    }
+    
     inventario = inventario.map((item) =>
       item.id === id ? { 
         ...item, 
@@ -22,14 +39,40 @@ export const inventarioService = {
     return inventario.find((item) => item.id === id);
   },
   delete: (id) => {
+    const itemToDelete = inventario.find(item => item.id === id);
+    if (itemToDelete) {
+      historicoInventario.push({
+        ...itemToDelete,
+        historicoId: Date.now(),
+        tipoOperacao: 'exclusão'
+      });
+    }
     inventario = inventario.filter((item) => item.id !== id);
   },
-  checkAvailability: (type, quantity) => {
-    const item = inventario.find(
-      (i) => i.type.toLowerCase() === type.toLowerCase()
+  checkAvailability: (type, quantity, area) => {
+    const items = inventario.filter(
+      (i) => i.type.toLowerCase() === type.toLowerCase() &&
+      (!area || i.area === area)
     );
-    return item ? item.quantity >= quantity : false;
+    const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
+    return totalQuantity >= quantity;
   },
+  getTotalByType: (type, area) => {
+    return inventario
+      .filter(i => 
+        i.type.toLowerCase() === type.toLowerCase() &&
+        (!area || i.area === area)
+      )
+      .reduce((sum, item) => sum + item.quantity, 0);
+  },
+  getHistoricoByPeriod: (startDate, endDate, area) => {
+    return historicoInventario.filter(item => {
+      const itemDate = new Date(item.dataRegistro);
+      return itemDate >= startDate &&
+             itemDate <= endDate &&
+             (!area || item.area === area);
+    });
+  }
 };
 
 // Initialize sample data
@@ -41,6 +84,7 @@ inventario = [
     quantity: 200, 
     unit: "L",
     location: "Almoxarifado A - Prateleira 1",
+    area: "Almoxarifado",
     dataRegistro: "2024-03-01T10:00:00.000Z"
   },
   { 
@@ -50,6 +94,7 @@ inventario = [
     quantity: 50, 
     unit: "Kg",
     location: "Almoxarifado B - Prateleira 3",
+    area: "Almoxarifado",
     dataRegistro: "2024-03-01T10:00:00.000Z"
   },
   { 
@@ -59,6 +104,14 @@ inventario = [
     quantity: 150, 
     unit: "L",
     location: "Almoxarifado A - Prateleira 2",
+    area: "Almoxarifado",
     dataRegistro: "2024-03-01T10:00:00.000Z"
   },
 ];
+
+// Initialize history with initial inventory
+historicoInventario = inventario.map(item => ({
+  ...item,
+  historicoId: Date.now(),
+  tipoOperacao: 'inicial'
+}));

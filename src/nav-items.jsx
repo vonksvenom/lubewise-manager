@@ -1,10 +1,11 @@
-import { HomeIcon, Wrench, Settings, Calendar, Package, Users } from "lucide-react";
+import { HomeIcon, Wrench, Settings, Calendar, Package, Users, Factory } from "lucide-react";
 import Dashboard from "./pages/Dashboard";
 import Equipamentos from "./pages/Equipamentos";
 import OrdensServico from "./pages/OrdensServico";
 import Usuarios from "./pages/Usuarios";
 import Inventario from "./pages/Inventario";
 import Calendario from "./pages/Calendario";
+import Areas from "./pages/Areas";
 
 export const navItems = [
   {
@@ -12,6 +13,12 @@ export const navItems = [
     to: "/",
     icon: <HomeIcon className="h-4 w-4" />,
     page: <Dashboard />,
+  },
+  {
+    title: "Áreas",
+    to: "/areas",
+    icon: <Factory className="h-4 w-4" />,
+    page: <Areas />,
   },
   {
     title: "Equipamentos",
