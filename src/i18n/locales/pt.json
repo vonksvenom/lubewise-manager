@@ -1,0 +1,16 @@
+{
+  "dashboard": "Dashboard",
+  "equipment": "Equipamentos",
+  "workOrders": "Ordens de Serviço",
+  "maintenance": "Manutenções",
+  "inventory": "Estoque",
+  "stats": {
+    "equipment": "Equipamentos",
+    "pendingMaintenance": "Manutenções Pendentes",
+    "completedMonth": "Concluídas (Mês)",
+    "lubricants": "Lubrificantes"
+  },
+  "recentActivities": "Atividades Recentes",
+  "scheduledMaintenance": "Manutenção Preventiva - Máquina #23",
+  "scheduledFor": "Agendada para hoje às 14:00"
+}

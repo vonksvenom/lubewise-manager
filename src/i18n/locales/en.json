@@ -1,0 +1,16 @@
+{
+  "dashboard": "Dashboard",
+  "equipment": "Equipment",
+  "workOrders": "Work Orders",
+  "maintenance": "Maintenance",
+  "inventory": "Inventory",
+  "stats": {
+    "equipment": "Equipment",
+    "pendingMaintenance": "Pending Maintenance",
+    "completedMonth": "Completed (Month)",
+    "lubricants": "Lubricants"
+  },
+  "recentActivities": "Recent Activities",
+  "scheduledMaintenance": "Preventive Maintenance - Machine #23",
+  "scheduledFor": "Scheduled for today at 2:00 PM"
+}

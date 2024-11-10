@@ -1,26 +1,40 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { 
   Settings, 
-  Tool, 
+  Wrench, 
   Calendar, 
   Package, 
   BarChart3, 
   Menu,
-  X
+  X,
+  Globe
 } from "lucide-react";
+import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
+  const { t, i18n } = useTranslation();
 
   const navItems = [
-    { title: "Dashboard", icon: <BarChart3 />, path: "/" },
-    { title: "Equipamentos", icon: <Tool />, path: "/equipamentos" },
-    { title: "Ordens de Serviço", icon: <Settings />, path: "/ordens" },
-    { title: "Manutenções", icon: <Calendar />, path: "/manutencoes" },
-    { title: "Estoque", icon: <Package />, path: "/estoque" },
+    { title: t('dashboard'), icon: <BarChart3 />, path: "/" },
+    { title: t('equipment'), icon: <Wrench />, path: "/equipamentos" },
+    { title: t('workOrders'), icon: <Settings />, path: "/ordens" },
+    { title: t('maintenance'), icon: <Calendar />, path: "/manutencoes" },
+    { title: t('inventory'), icon: <Package />, path: "/estoque" },
   ];
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -31,6 +45,25 @@ const Layout = ({ children }) => {
       >
         {sidebarOpen ? <X /> : <Menu />}
       </button>
+
+      {/* Language switcher */}
+      <div className="fixed top-4 right-4 z-50">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon">
+              <Globe className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={() => changeLanguage('pt')}>
+              Português
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => changeLanguage('en')}>
+              English
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
 
       {/* Sidebar */}
       <div
