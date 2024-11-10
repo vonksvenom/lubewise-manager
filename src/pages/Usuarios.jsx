@@ -25,10 +25,20 @@ const Usuarios = () => {
   const { user, isAdmin, isPowerUser } = useAuth();
 
   useEffect(() => {
-    setUsers(userService.getAll());
+    const fetchUsers = async () => {
+      try {
+        const data = await userService.getAll();
+        setUsers(Array.isArray(data) ? data : []);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+        toast.error("Erro ao carregar usuários");
+        setUsers([]);
+      }
+    };
+    fetchUsers();
   }, []);
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = {
@@ -42,17 +52,17 @@ const Usuarios = () => {
 
     try {
       if (selectedUser) {
-        // Se a senha estiver vazia, não a incluímos na atualização
         if (!data.password) {
           delete data.password;
         }
-        userService.update(selectedUser.id, data);
+        await userService.update(selectedUser.id, data);
         toast.success("Usuário atualizado com sucesso!");
       } else {
-        userService.add(data);
+        await userService.add(data);
         toast.success("Usuário adicionado com sucesso!");
       }
-      setUsers(userService.getAll());
+      const updatedUsers = await userService.getAll();
+      setUsers(Array.isArray(updatedUsers) ? updatedUsers : []);
       setSelectedUser(null);
       setIsDialogOpen(false);
     } catch (error) {
@@ -60,13 +70,18 @@ const Usuarios = () => {
     }
   };
 
-  const handleDeleteUser = (id) => {
-    userService.delete(id);
-    setUsers(userService.getAll());
-    toast.success("Usuário removido com sucesso!");
+  const handleDeleteUser = async (id) => {
+    try {
+      await userService.delete(id);
+      const updatedUsers = await userService.getAll();
+      setUsers(Array.isArray(updatedUsers) ? updatedUsers : []);
+      toast.success("Usuário removido com sucesso!");
+    } catch (error) {
+      toast.error("Erro ao remover usuário");
+    }
   };
 
-  const filteredUsers = users.filter((user) => {
+  const filteredUsers = (users || []).filter((user) => {
     const searchLower = searchTerm.toLowerCase();
     return (
       (user.name?.toLowerCase() || "").includes(searchLower) ||
@@ -127,7 +142,6 @@ const Usuarios = () => {
         />
       </Card>
 
-      {/* Botão de alterar senha (visível apenas para o próprio usuário) */}
       <div className="flex justify-end">
         <ChangePasswordDialog userId={user?.id} />
       </div>
