@@ -117,32 +117,35 @@ export const initialAreas = generateAreas();
 export const initialEquipamentos = generateEquipamentos();
 export const initialInventario = generateInventario();
 export const initialOrdensServico = generateOrdensServico();
+
 export const initialUsers = [
   {
     id: "1",
     name: "Administrador",
-    email: "admin@exemplo.com",
+    email: "admin@admin.com",
     password: "admin123",
-    role: "Administrador",
+    role: "admin",
     department: "TI",
-    isAdmin: true
+    isAdmin: true,
+    systemOwner: true // Indica que é o dono do sistema
   },
   {
     id: "2",
-    name: "Técnico",
-    email: "tecnico@exemplo.com",
-    password: "tecnico123",
-    role: "Técnico",
-    department: "Manutenção",
-    isAdmin: false
+    name: "Power User",
+    email: "pwr@pwr.com",
+    password: "pwr123",
+    role: "powerUser",
+    department: "Gestão",
+    isPowerUser: true,
+    companyId: "1"
   },
   {
     id: "3",
-    name: "Supervisor",
-    email: "supervisor@exemplo.com",
-    password: "supervisor123",
-    role: "Supervisor",
-    department: "Produção",
-    isPowerUser: true
+    name: "Usuário Comum",
+    email: "user@exemplo.com",
+    password: "user123",
+    role: "user",
+    department: "Operacional",
+    companyId: "1"
   }
 ];

@@ -3,12 +3,16 @@ import { initialUsers } from './initialData';
 const STORAGE_KEY = 'users';
 const CURRENT_USER_KEY = 'user';
 
-const getAll = () => {
-  let data = localStorage.getItem(STORAGE_KEY);
-  if (!data) {
+const init = () => {
+  const existingUsers = localStorage.getItem(STORAGE_KEY);
+  if (!existingUsers) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(initialUsers));
-    return initialUsers;
   }
+};
+
+const getAll = () => {
+  init(); // Garante que os dados iniciais estão carregados
+  const data = localStorage.getItem(STORAGE_KEY);
   return JSON.parse(data);
 };
 
@@ -72,6 +76,7 @@ const setCurrentUser = (user) => {
 };
 
 export const userService = {
+  init,
   getAll,
   getById,
   add,

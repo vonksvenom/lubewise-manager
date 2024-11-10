@@ -33,21 +33,34 @@ export const AuthProvider = ({ children }) => {
   };
 
   const isAdmin = () => {
-    return user?.role === 'admin';
+    return user?.role === 'admin' || user?.systemOwner === true;
   };
 
   const isPowerUser = () => {
     return user?.role === 'powerUser';
   };
 
+  const isSystemOwner = () => {
+    return user?.systemOwner === true;
+  };
+
   const hasPermission = (action) => {
+    if (isSystemOwner()) return true;
     if (isAdmin()) return true;
     if (isPowerUser() && user?.companyId === action.companyId) return true;
     return false;
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAdmin, isPowerUser, hasPermission }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      login, 
+      logout, 
+      isAdmin, 
+      isPowerUser, 
+      isSystemOwner,
+      hasPermission 
+    }}>
       {children}
     </AuthContext.Provider>
   );
