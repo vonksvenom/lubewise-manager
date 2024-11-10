@@ -81,53 +81,6 @@ const Layout = ({ children }) => {
       </button>
 
       <div className="fixed top-4 right-4 z-50 flex gap-2">
-        {(isAdmin || isPowerUser) && (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon" className="rounded-xl shadow-lg transform transition hover:scale-105 hover:shadow-xl bg-gradient-to-br from-muted to-accent/10">
-                <Palette className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="rounded-xl shadow-lg backdrop-blur-sm bg-background/95">
-              {Object.entries(themes).map(([key, theme]) => (
-                <DropdownMenuItem key={key} onClick={() => handleThemeChange(key)}>
-                  {theme.name}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
-
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={logout}
-          className="text-red-500 hover:text-red-700 rounded-xl shadow-lg transform transition hover:scale-105 hover:shadow-xl bg-gradient-to-br from-muted to-accent/10"
-        >
-          <LogOut className="h-4 w-4" />
-        </Button>
-
-        {(isAdmin || isPowerUser) && (
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="icon" className="rounded-xl shadow-lg transform transition hover:scale-105 hover:shadow-xl bg-gradient-to-br from-muted to-accent/10">
-                <Upload className="h-4 w-4" />
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="rounded-xl shadow-lg backdrop-blur-sm bg-background/95">
-              <DialogHeader>
-                <DialogTitle>Alterar Logo</DialogTitle>
-              </DialogHeader>
-              <Input
-                type="file"
-                accept="image/*"
-                onChange={handleLogoChange}
-                className="mt-4 rounded-xl"
-              />
-            </DialogContent>
-          </Dialog>
-        )}
-        
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon" className="rounded-xl shadow-lg transform transition hover:scale-105 hover:shadow-xl bg-gradient-to-br from-muted to-accent/10">
@@ -146,6 +99,15 @@ const Layout = ({ children }) => {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={logout}
+          className="text-red-500 hover:text-red-700 rounded-xl shadow-lg transform transition hover:scale-105 hover:shadow-xl bg-gradient-to-br from-muted to-accent/10"
+        >
+          <LogOut className="h-4 w-4" />
+        </Button>
       </div>
 
       <div
@@ -191,7 +153,46 @@ const Layout = ({ children }) => {
       </div>
 
       <div className={`transition-all duration-200 ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'} min-h-screen`}>
-        <main className="p-6">{children}</main>
+        <main className="p-6">
+          {children}
+          {(isAdmin() || isPowerUser()) && (
+            <div className="fixed bottom-4 right-4 flex gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="icon" className="rounded-xl shadow-lg transform transition hover:scale-105 hover:shadow-xl bg-gradient-to-br from-muted to-accent/10">
+                    <Palette className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="rounded-xl shadow-lg backdrop-blur-sm bg-background/95">
+                  {Object.entries(themes).map(([key, theme]) => (
+                    <DropdownMenuItem key={key} onClick={() => handleThemeChange(key)}>
+                      {theme.name}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="icon" className="rounded-xl shadow-lg transform transition hover:scale-105 hover:shadow-xl bg-gradient-to-br from-muted to-accent/10">
+                    <Upload className="h-4 w-4" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="rounded-xl shadow-lg backdrop-blur-sm bg-background/95">
+                  <DialogHeader>
+                    <DialogTitle>Alterar Logo</DialogTitle>
+                  </DialogHeader>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleLogoChange}
+                    className="mt-4 rounded-xl"
+                  />
+                </DialogContent>
+              </Dialog>
+            </div>
+          )}
+        </main>
       </div>
     </div>
   );
