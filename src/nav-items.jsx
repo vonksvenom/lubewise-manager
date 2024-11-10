@@ -1,8 +1,8 @@
-import { HomeIcon, Wrench, Settings, Calendar, Package } from "lucide-react";
+import { HomeIcon, Wrench, Settings, Calendar, Package, Users } from "lucide-react";
 import Dashboard from "./pages/Dashboard";
 import Equipamentos from "./pages/Equipamentos";
 import OrdensServico from "./pages/OrdensServico";
-import Manutencoes from "./pages/Manutencoes";
+import Usuarios from "./pages/Usuarios";
 import Inventario from "./pages/Inventario";
 import Calendario from "./pages/Calendario";
 
@@ -26,10 +26,10 @@ export const navItems = [
     page: <OrdensServico />,
   },
   {
-    title: "Manutenções",
-    to: "/manutencoes",
-    icon: <Calendar className="h-4 w-4" />,
-    page: <Manutencoes />,
+    title: "Usuários",
+    to: "/usuarios",
+    icon: <Users className="h-4 w-4" />,
+    page: <Usuarios />,
   },
   {
     title: "Inventário",

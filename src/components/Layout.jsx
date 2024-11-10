@@ -9,7 +9,10 @@ import {
   BarChart3, 
   Menu,
   X,
-  Globe
+  Globe,
+  ChevronLeft,
+  ChevronRight,
+  Users
 } from "lucide-react";
 import { Button } from "./ui/button";
 import {
@@ -21,6 +24,7 @@ import {
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const location = useLocation();
   const { t, i18n } = useTranslation();
 
@@ -28,8 +32,9 @@ const Layout = ({ children }) => {
     { title: t('dashboard'), icon: <BarChart3 />, path: "/" },
     { title: t('equipment'), icon: <Wrench />, path: "/equipamentos" },
     { title: t('workOrders'), icon: <Settings />, path: "/ordens" },
-    { title: t('maintenance'), icon: <Calendar />, path: "/manutencoes" },
+    { title: t('users'), icon: <Users />, path: "/usuarios" },
     { title: t('inventory'), icon: <Package />, path: "/inventario" },
+    { title: t('calendar'), icon: <Calendar />, path: "/calendario" },
   ];
 
   const changeLanguage = (lng) => {
@@ -76,7 +81,9 @@ const Layout = ({ children }) => {
       </div>
 
       <div
-        className={`fixed inset-y-0 left-0 z-40 w-64 bg-muted shadow-lg transform transition-transform duration-200 ease-in-out lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 ${
+          sidebarCollapsed ? 'w-16' : 'w-64'
+        } bg-muted shadow-lg transform transition-all duration-200 ease-in-out lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -85,7 +92,7 @@ const Layout = ({ children }) => {
             <img
               src="https://images.cws.digital/fornecedores/m/sotreq-industrial.jpg"
               alt="Sotreq Logo"
-              className="h-16 object-contain"
+              className={`${sidebarCollapsed ? 'h-8' : 'h-16'} object-contain transition-all duration-200`}
             />
           </div>
           <nav className="flex-1 p-4">
@@ -100,14 +107,20 @@ const Layout = ({ children }) => {
                 }`}
               >
                 {item.icon}
-                <span>{item.title}</span>
+                {!sidebarCollapsed && <span>{item.title}</span>}
               </Link>
             ))}
           </nav>
+          <button
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            className="p-4 text-catYellow hover:bg-accent rounded-md mx-2 mb-2 flex items-center justify-center"
+          >
+            {sidebarCollapsed ? <ChevronRight /> : <ChevronLeft />}
+          </button>
         </div>
       </div>
 
-      <div className="lg:ml-64 min-h-screen">
+      <div className={`transition-all duration-200 ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'} min-h-screen`}>
         <main className="p-6">{children}</main>
       </div>
     </div>
