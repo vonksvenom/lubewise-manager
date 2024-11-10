@@ -5,10 +5,23 @@ const STORAGE_KEY = 'ordensServico';
 const getAll = () => {
   let data = localStorage.getItem(STORAGE_KEY);
   if (!data) {
+    // Se não houver dados no localStorage, use os dados iniciais
     localStorage.setItem(STORAGE_KEY, JSON.stringify(initialOrdensServico));
     return initialOrdensServico;
   }
-  return JSON.parse(data);
+  try {
+    const parsedData = JSON.parse(data);
+    // Se o array estiver vazio, recarregue os dados iniciais
+    if (!Array.isArray(parsedData) || parsedData.length === 0) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(initialOrdensServico));
+      return initialOrdensServico;
+    }
+    return parsedData;
+  } catch (error) {
+    // Se houver erro ao parsear os dados, recarregue os dados iniciais
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialOrdensServico));
+    return initialOrdensServico;
+  }
 };
 
 const getById = (id) => {
