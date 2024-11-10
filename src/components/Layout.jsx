@@ -173,7 +173,7 @@ const Layout = ({ children }) => {
                     ? "bg-primary text-background"
                     : "text-catYellow hover:bg-accent"
                 } ${sidebarCollapsed ? 'justify-center' : ''}`}
-                title={sidebarCollapsed ? item.title : ''}
+                title={item.title}
               >
                 {item.icon}
                 {!sidebarCollapsed && <span>{item.title}</span>}
@@ -183,6 +183,7 @@ const Layout = ({ children }) => {
           <button
             onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
             className="p-4 text-catYellow hover:bg-accent rounded-md mx-2 mb-2 flex items-center justify-center"
+            title={sidebarCollapsed ? "Expandir menu" : "Recolher menu"}
           >
             {sidebarCollapsed ? <ChevronRight /> : <ChevronLeft />}
           </button>
