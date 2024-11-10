@@ -23,7 +23,7 @@ const Layout = ({ children }) => {
   const [currentTheme, setCurrentTheme] = useState('corporate');
   const [logoUrl, setLogoUrl] = useState("https://images.cws.digital/fornecedores/m/sotreq-industrial.jpg");
   const { t, i18n } = useTranslation();
-  const { user, isAdmin, isPowerUser } = useAuth();
+  const { user, isAdmin, isPowerUser, logout } = useAuth();
   const currentUser = userService.getCurrentUser();
 
   useEffect(() => {
@@ -109,7 +109,7 @@ const Layout = ({ children }) => {
         <Button
           variant="outline"
           size="icon"
-          onClick={auth.logout}
+          onClick={logout}
           className="text-red-500 hover:text-red-700 rounded-xl shadow-neo-xl transform transition hover:scale-105 hover:shadow-neo-3d bg-gradient-to-br from-muted to-accent/10"
         >
           <LogOut className="h-4 w-4" />
