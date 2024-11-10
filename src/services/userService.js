@@ -24,7 +24,6 @@ const getById = (id) => {
 const add = (user) => {
   const users = getAll();
   
-  // Verifica se o email existe e se já existe um usuário com o mesmo email
   if (user.email) {
     const existingUser = users.find(u => u.email?.toLowerCase() === user.email.toLowerCase());
     if (existingUser) {
@@ -45,7 +44,6 @@ const update = (id, user) => {
   const users = getAll();
   const index = users.findIndex(u => u.id === id);
   
-  // Verifica se o email existe e se já está em uso por outro usuário
   if (user.email) {
     const existingUser = users.find(u => 
       u.email?.toLowerCase() === user.email.toLowerCase() && u.id !== id
@@ -93,6 +91,28 @@ const setCurrentUser = (user) => {
   }
 };
 
+const changePassword = (userId, currentPassword, newPassword) => {
+  const users = getAll();
+  const user = users.find(u => u.id === userId);
+  
+  if (!user) {
+    throw new Error('Usuário não encontrado');
+  }
+
+  if (user.password !== currentPassword) {
+    throw new Error('Senha atual incorreta');
+  }
+
+  user.password = newPassword;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+
+  // Atualiza o usuário atual se necessário
+  const currentUser = getCurrentUser();
+  if (currentUser && currentUser.id === userId) {
+    setCurrentUser(user);
+  }
+};
+
 export const userService = {
   init,
   getAll,
@@ -101,5 +121,6 @@ export const userService = {
   update,
   delete: remove,
   getCurrentUser,
-  setCurrentUser
+  setCurrentUser,
+  changePassword
 };
