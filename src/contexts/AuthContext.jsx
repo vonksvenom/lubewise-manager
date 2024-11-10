@@ -47,8 +47,13 @@ export const AuthProvider = ({ children }) => {
   const hasPermission = (action) => {
     if (isSystemOwner()) return true;
     if (isAdmin()) return true;
+    // Power users só têm acesso aos dados da própria empresa
     if (isPowerUser() && user?.companyId === action.companyId) return true;
     return false;
+  };
+
+  const canManageCompany = () => {
+    return isAdmin() || isSystemOwner();
   };
 
   return (
@@ -59,7 +64,8 @@ export const AuthProvider = ({ children }) => {
       isAdmin, 
       isPowerUser, 
       isSystemOwner,
-      hasPermission 
+      hasPermission,
+      canManageCompany
     }}>
       {children}
     </AuthContext.Provider>

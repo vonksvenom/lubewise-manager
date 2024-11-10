@@ -118,6 +118,14 @@ export const initialEquipamentos = generateEquipamentos();
 export const initialInventario = generateInventario();
 export const initialOrdensServico = generateOrdensServico();
 
+export const initialCompanies = [
+  {
+    id: "1",
+    name: "Empresa Exemplo",
+    active: true
+  }
+];
+
 export const initialUsers = [
   {
     id: "1",
@@ -137,7 +145,8 @@ export const initialUsers = [
     role: "powerUser",
     department: "Gestão",
     isPowerUser: true,
-    companyId: "1"
+    companyId: "1", // Vinculado à empresa exemplo
+    companyName: "Empresa Exemplo"
   },
   {
     id: "3",
