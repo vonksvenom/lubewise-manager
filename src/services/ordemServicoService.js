@@ -63,7 +63,7 @@ ordensServico = Array.from({ length: 300 }, (_, index) => {
   const tipoManutencao = tiposManutencao[Math.floor(Math.random() * tiposManutencao.length)];
   const dataInicio = getRandomDate(new Date(2023, 0, 1), new Date(2025, 11, 31)); // Atualizado para incluir até dezembro de 2025
   const dataFim = new Date(dataInicio);
-  dataFim.setDate(dataFim.getDate() + Math.floor(Math.random() * 14) + 1);
+  dataFim.setDate(dataFim.getDate() + Math.floor(Math.random() * 7) + 1); // Reduzido para máximo 7 dias
   
   const equipamentoId = String(Math.floor(Math.random() * 100) + 1);
   const responsavel = responsaveis[Math.floor(Math.random() * responsaveis.length)];
