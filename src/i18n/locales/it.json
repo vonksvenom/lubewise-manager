@@ -1,0 +1,16 @@
+{
+  "dashboard": "Cruscotto",
+  "equipment": "Attrezzature",
+  "workOrders": "Ordini di Lavoro",
+  "maintenance": "Manutenzione",
+  "inventory": "Inventario",
+  "stats": {
+    "equipment": "Attrezzature",
+    "pendingMaintenance": "Manutenzione in Sospeso",
+    "completedMonth": "Completato (Mese)",
+    "lubricants": "Lubrificanti"
+  },
+  "recentActivities": "Attività Recenti",
+  "scheduledMaintenance": "Manutenzione Preventiva - Macchina #23",
+  "scheduledFor": "Programmato per oggi alle 14:00"
+}

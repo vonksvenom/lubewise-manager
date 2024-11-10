@@ -1,0 +1,16 @@
+{
+  "dashboard": "Tableau de Bord",
+  "equipment": "Équipements",
+  "workOrders": "Ordres de Travail",
+  "maintenance": "Maintenance",
+  "inventory": "Inventaire",
+  "stats": {
+    "equipment": "Équipements",
+    "pendingMaintenance": "Maintenance en Attente",
+    "completedMonth": "Terminé (Mois)",
+    "lubricants": "Lubrifiants"
+  },
+  "recentActivities": "Activités Récentes",
+  "scheduledMaintenance": "Maintenance Préventive - Machine #23",
+  "scheduledFor": "Programmé pour aujourd'hui à 14h00"
+}

@@ -38,7 +38,6 @@ const Layout = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Mobile menu button */}
       <button
         className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-md shadow-md"
         onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -46,7 +45,6 @@ const Layout = ({ children }) => {
         {sidebarOpen ? <X /> : <Menu />}
       </button>
 
-      {/* Language switcher */}
       <div className="fixed top-4 right-4 z-50">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -61,11 +59,22 @@ const Layout = ({ children }) => {
             <DropdownMenuItem onClick={() => changeLanguage('en')}>
               English
             </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => changeLanguage('es')}>
+              Español
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => changeLanguage('it')}>
+              Italiano
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => changeLanguage('da')}>
+              Dansk
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => changeLanguage('fr')}>
+              Français
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
-      {/* Sidebar */}
       <div
         className={`fixed inset-y-0 left-0 z-40 w-64 bg-white shadow-lg transform transition-transform duration-200 ease-in-out lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -94,7 +103,6 @@ const Layout = ({ children }) => {
         </div>
       </div>
 
-      {/* Main content */}
       <div className="lg:ml-64 min-h-screen">
         <main className="p-6">{children}</main>
       </div>

@@ -1,0 +1,16 @@
+{
+  "dashboard": "Panel de Control",
+  "equipment": "Equipos",
+  "workOrders": "Órdenes de Trabajo",
+  "maintenance": "Mantenimiento",
+  "inventory": "Inventario",
+  "stats": {
+    "equipment": "Equipos",
+    "pendingMaintenance": "Mantenimiento Pendiente",
+    "completedMonth": "Completado (Mes)",
+    "lubricants": "Lubricantes"
+  },
+  "recentActivities": "Actividades Recientes",
+  "scheduledMaintenance": "Mantenimiento Preventivo - Máquina #23",
+  "scheduledFor": "Programado para hoy a las 14:00"
+}

@@ -1,0 +1,16 @@
+{
+  "dashboard": "Dashboard",
+  "equipment": "Udstyr",
+  "workOrders": "Arbejdsordrer",
+  "maintenance": "Vedligeholdelse",
+  "inventory": "Lager",
+  "stats": {
+    "equipment": "Udstyr",
+    "pendingMaintenance": "Afventende Vedligeholdelse",
+    "completedMonth": "Afsluttet (Måned)",
+    "lubricants": "Smøremidler"
+  },
+  "recentActivities": "Seneste Aktiviteter",
+  "scheduledMaintenance": "Forebyggende Vedligeholdelse - Maskine #23",
+  "scheduledFor": "Planlagt til i dag kl. 14:00"
+}
