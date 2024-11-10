@@ -12,7 +12,7 @@ const SidebarNav = ({ navItems, sidebarCollapsed }) => {
           className={`flex items-center gap-3 px-4 py-3 mb-2 rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg ${
             location.pathname === item.to
               ? "bg-primary text-background translate-x-2"
-              : "text-catYellow hover:bg-accent bg-gradient-to-br from-muted to-accent/10"
+              : "text-catYellow hover:bg-accent bg-gradient-to-br from-muted to-accent/5"
           } ${sidebarCollapsed ? 'w-12 h-12 p-0 justify-center' : 'w-full'}`}
           title={item.title}
         >
