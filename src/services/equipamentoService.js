@@ -1,8 +1,14 @@
+import { initialEquipamentos } from './initialData';
+
 const STORAGE_KEY = 'equipamentos';
 
 const getAll = () => {
-  const data = localStorage.getItem(STORAGE_KEY);
-  return data ? JSON.parse(data) : [];
+  let data = localStorage.getItem(STORAGE_KEY);
+  if (!data) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialEquipamentos));
+    return initialEquipamentos;
+  }
+  return JSON.parse(data);
 };
 
 const getById = (id) => {

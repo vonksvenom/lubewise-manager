@@ -1,8 +1,14 @@
+import { initialOrdensServico } from './initialData';
+
 const STORAGE_KEY = 'ordensServico';
 
 const getAll = () => {
-  const data = localStorage.getItem(STORAGE_KEY);
-  return data ? JSON.parse(data) : [];
+  let data = localStorage.getItem(STORAGE_KEY);
+  if (!data) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialOrdensServico));
+    return initialOrdensServico;
+  }
+  return JSON.parse(data);
 };
 
 const getById = (id) => {

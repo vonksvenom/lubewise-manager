@@ -1,41 +1,53 @@
-let areas = [];
+import { initialAreas } from './initialData';
 
-export const areaService = {
-  getAll: () => areas,
-  add: (area) => {
-    const newArea = { ...area, id: Date.now() };
-    areas.push(newArea);
-    return newArea;
-  },
-  update: (id, data) => {
-    areas = areas.map((area) =>
-      area.id === id ? { ...area, ...data } : area
-    );
-    return areas.find((area) => area.id === id);
-  },
-  delete: (id) => {
-    areas = areas.filter((area) => area.id !== id);
-  },
+const STORAGE_KEY = 'areas';
+
+const getAll = () => {
+  let data = localStorage.getItem(STORAGE_KEY);
+  if (!data) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialAreas));
+    return initialAreas;
+  }
+  return JSON.parse(data);
 };
 
-// Initialize sample data
-areas = [
-  { 
-    id: 1, 
-    nome: "Área de Produção", 
-    descricao: "Área principal de produção",
-    responsavel: "João Silva"
-  },
-  { 
-    id: 2, 
-    nome: "Manutenção", 
-    descricao: "Oficina de manutenção",
-    responsavel: "Maria Santos"
-  },
-  { 
-    id: 3, 
-    nome: "Almoxarifado", 
-    descricao: "Área de armazenamento",
-    responsavel: "Pedro Oliveira"
-  },
-];
+const getById = (id) => {
+  const areas = getAll();
+  return areas.find(area => area.id === id);
+};
+
+const add = (area) => {
+  const areas = getAll();
+  const newArea = {
+    ...area,
+    id: Date.now().toString(),
+  };
+  areas.push(newArea);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(areas));
+  return newArea;
+};
+
+const update = (id, area) => {
+  const areas = getAll();
+  const index = areas.findIndex(a => a.id === id);
+  if (index !== -1) {
+    areas[index] = { ...areas[index], ...area };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(areas));
+    return areas[index];
+  }
+  return null;
+};
+
+const remove = (id) => {
+  const areas = getAll();
+  const filtered = areas.filter(area => area.id !== id);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+};
+
+export const areaService = {
+  getAll,
+  getById,
+  add,
+  update,
+  delete: remove
+};

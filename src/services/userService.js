@@ -1,57 +1,82 @@
-let users = [];
+import { initialUsers } from './initialData';
 
-export const userService = {
-  getAll: () => users,
-  add: (user) => {
-    const newUser = { ...user, id: Date.now(), theme: 'default' };
-    users.push(newUser);
-    return newUser;
-  },
-  update: (id, data) => {
-    users = users.map((user) =>
-      user.id === id ? { ...user, ...data } : user
-    );
-    return users.find((user) => user.id === id);
-  },
-  delete: (id) => {
-    users = users.filter((user) => user.id !== id);
-  },
-  getCurrentUser: () => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
-  },
+const STORAGE_KEY = 'users';
+const CURRENT_USER_KEY = 'user';
+
+const getAll = () => {
+  let data = localStorage.getItem(STORAGE_KEY);
+  if (!data) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialUsers));
+    return initialUsers;
+  }
+  return JSON.parse(data);
 };
 
-// Initialize sample data
-users = [
-  { 
-    id: 1, 
-    name: "Admin", 
-    email: "admin@admin.com", 
-    password: "admin123", 
-    role: "admin", 
-    department: "TI", 
-    isAdmin: true,
-    theme: 'default'
-  },
-  { 
-    id: 2, 
-    name: "User", 
-    email: "user@user.com", 
-    password: "user123", 
-    role: "user", 
-    department: "Manutenção", 
-    isAdmin: false,
-    theme: 'default'
-  },
-  { 
-    id: 3, 
-    name: "Operador", 
-    email: "opr@opr.com", 
-    password: "opr123", 
-    role: "operator", 
-    department: "Operações", 
-    isAdmin: false,
-    theme: 'default'
-  },
-];
+const getById = (id) => {
+  const users = getAll();
+  return users.find(user => user.id === id);
+};
+
+const add = (user) => {
+  const users = getAll();
+  const newUser = {
+    ...user,
+    id: Date.now().toString(),
+  };
+  users.push(newUser);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+  return newUser;
+};
+
+const update = (id, user) => {
+  const users = getAll();
+  const index = users.findIndex(u => u.id === id);
+  if (index !== -1) {
+    users[index] = { ...users[index], ...user };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+    
+    // Atualiza o usuário atual se for o mesmo
+    const currentUser = getCurrentUser();
+    if (currentUser && currentUser.id === id) {
+      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(users[index]));
+    }
+    
+    return users[index];
+  }
+  return null;
+};
+
+const remove = (id) => {
+  const users = getAll();
+  const filtered = users.filter(user => user.id !== id);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+  
+  // Remove o usuário atual se for o mesmo
+  const currentUser = getCurrentUser();
+  if (currentUser && currentUser.id === id) {
+    localStorage.removeItem(CURRENT_USER_KEY);
+  }
+};
+
+const getCurrentUser = () => {
+  const data = localStorage.getItem(CURRENT_USER_KEY);
+  return data ? JSON.parse(data) : null;
+};
+
+const setCurrentUser = (user) => {
+  if (user) {
+    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+  } else {
+    localStorage.removeItem(CURRENT_USER_KEY);
+  }
+};
+
+export const userService = {
+  getAll,
+  getById,
+  add,
+  update,
+  delete: remove,
+  getCurrentUser,
+  setCurrentUser
+};
