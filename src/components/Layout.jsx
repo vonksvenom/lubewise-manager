@@ -23,7 +23,7 @@ const Layout = ({ children }) => {
   const [currentTheme, setCurrentTheme] = useState('corporate');
   const [logoUrl, setLogoUrl] = useState("https://images.cws.digital/fornecedores/m/sotreq-industrial.jpg");
   const { t, i18n } = useTranslation();
-  const { logout, isAdmin, isPowerUser } = useAuth();
+  const auth = useAuth();
   const currentUser = userService.getCurrentUser();
 
   useEffect(() => {
@@ -62,7 +62,7 @@ const Layout = ({ children }) => {
     document.documentElement.style.setProperty('--muted', themes[theme].colors.muted);
     
     // Se for admin ou power user e estiver definindo o tema padrão da empresa
-    if ((isAdmin() || isPowerUser()) && theme !== currentTheme) {
+    if ((auth.isAdmin() || auth.isPowerUser()) && theme !== currentTheme) {
       const setAsDefault = window.confirm("Deseja definir este tema como padrão para todos os usuários?");
       if (setAsDefault) {
         localStorage.setItem('company_default_theme', theme);
@@ -81,7 +81,7 @@ const Layout = ({ children }) => {
   };
 
   const filteredNavItems = navItems.filter(item => 
-    !item.adminOnly || (item.adminOnly && isAdmin)
+    !item.adminOnly || (item.adminOnly && auth.isAdmin())
   );
 
   return (
@@ -157,21 +157,20 @@ const Layout = ({ children }) => {
           </button>
         </div>
       </div>
-
       <div className={`transition-all duration-200 ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'} min-h-screen`}>
         <main className="p-6">
           {children}
-          {(isAdmin || isPowerUser) && (
+          {(auth.isAdmin() || auth.isPowerUser()) && (
             <div className="fixed bottom-4 right-4 flex gap-2">
               <ThemeSelector 
-                isAdmin={isAdmin} 
-                isPowerUser={isPowerUser} 
+                isAdmin={auth.isAdmin()} 
+                isPowerUser={auth.isPowerUser()} 
                 onThemeChange={handleThemeChange}
                 currentTheme={currentTheme}
               />
               <LogoUploader 
-                isAdmin={isAdmin} 
-                isPowerUser={isPowerUser} 
+                isAdmin={auth.isAdmin()} 
+                isPowerUser={auth.isPowerUser()} 
                 onLogoChange={(newLogo) => {
                   setLogoUrl(newLogo);
                   localStorage.setItem('logoUrl', newLogo);
