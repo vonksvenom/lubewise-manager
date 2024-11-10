@@ -13,11 +13,17 @@ const SidebarNav = ({ navItems, sidebarCollapsed }) => {
             location.pathname === item.to
               ? "bg-primary text-background translate-x-2"
               : "text-catYellow hover:bg-accent bg-gradient-to-br from-muted to-accent/10"
-          } ${sidebarCollapsed ? 'justify-center' : ''}`}
+          } ${sidebarCollapsed ? 'justify-center w-auto' : 'w-full'}`}
           title={item.title}
         >
-          {item.icon}
-          {!sidebarCollapsed && <span>{item.title}</span>}
+          <span className="flex-shrink-0">
+            {item.icon}
+          </span>
+          <span className={`transition-all duration-200 ${
+            sidebarCollapsed ? 'w-0 overflow-hidden opacity-0' : 'w-auto opacity-100'
+          }`}>
+            {item.title}
+          </span>
         </Link>
       ))}
     </nav>
