@@ -117,6 +117,7 @@ export const initialAreas = generateAreas();
 export const initialEquipamentos = generateEquipamentos();
 export const initialInventario = generateInventario();
 export const initialOrdensServico = generateOrdensServico();
+
 export const initialUsers = [
   {
     id: "1",
