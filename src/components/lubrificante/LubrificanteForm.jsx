@@ -20,6 +20,7 @@ const LubrificanteForm = ({ initialData, onSave }) => {
       fornecedor: "",
       viscosidade: "",
       volumePadrao: "200L",
+      type: "Óleo", // Default value
     }
   );
 
@@ -73,6 +74,23 @@ const LubrificanteForm = ({ initialData, onSave }) => {
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
+          <label htmlFor="type" className="text-sm font-medium">
+            Tipo
+          </label>
+          <Select
+            value={formData.type}
+            onValueChange={(value) => handleChange("type", value)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Selecione o tipo" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Óleo">Óleo</SelectItem>
+              <SelectItem value="Graxa">Graxa</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
           <label htmlFor="viscosidade" className="text-sm font-medium">
             Viscosidade
           </label>
@@ -83,26 +101,27 @@ const LubrificanteForm = ({ initialData, onSave }) => {
             required
           />
         </div>
-        <div className="space-y-2">
-          <label htmlFor="volumePadrao" className="text-sm font-medium">
-            Volume Padrão
-          </label>
-          <Select
-            value={formData.volumePadrao}
-            onValueChange={(value) => handleChange("volumePadrao", value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Selecione o volume" />
-            </SelectTrigger>
-            <SelectContent>
-              {VOLUMES_PADRAO.map((volume) => (
-                <SelectItem key={volume} value={volume}>
-                  {volume}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+      </div>
+
+      <div className="space-y-2">
+        <label htmlFor="volumePadrao" className="text-sm font-medium">
+          Volume Padrão
+        </label>
+        <Select
+          value={formData.volumePadrao}
+          onValueChange={(value) => handleChange("volumePadrao", value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Selecione o volume" />
+          </SelectTrigger>
+          <SelectContent>
+            {VOLUMES_PADRAO.map((volume) => (
+              <SelectItem key={volume} value={volume}>
+                {volume}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="flex justify-end gap-2">
