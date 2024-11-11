@@ -3,8 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DialogClose } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import EquipamentoBasicInfo from "./equipamento/EquipamentoBasicInfo";
 import EquipamentoStatusSelect from "./equipamento/EquipamentoStatusSelect";
+import { userService, areaService } from "@/services/dataService";
 
 const EquipamentoForm = ({ initialData, onSave }) => {
   const [formData, setFormData] = useState(
@@ -22,6 +30,11 @@ const EquipamentoForm = ({ initialData, onSave }) => {
     }
   );
 
+  const areas = areaService.getAll();
+  const responsaveis = userService.getAll().filter(user => 
+    user.role === "technician" || user.role === "supervisor"
+  );
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave(formData);
@@ -35,6 +48,39 @@ const EquipamentoForm = ({ initialData, onSave }) => {
     <form onSubmit={handleSubmit} className="space-y-4">
       <EquipamentoBasicInfo formData={formData} handleChange={handleChange} />
       
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <label htmlFor="area" className="text-sm font-medium">Área</label>
+          <Select value={formData.area} onValueChange={(value) => handleChange("area", value)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Selecione a área" />
+            </SelectTrigger>
+            <SelectContent>
+              {areas.map((area) => (
+                <SelectItem key={area.id} value={area.nome}>
+                  {area.nome}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
+          <label htmlFor="responsavel" className="text-sm font-medium">Responsável</label>
+          <Select value={formData.responsavel} onValueChange={(value) => handleChange("responsavel", value)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Selecione o responsável" />
+            </SelectTrigger>
+            <SelectContent>
+              {responsaveis.map((resp) => (
+                <SelectItem key={resp.id} value={resp.name}>
+                  {resp.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <label htmlFor="modelo" className="text-sm font-medium">Modelo</label>

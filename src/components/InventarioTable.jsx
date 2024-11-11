@@ -12,8 +12,15 @@ import { useToast } from "@/components/ui/use-toast";
 import { inventarioService } from "@/services/dataService";
 import { format } from "date-fns";
 import { useState, useEffect } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-const InventarioTable = ({ searchTerm, onEdit }) => {
+const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo" }) => {
   const [items, setItems] = useState([]);
   const { toast } = useToast();
 
@@ -52,11 +59,27 @@ const InventarioTable = ({ searchTerm, onEdit }) => {
 
   return (
     <div className="rounded-xl shadow-neo-3d bg-gradient-to-br from-muted to-accent/10 p-4">
+      <div className="mb-4 flex justify-end">
+        <Select
+          value={viewMode}
+          onValueChange={(value) => setViewMode(value)}
+          className="w-[200px]"
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Modo de visualização" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="tipo">Por Tipo</SelectItem>
+            <SelectItem value="descricao">Por Descrição</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead>Nome</TableHead>
-            <TableHead>Tipo</TableHead>
+            <TableHead>{viewMode === "tipo" ? "Tipo" : "Descrição Comercial"}</TableHead>
             <TableHead>Quantidade</TableHead>
             <TableHead>Unidade</TableHead>
             <TableHead>Local</TableHead>
@@ -69,7 +92,7 @@ const InventarioTable = ({ searchTerm, onEdit }) => {
           {filteredItems.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.name}</TableCell>
-              <TableCell>{item.type}</TableCell>
+              <TableCell>{viewMode === "tipo" ? item.type : item.descricaoComercial}</TableCell>
               <TableCell>{item.quantity}</TableCell>
               <TableCell>{item.unit}</TableCell>
               <TableCell>{item.location}</TableCell>
