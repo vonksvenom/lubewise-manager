@@ -11,9 +11,12 @@ import { Pencil, Trash2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { lubrificanteService } from "@/services/lubrificanteService";
 import { useState, useEffect } from "react";
+import LubrificanteEditDialog from "./LubrificanteEditDialog";
 
-const LubrificanteTable = ({ searchTerm, onEdit }) => {
+const LubrificanteTable = ({ searchTerm }) => {
   const [items, setItems] = useState([]);
+  const [selectedLubrificante, setSelectedLubrificante] = useState(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -44,6 +47,31 @@ const LubrificanteTable = ({ searchTerm, onEdit }) => {
     }
   };
 
+  const handleEdit = (lubrificante) => {
+    setSelectedLubrificante(lubrificante);
+    setEditDialogOpen(true);
+  };
+
+  const handleSave = async (data) => {
+    try {
+      await lubrificanteService.update(selectedLubrificante.id, data);
+      const updatedItems = await lubrificanteService.getAll();
+      setItems(updatedItems);
+      setEditDialogOpen(false);
+      setSelectedLubrificante(null);
+      toast({
+        title: "Lubrificante atualizado",
+        description: "As alterações foram salvas com sucesso.",
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao salvar",
+        description: "Não foi possível salvar as alterações.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const filteredItems = items.filter(
     (item) =>
       item.nomeComercial?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -52,50 +80,59 @@ const LubrificanteTable = ({ searchTerm, onEdit }) => {
   );
 
   return (
-    <div className="rounded-xl shadow-neo-3d bg-gradient-to-br from-muted to-accent/10 p-4">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Nome Comercial</TableHead>
-            <TableHead>Código LIS</TableHead>
-            <TableHead>Fornecedor</TableHead>
-            <TableHead>Viscosidade</TableHead>
-            <TableHead>Volume Padrão</TableHead>
-            <TableHead>Ações</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filteredItems.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell>{item.nomeComercial}</TableCell>
-              <TableCell>{item.codigoLIS}</TableCell>
-              <TableCell>{item.fornecedor}</TableCell>
-              <TableCell>{item.viscosidade}</TableCell>
-              <TableCell>{item.volumePadrao}</TableCell>
-              <TableCell>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => onEdit(item)}
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleDelete(item.id)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              </TableCell>
+    <>
+      <div className="rounded-xl shadow-neo-3d bg-gradient-to-br from-muted to-accent/10 p-4">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Nome Comercial</TableHead>
+              <TableHead>Código LIS</TableHead>
+              <TableHead>Fornecedor</TableHead>
+              <TableHead>Viscosidade</TableHead>
+              <TableHead>Volume Padrão</TableHead>
+              <TableHead>Ações</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+          </TableHeader>
+          <TableBody>
+            {filteredItems.map((item) => (
+              <TableRow key={item.id}>
+                <TableCell>{item.nomeComercial}</TableCell>
+                <TableCell>{item.codigoLIS}</TableCell>
+                <TableCell>{item.fornecedor}</TableCell>
+                <TableCell>{item.viscosidade}</TableCell>
+                <TableCell>{item.volumePadrao}</TableCell>
+                <TableCell>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => handleEdit(item)}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => handleDelete(item.id)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      <LubrificanteEditDialog
+        isOpen={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        lubrificante={selectedLubrificante}
+        onSave={handleSave}
+      />
+    </>
   );
 };
 
