@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Plus, Trash2 } from "lucide-react";
 
-const EquipamentoSubequipamentos = ({ subequipamentos, onAdd, onRemove }) => {
+const EquipamentoSubequipamentos = ({ subequipamentos = [], onAdd, onRemove }) => {
   const [novoSubequipamento, setNovoSubequipamento] = useState({
     nome: "",
     tag: "",
