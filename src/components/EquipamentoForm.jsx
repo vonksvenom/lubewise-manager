@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import EquipamentoBasicInfo from "./equipamento/EquipamentoBasicInfo";
 import EquipamentoStatusSelect from "./equipamento/EquipamentoStatusSelect";
+import EquipamentoSubequipamentos from "./equipamento/EquipamentoSubequipamentos";
 import { userService, areaService } from "@/services/dataService";
 
 const EquipamentoForm = ({ initialData, onSave }) => {
@@ -27,6 +28,7 @@ const EquipamentoForm = ({ initialData, onSave }) => {
       fabricante: "",
       numeroSerie: "",
       dataFabricacao: "",
+      subequipamentos: [], // Array to store nested equipment
     }
   );
 
@@ -42,6 +44,20 @@ const EquipamentoForm = ({ initialData, onSave }) => {
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubequipamentoAdd = (subequipamento) => {
+    setFormData((prev) => ({
+      ...prev,
+      subequipamentos: [...prev.subequipamentos, subequipamento],
+    }));
+  };
+
+  const handleSubequipamentoRemove = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      subequipamentos: prev.subequipamentos.filter((_, i) => i !== index),
+    }));
   };
 
   return (
@@ -115,6 +131,12 @@ const EquipamentoForm = ({ initialData, onSave }) => {
           rows={3}
         />
       </div>
+
+      <EquipamentoSubequipamentos
+        subequipamentos={formData.subequipamentos}
+        onAdd={handleSubequipamentoAdd}
+        onRemove={handleSubequipamentoRemove}
+      />
 
       <div className="flex justify-end gap-2">
         <DialogClose asChild>
