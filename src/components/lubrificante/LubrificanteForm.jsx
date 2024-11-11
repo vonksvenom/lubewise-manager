@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const VOLUMES_PADRAO = ["200L", "20L", "5L", "1L", "500ml"];
+const VOLUMES_PADRAO = ["1000L", "200L", "20L", "5L", "1L", "500ml"];
 
 const LubrificanteForm = ({ initialData, onSave }) => {
   const [formData, setFormData] = useState(
