@@ -4,10 +4,13 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import { Card } from "@/components/ui/card";
 import { ordemServicoService, equipamentoService } from "@/services/dataService";
 import { initialEquipamentos } from "@/services/data/equipmentData";
+import OrdemServicoViewDialog from "@/components/ordem-servico/OrdemServicoViewDialog";
 
 const Calendario = () => {
   const [ordensServico, setOrdensServico] = useState([]);
   const [equipamentos, setEquipamentos] = useState(initialEquipamentos);
+  const [selectedOrdem, setSelectedOrdem] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -30,6 +33,12 @@ const Calendario = () => {
       (e) => e.id?.toString() === equipamentoId?.toString()
     );
     return equipamento ? equipamento.nome : "N/A";
+  };
+
+  const handleEventClick = (info) => {
+    const ordem = ordensServico.find(os => os.id === info.event.id);
+    setSelectedOrdem(ordem);
+    setDialogOpen(true);
   };
 
   const events = ordensServico.map((ordem) => ({
@@ -62,8 +71,14 @@ const Calendario = () => {
             center: "title",
             right: "dayGridMonth,dayGridWeek",
           }}
+          eventClick={handleEventClick}
         />
       </Card>
+      <OrdemServicoViewDialog
+        ordem={selectedOrdem}
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+      />
     </div>
   );
 };
