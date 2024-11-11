@@ -92,7 +92,7 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
               onChange={(e) =>
                 handleConsumableChange(consumable.type, e.target.value)
               }
-              placeholder={`Quantidade de ${consumable.type}`}
+              placeholder={`Quantidade de ${consumable.type} em ${consumable.type === "Óleo" ? "litros" : "gramas"}`}
             />
           </div>
         ))}

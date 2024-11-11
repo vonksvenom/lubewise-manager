@@ -91,7 +91,7 @@ const OrdemServicoViewDialog = ({ ordem, open, onOpenChange }) => {
               <ul className="list-disc pl-5 space-y-1">
                 {ordem.consumables.map((item, index) => (
                   <li key={index} className="text-muted-foreground">
-                    {item.type}: {item.quantity} unidades
+                    {item.type}: {item.quantity} {item.type === "Óleo" ? "L" : "g"}
                   </li>
                 ))}
               </ul>
