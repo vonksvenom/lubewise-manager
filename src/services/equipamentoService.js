@@ -1,80 +1,55 @@
-import { API_BASE_URL } from '../config/api';
 import { initialEquipamentos } from './data/equipmentData';
 
-const getAll = async () => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/equipamentos`);
-    if (!response.ok) {
-      console.warn('API request failed, falling back to initial data');
-      return initialEquipamentos;
-    }
-    const data = await response.json();
-    return Array.isArray(data) ? data : initialEquipamentos;
-  } catch (error) {
-    console.warn('Error fetching data, falling back to initial data:', error);
-    return initialEquipamentos;
+const STORAGE_KEY = 'equipamentos';
+
+const init = () => {
+  const existingEquipamentos = localStorage.getItem(STORAGE_KEY);
+  if (!existingEquipamentos) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialEquipamentos));
   }
 };
 
-const getById = async (id) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/equipamentos/${id}`);
-    if (!response.ok) throw new Error('Network response was not ok');
-    return await response.json();
-  } catch (error) {
-    console.warn('Error fetching equipamento:', error);
-    return initialEquipamentos.find(e => e.id === id) || null;
-  }
+const getAll = () => {
+  init();
+  const data = localStorage.getItem(STORAGE_KEY);
+  return JSON.parse(data);
 };
 
-const add = async (equipamento) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/equipamentos`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(equipamento),
-    });
-    if (!response.ok) throw new Error('Network response was not ok');
-    return await response.json();
-  } catch (error) {
-    console.error('Error adding equipamento:', error);
-    throw error;
-  }
+const getById = (id) => {
+  const equipamentos = getAll();
+  return equipamentos.find(equipamento => equipamento.id === id);
 };
 
-const update = async (id, equipamento) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/equipamentos/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(equipamento),
-    });
-    if (!response.ok) throw new Error('Network response was not ok');
-    return await response.json();
-  } catch (error) {
-    console.error('Error updating equipamento:', error);
-    throw error;
-  }
+const add = (equipamento) => {
+  const equipamentos = getAll();
+  const newEquipamento = {
+    ...equipamento,
+    id: Date.now().toString(),
+  };
+  equipamentos.push(newEquipamento);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(equipamentos));
+  return newEquipamento;
 };
 
-const remove = async (id) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/equipamentos/${id}`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) throw new Error('Network response was not ok');
-    return true;
-  } catch (error) {
-    console.error('Error deleting equipamento:', error);
-    throw error;
+const update = (id, equipamento) => {
+  const equipamentos = getAll();
+  const index = equipamentos.findIndex(e => e.id === id);
+  if (index !== -1) {
+    equipamentos[index] = { ...equipamentos[index], ...equipamento };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(equipamentos));
+    return equipamentos[index];
   }
+  return null;
+};
+
+const remove = (id) => {
+  const equipamentos = getAll();
+  const filtered = equipamentos.filter(equipamento => equipamento.id !== id);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
 };
 
 export const equipamentoService = {
+  init,
   getAll,
   getById,
   add,

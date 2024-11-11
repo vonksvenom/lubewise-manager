@@ -19,7 +19,7 @@ const CompanyLocationFilter = () => {
   useEffect(() => {
     const loadCompanies = () => {
       let availableCompanies = companyService.getAll();
-      if (!isAdmin) {
+      if (!isAdmin && user?.companyId) {
         availableCompanies = availableCompanies.filter(
           (company) => company.id === user.companyId
         );
@@ -27,7 +27,7 @@ const CompanyLocationFilter = () => {
       setCompanies(availableCompanies);
 
       // Set default company if user has one assigned
-      if (user.companyId && !selectedCompany) {
+      if (user?.companyId && !selectedCompany) {
         setSelectedCompany(user.companyId);
       }
     };
@@ -42,7 +42,7 @@ const CompanyLocationFilter = () => {
         (loc) => loc.companyId === selectedCompany
       );
       
-      if (!isAdmin && !isPowerUser) {
+      if (!isAdmin && !isPowerUser && user?.locationId) {
         filteredLocations = filteredLocations.filter(
           (loc) => loc.id === user.locationId
         );
@@ -51,7 +51,7 @@ const CompanyLocationFilter = () => {
       setLocations(filteredLocations);
 
       // Set default location if user has one assigned
-      if (user.locationId && !selectedLocation) {
+      if (user?.locationId && !selectedLocation) {
         setSelectedLocation(user.locationId);
       }
     } else {
