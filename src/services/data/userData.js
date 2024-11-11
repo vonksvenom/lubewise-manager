@@ -48,17 +48,11 @@ export const initialUsers = [
     password: "tec123",
     role: "technician",
     department: "Manutenção",
-    isAdmin: false,
+    nivel: "junior",
+    horasDisponiveis: "8",
     permissions: {
-      createUsers: false,
-      deleteUsers: false,
-      editSettings: false,
-      manageCompany: false,
-      viewReports: false,
-      editEquipments: false,
       editWorkOrders: true,
       editInventory: true,
-      editAreas: false
     }
   },
   {
@@ -88,17 +82,11 @@ export const initialUsers = [
     password: "tec456",
     role: "technician",
     department: "Manutenção",
-    isAdmin: false,
+    nivel: "senior",
+    horasDisponiveis: "8",
     permissions: {
-      createUsers: false,
-      deleteUsers: false,
-      editSettings: false,
-      manageCompany: false,
-      viewReports: false,
-      editEquipments: false,
       editWorkOrders: true,
       editInventory: true,
-      editAreas: false
     }
   },
   {
@@ -108,17 +96,11 @@ export const initialUsers = [
     password: "tec789",
     role: "technician",
     department: "Manutenção",
-    isAdmin: false,
+    nivel: "pleno",
+    horasDisponiveis: "6",
     permissions: {
-      createUsers: false,
-      deleteUsers: false,
-      editSettings: false,
-      manageCompany: false,
-      viewReports: false,
-      editEquipments: false,
       editWorkOrders: true,
       editInventory: true,
-      editAreas: false
     }
   },
   {
@@ -128,17 +110,137 @@ export const initialUsers = [
     password: "tec101",
     role: "technician",
     department: "Manutenção",
-    isAdmin: false,
+    nivel: "pleno",
+    horasDisponiveis: "8",
     permissions: {
-      createUsers: false,
-      deleteUsers: false,
-      editSettings: false,
-      manageCompany: false,
-      viewReports: false,
-      editEquipments: false,
       editWorkOrders: true,
       editInventory: true,
-      editAreas: false
+    }
+  },
+  {
+    id: "8",
+    name: "Carlos Silva",
+    email: "carlos.silva@exemplo.com",
+    password: "tec123",
+    role: "technician",
+    nivel: "senior",
+    horasDisponiveis: "8",
+    department: "Manutenção",
+    permissions: {
+      editWorkOrders: true,
+      editInventory: true,
+    }
+  },
+  {
+    id: "9",
+    name: "Ana Santos",
+    email: "ana.santos@exemplo.com",
+    password: "tec123",
+    role: "technician",
+    nivel: "pleno",
+    horasDisponiveis: "6",
+    department: "Manutenção",
+    permissions: {
+      editWorkOrders: true,
+      editInventory: true,
+    }
+  },
+  {
+    id: "10",
+    name: "Roberto Oliveira",
+    email: "roberto.oliveira@exemplo.com",
+    password: "tec123",
+    role: "technician",
+    nivel: "junior",
+    horasDisponiveis: "8",
+    department: "Manutenção",
+    permissions: {
+      editWorkOrders: true,
+      editInventory: true,
+    }
+  },
+  {
+    id: "11",
+    name: "Mariana Costa",
+    email: "mariana.costa@exemplo.com",
+    password: "tec123",
+    role: "technician",
+    nivel: "especialista",
+    horasDisponiveis: "4",
+    department: "Manutenção",
+    permissions: {
+      editWorkOrders: true,
+      editInventory: true,
+    }
+  },
+  {
+    id: "12",
+    name: "Paulo Mendes",
+    email: "paulo.mendes@exemplo.com",
+    password: "tec123",
+    role: "technician",
+    nivel: "senior",
+    horasDisponiveis: "8",
+    department: "Manutenção",
+    permissions: {
+      editWorkOrders: true,
+      editInventory: true,
+    }
+  },
+  {
+    id: "13",
+    name: "Fernanda Lima",
+    email: "fernanda.lima@exemplo.com",
+    password: "tec123",
+    role: "technician",
+    nivel: "pleno",
+    horasDisponiveis: "6",
+    department: "Manutenção",
+    permissions: {
+      editWorkOrders: true,
+      editInventory: true,
+    }
+  },
+  {
+    id: "14",
+    name: "Ricardo Souza",
+    email: "ricardo.souza@exemplo.com",
+    password: "tec123",
+    role: "technician",
+    nivel: "senior",
+    horasDisponiveis: "8",
+    department: "Manutenção",
+    permissions: {
+      editWorkOrders: true,
+      editInventory: true,
+    }
+  },
+  {
+    id: "15",
+    name: "Juliana Martins",
+    email: "juliana.martins@exemplo.com",
+    password: "tec123",
+    role: "technician",
+    nivel: "especialista",
+    horasDisponiveis: "4",
+    department: "Manutenção",
+    permissions: {
+      editWorkOrders: true,
+      editInventory: true,
+    }
+  },
+  {
+    id: "16",
+    name: "André Santos",
+    email: "andre.santos@exemplo.com",
+    password: "tec123",
+    role: "technician",
+    nivel: "pleno",
+    horasDisponiveis: "8",
+    department: "Manutenção",
+    permissions: {
+      editWorkOrders: true,
+      editInventory: true,
     }
   }
 ];
