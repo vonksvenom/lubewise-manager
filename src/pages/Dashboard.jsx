@@ -6,12 +6,28 @@ import { InventoryChart } from "@/components/InventoryChart";
 import { InventarioSummary } from "@/components/InventarioSummary";
 import MaintenanceStats from "@/components/dashboard/MaintenanceStats";
 import WorkloadStats from "@/components/dashboard/WorkloadStats";
+import { useQuery } from "@tanstack/react-query";
 
 const Dashboard = () => {
   const { t } = useTranslation();
-  const ordensServico = ordemServicoService.getAll();
-  const equipamentos = equipamentoService.getAll();
-  const inventario = inventarioService.getAll();
+  
+  const { data: ordensServico = [] } = useQuery({
+    queryKey: ['ordensServico'],
+    queryFn: () => ordemServicoService.getAll(),
+    initialData: []
+  });
+
+  const { data: equipamentos = [] } = useQuery({
+    queryKey: ['equipamentos'],
+    queryFn: () => equipamentoService.getAll(),
+    initialData: []
+  });
+
+  const { data: inventario = [] } = useQuery({
+    queryKey: ['inventario'],
+    queryFn: () => inventarioService.getAll(),
+    initialData: []
+  });
 
   return (
     <div className="space-y-6">

@@ -4,11 +4,14 @@ import { initialEquipamentos } from './data/equipmentData';
 const getAll = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/equipamentos`);
-    if (!response.ok) throw new Error('Network response was not ok');
+    if (!response.ok) {
+      console.warn('API request failed, falling back to initial data');
+      return initialEquipamentos;
+    }
     const data = await response.json();
     return Array.isArray(data) ? data : initialEquipamentos;
   } catch (error) {
-    console.warn('Falling back to initial data:', error);
+    console.warn('Error fetching data, falling back to initial data:', error);
     return initialEquipamentos;
   }
 };
