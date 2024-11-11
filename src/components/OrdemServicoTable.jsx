@@ -11,6 +11,7 @@ import { Edit, Trash2 } from "lucide-react";
 import { format, isBefore } from "date-fns";
 import { useState } from "react";
 import OrdemServicoViewDialog from "./ordem-servico/OrdemServicoViewDialog";
+import { userService } from "@/services/dataService";
 
 const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) => {
   const [selectedOrdem, setSelectedOrdem] = useState(null);
@@ -21,6 +22,13 @@ const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) =>
       (e) => e.id.toString() === equipamentoId
     );
     return equipamento ? equipamento.nome : "N/A";
+  };
+
+  const getTecnicoNome = (tecnicoId) => {
+    const tecnico = userService.getAll().find(
+      (u) => u.id === tecnicoId && u.role === "technician"
+    );
+    return tecnico ? tecnico.name : "N/A";
   };
 
   const getStatusDisplay = (ordem) => {
@@ -71,6 +79,7 @@ const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) =>
               <TableHead>Título</TableHead>
               <TableHead>Tipo</TableHead>
               <TableHead>Equipamento</TableHead>
+              <TableHead>Técnico</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Prioridade</TableHead>
               <TableHead>Data Início</TableHead>
@@ -105,6 +114,7 @@ const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) =>
                     </span>
                   </TableCell>
                   <TableCell>{getEquipamentoNome(ordem.equipamentoId)}</TableCell>
+                  <TableCell>{getTecnicoNome(ordem.tecnicoId)}</TableCell>
                   <TableCell>
                     <span
                       className={`px-2 py-1 rounded-full text-sm ${statusDisplay.className}`}

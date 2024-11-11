@@ -6,6 +6,7 @@ const generateOrdensServico = () => {
   const tipos = ["Preventiva", "Corretiva", "Preditiva"];
   const status = ["Pendente", "Em Andamento", "Concluída", "Cancelada"];
   const prioridades = ["Baixa", "Media", "Alta", "Urgente"];
+  const tecnicos = ["3", "5", "6", "7"]; // IDs dos técnicos
   
   const now = new Date();
   const oneMonthAgo = subDays(now, 30);
@@ -39,6 +40,7 @@ const generateOrdensServico = () => {
       prioridade: prioridades[Math.floor(Math.random() * prioridades.length)],
       horasEstimadas: Math.floor(Math.random() * 24) + 1,
       cip: `CIP-${i.toString().padStart(4, '0')}`,
+      tecnicoId: tecnicos[Math.floor(Math.random() * tecnicos.length)],
       consumables: [
         { type: "Óleo", quantity: Math.floor(Math.random() * 10) },
         { type: "Graxa", quantity: Math.floor(Math.random() * 5) }
@@ -69,6 +71,7 @@ const generateOrdensServico = () => {
       prioridade: prioridades[Math.floor(Math.random() * prioridades.length)],
       horasEstimadas: Math.floor(Math.random() * 24) + 1,
       cip: `CIP-${i.toString().padStart(4, '0')}`,
+      tecnicoId: tecnicos[Math.floor(Math.random() * tecnicos.length)],
       consumables: [
         { type: "Óleo", quantity: Math.floor(Math.random() * 10) },
         { type: "Graxa", quantity: Math.floor(Math.random() * 5) }

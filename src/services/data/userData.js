@@ -43,8 +43,8 @@ export const initialUsers = [
   },
   {
     id: "3",
-    name: "Técnico",
-    email: "tecnico@exemplo.com",
+    name: "Técnico João",
+    email: "tecnico.joao@exemplo.com",
     password: "tec123",
     role: "technician",
     department: "Manutenção",
@@ -78,6 +78,66 @@ export const initialUsers = [
       editEquipments: false,
       editWorkOrders: false,
       editInventory: false,
+      editAreas: false
+    }
+  },
+  {
+    id: "5",
+    name: "Técnico Pedro",
+    email: "tecnico.pedro@exemplo.com",
+    password: "tec456",
+    role: "technician",
+    department: "Manutenção",
+    isAdmin: false,
+    permissions: {
+      createUsers: false,
+      deleteUsers: false,
+      editSettings: false,
+      manageCompany: false,
+      viewReports: false,
+      editEquipments: false,
+      editWorkOrders: true,
+      editInventory: true,
+      editAreas: false
+    }
+  },
+  {
+    id: "6",
+    name: "Técnico Maria",
+    email: "tecnico.maria@exemplo.com",
+    password: "tec789",
+    role: "technician",
+    department: "Manutenção",
+    isAdmin: false,
+    permissions: {
+      createUsers: false,
+      deleteUsers: false,
+      editSettings: false,
+      manageCompany: false,
+      viewReports: false,
+      editEquipments: false,
+      editWorkOrders: true,
+      editInventory: true,
+      editAreas: false
+    }
+  },
+  {
+    id: "7",
+    name: "Técnico Carlos",
+    email: "tecnico.carlos@exemplo.com",
+    password: "tec101",
+    role: "technician",
+    department: "Manutenção",
+    isAdmin: false,
+    permissions: {
+      createUsers: false,
+      deleteUsers: false,
+      editSettings: false,
+      manageCompany: false,
+      viewReports: false,
+      editEquipments: false,
+      editWorkOrders: true,
+      editInventory: true,
       editAreas: false
     }
   }

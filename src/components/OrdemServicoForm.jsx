@@ -5,6 +5,7 @@ import { DialogClose } from "@/components/ui/dialog";
 import { DatePicker } from "@/components/ui/date-picker";
 import OrdemServicoBasicInfo from "./ordem-servico/OrdemServicoBasicInfo";
 import OrdemServicoSelects from "./ordem-servico/OrdemServicoSelects";
+import { userService } from "@/services/dataService";
 
 const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
   const [formData, setFormData] = useState(
@@ -12,6 +13,7 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
       titulo: "",
       descricao: "",
       equipamentoId: "",
+      tecnicoId: "",
       status: "Pendente",
       dataInicio: new Date(),
       dataFim: new Date(),
@@ -25,8 +27,14 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
     }
   );
 
+  const tecnicos = userService.getAll().filter(user => user.role === "technician");
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!formData.tecnicoId) {
+      alert("Por favor, selecione um técnico responsável");
+      return;
+    }
     onSave(formData);
   };
 
@@ -51,6 +59,7 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
         formData={formData}
         handleChange={handleChange}
         equipamentos={equipamentos}
+        tecnicos={tecnicos}
       />
 
       <div className="space-y-2">
@@ -73,7 +82,9 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
         <h3 className="text-sm font-medium">Consumíveis</h3>
         {formData.consumables.map((consumable) => (
           <div key={consumable.type} className="space-y-2">
-            <label className="text-sm font-medium">{consumable.type}</label>
+            <label className="text-sm font-medium">
+              {consumable.type} ({consumable.type === "Óleo" ? "L" : "g"})
+            </label>
             <Input
               type="number"
               min="0"

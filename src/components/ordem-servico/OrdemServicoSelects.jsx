@@ -6,7 +6,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const OrdemServicoSelects = ({ formData, handleChange, equipamentos = [] }) => {
+const OrdemServicoSelects = ({ formData, handleChange, equipamentos = [], tecnicos = [] }) => {
   // Ensure equipamentos is always an array
   const equipamentosList = Array.isArray(equipamentos) ? equipamentos : [];
 
@@ -46,6 +46,27 @@ const OrdemServicoSelects = ({ formData, handleChange, equipamentos = [] }) => {
             {equipamentosList.map((equip) => (
               <SelectItem key={equip.id} value={equip.id.toString()}>
                 {equip.nome}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="space-y-2">
+        <label htmlFor="tecnico" className="text-sm font-medium">
+          Técnico Responsável
+        </label>
+        <Select
+          value={formData.tecnicoId}
+          onValueChange={(value) => handleChange("tecnicoId", value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Selecione o técnico" />
+          </SelectTrigger>
+          <SelectContent>
+            {tecnicos.map((tecnico) => (
+              <SelectItem key={tecnico.id} value={tecnico.id}>
+                {tecnico.name}
               </SelectItem>
             ))}
           </SelectContent>
