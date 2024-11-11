@@ -50,9 +50,10 @@ export const InventarioSummary = () => {
           ]
         });
       } else {
+        // Group by commercial name when viewMode is "descricao"
         const totals = inventory.reduce((acc, item) => {
           if (!area || item.area === area) {
-            const key = item.name;
+            const key = item.commercialName || item.name;
             if (!acc[key]) {
               acc[key] = {
                 name: key,

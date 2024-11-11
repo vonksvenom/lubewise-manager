@@ -7,9 +7,6 @@ import {
 } from "@/components/ui/select";
 
 const OrdemServicoSelects = ({ formData, handleChange, equipamentos = [], tecnicos = [] }) => {
-  // Ensure equipamentos is always an array
-  const equipamentosList = Array.isArray(equipamentos) ? equipamentos : [];
-
   return (
     <div className="space-y-4">
       <div className="space-y-2">
@@ -43,7 +40,7 @@ const OrdemServicoSelects = ({ formData, handleChange, equipamentos = [], tecnic
             <SelectValue placeholder="Selecione o equipamento" />
           </SelectTrigger>
           <SelectContent>
-            {equipamentosList.map((equip) => (
+            {equipamentos.map((equip) => (
               <SelectItem key={equip.id} value={equip.id.toString()}>
                 {equip.nome}
               </SelectItem>
@@ -64,9 +61,9 @@ const OrdemServicoSelects = ({ formData, handleChange, equipamentos = [], tecnic
             <SelectValue placeholder="Selecione o técnico" />
           </SelectTrigger>
           <SelectContent>
-            {tecnicos.map((tecnico) => (
+            {tecnicos.filter(t => t.role === "technician").map((tecnico) => (
               <SelectItem key={tecnico.id} value={tecnico.id}>
-                {tecnico.name}
+                {tecnico.name} ({tecnico.nivel}) - {tecnico.horasDisponiveis}h/dia
               </SelectItem>
             ))}
           </SelectContent>
