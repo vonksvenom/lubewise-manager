@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Plus, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 const EquipamentoSubequipamentos = ({ subequipamentos = [], onAdd, onRemove }) => {
   const [novoSubequipamento, setNovoSubequipamento] = useState({
@@ -17,10 +18,14 @@ const EquipamentoSubequipamentos = ({ subequipamentos = [], onAdd, onRemove }) =
   });
 
   const handleAdd = () => {
-    if (novoSubequipamento.nome && novoSubequipamento.tag) {
-      onAdd(novoSubequipamento);
-      setNovoSubequipamento({ nome: "", tag: "", tipo: "" });
+    if (!novoSubequipamento.nome || !novoSubequipamento.tag) {
+      toast.error("Nome e TAG são obrigatórios");
+      return;
     }
+
+    onAdd(novoSubequipamento);
+    setNovoSubequipamento({ nome: "", tag: "", tipo: "" });
+    toast.success("Subequipamento adicionado com sucesso!");
   };
 
   return (
@@ -41,7 +46,10 @@ const EquipamentoSubequipamentos = ({ subequipamentos = [], onAdd, onRemove }) =
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => onRemove(index)}
+                  onClick={() => {
+                    onRemove(index);
+                    toast.success("Subequipamento removido com sucesso!");
+                  }}
                 >
                   <Trash2 className="h-4 w-4 text-red-500" />
                 </Button>

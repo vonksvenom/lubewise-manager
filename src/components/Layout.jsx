@@ -27,6 +27,28 @@ const Layout = ({ children }) => {
   const currentUser = userService.getCurrentUser();
 
   useEffect(() => {
+    const resetData = () => {
+      const currentUser = userService.getCurrentUser();
+      if (currentUser) {
+        localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(currentUser));
+      }
+      
+      // Reload all necessary data
+      const userTheme = localStorage.getItem(`theme_${currentUser?.id}`);
+      if (userTheme) {
+        handleThemeChange(userTheme, true);
+      }
+
+      const savedLogo = localStorage.getItem('logoUrl');
+      if (savedLogo) {
+        setLogoUrl(savedLogo);
+      }
+    };
+
+    resetData();
+  }, []);
+
+  useEffect(() => {
     const userTheme = localStorage.getItem(`theme_${currentUser?.id}`);
     if (userTheme) {
       handleThemeChange(userTheme, true);

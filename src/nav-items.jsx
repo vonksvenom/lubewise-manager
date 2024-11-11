@@ -1,4 +1,4 @@
-import { HomeIcon, Wrench, Settings, Calendar, Package, Users, Factory, Cog, Droplet, UserCog } from "lucide-react";
+import { HomeIcon, Wrench, Settings, Calendar, Package, Users, Factory, Cog, Droplet, UserCog, Building } from "lucide-react";
 import Dashboard from "./pages/Dashboard";
 import Equipamentos from "./pages/Equipamentos";
 import OrdensServico from "./pages/OrdensServico";
@@ -7,6 +7,7 @@ import Inventario from "./pages/Inventario";
 import Calendario from "./pages/Calendario";
 import Areas from "./pages/Areas";
 import ConfiguracoesAdmin from "./pages/ConfiguracoesAdmin";
+import ConfiguracoesPowerUser from "./pages/ConfiguracoesPowerUser";
 import Lubrificantes from "./pages/Lubrificantes";
 import Operacionais from "./pages/Operacionais";
 
@@ -72,5 +73,12 @@ export const navItems = [
     icon: <Cog className="h-4 w-4" />,
     page: <ConfiguracoesAdmin />,
     adminOnly: true,
+  },
+  {
+    title: "Configurações PowerUser",
+    to: "/poweruser/configuracoes",
+    icon: <Building className="h-4 w-4" />,
+    page: <ConfiguracoesPowerUser />,
+    powerUserOnly: true,
   },
 ];

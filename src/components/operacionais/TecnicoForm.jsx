@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -25,11 +25,33 @@ const TecnicoForm = ({ open, onOpenChange, initialData }) => {
     horasDisponiveis: "8",
     department: "Manutenção",
     role: "technician",
+    locationId: "",
+    companyId: "",
   });
+
+  const [locations, setLocations] = useState([]);
+  const [companies, setCompanies] = useState([]);
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData(initialData);
+    }
+    
+    // Load locations and companies
+    const storedLocations = JSON.parse(localStorage.getItem("locations") || "[]");
+    const storedCompanies = JSON.parse(localStorage.getItem("companies") || "[]");
+    setLocations(storedLocations);
+    setCompanies(storedCompanies);
+  }, [initialData]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
+      if (!formData.locationId) {
+        toast.error("Por favor, selecione um local");
+        return;
+      }
+
       if (initialData) {
         userService.update(initialData.id, formData);
         toast.success("Técnico atualizado com sucesso!");
@@ -75,6 +97,48 @@ const TecnicoForm = ({ open, onOpenChange, initialData }) => {
               }
               required
             />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Empresa</label>
+            <Select
+              value={formData.companyId}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, companyId: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione a empresa" />
+              </SelectTrigger>
+              <SelectContent>
+                {companies.map((company) => (
+                  <SelectItem key={company.id} value={company.id}>
+                    {company.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Local</label>
+            <Select
+              value={formData.locationId}
+              onValueChange={(value) =>
+                setFormData((prev) => ({ ...prev, locationId: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione o local" />
+              </SelectTrigger>
+              <SelectContent>
+                {locations
+                  .filter(loc => !formData.companyId || loc.companyId === formData.companyId)
+                  .map((location) => (
+                    <SelectItem key={location.id} value={location.id}>
+                      {location.name}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
           </div>
           <div className="space-y-2">
             <label className="text-sm font-medium">Nível</label>
