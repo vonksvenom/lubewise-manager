@@ -8,8 +8,9 @@ import { navItems } from "../nav-items";
 import LayoutHeader from "./layout/LayoutHeader";
 import LayoutSidebar from "./layout/LayoutSidebar";
 import LayoutControls from "./layout/LayoutControls";
+import CompanyLocationFilter from "./layout/CompanyLocationFilter";
 
-const CURRENT_USER_KEY = "user"; // Added constant definition
+const CURRENT_USER_KEY = "user";
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -105,6 +106,11 @@ const Layout = ({ children }) => {
 
       <div className={`transition-all duration-200 ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'} min-h-screen`}>
         <main className="p-6">
+          {(isAdmin || isPowerUser) && (
+            <div className="mb-6">
+              <CompanyLocationFilter />
+            </div>
+          )}
           {children}
           <LayoutControls 
             isAdmin={isAdmin}

@@ -8,9 +8,13 @@ import MaintenanceStats from "@/components/dashboard/MaintenanceStats";
 import WorkloadStats from "@/components/dashboard/WorkloadStats";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import TechniciansDialog from "@/components/dashboard/TechniciansDialog";
 
 const Dashboard = () => {
   const { t } = useTranslation();
+  const [dialogOpen, setDialogOpen] = useState(false);
   
   const { data: ordensServico = [] } = useQuery({
     queryKey: ['ordensServico'],
@@ -60,7 +64,7 @@ const Dashboard = () => {
           </div>
         </Card>
 
-        <Card className="p-6">
+        <Card className="p-6 cursor-pointer hover:bg-accent/5 transition-colors" onClick={() => setDialogOpen(true)}>
           <div className="flex items-center gap-4">
             <div className="p-3 bg-green-500/10 rounded-lg">
               <Users className="h-6 w-6 text-green-500" />
@@ -81,6 +85,8 @@ const Dashboard = () => {
         <InventoryChart />
         <InventarioSummary />
       </div>
+
+      <TechniciansDialog open={dialogOpen} onOpenChange={setDialogOpen} />
     </div>
   );
 };
