@@ -2,51 +2,18 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2, ChevronRight, ChevronDown, Eye } from "lucide-react";
+import { ChevronRight, ChevronDown } from "lucide-react";
 import { useState } from "react";
-import QRCodeDisplay from "./common/QRCodeDisplay";
 import EquipamentoViewDialog from "./equipamento/EquipamentoViewDialog";
 import { useSortableTable } from "@/hooks/useSortableTable";
 import SortableHeader from "@/components/common/SortableHeader";
-
-const SubequipamentoRow = ({ subequipamento, depth = 1, onView }) => (
-  <TableRow className={`bg-muted/20`}>
-    <TableCell style={{ paddingLeft: `${depth * 2}rem` }}>
-      {subequipamento.imagem && (
-        <img
-          src={subequipamento.imagem}
-          alt={subequipamento.nome}
-          className="w-12 h-12 object-cover rounded-md"
-        />
-      )}
-    </TableCell>
-    <TableCell className="font-medium">
-      <button
-        onClick={() => onView(subequipamento)}
-        className="hover:underline text-left flex items-center gap-2"
-      >
-        <span>└─ {subequipamento.nome}</span>
-      </button>
-    </TableCell>
-    <TableCell>{subequipamento.tag}</TableCell>
-    <TableCell>{subequipamento.tipo || "-"}</TableCell>
-    <TableCell>-</TableCell>
-    <TableCell>-</TableCell>
-    <TableCell className="text-right">
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => onView(subequipamento)}
-      >
-        <Eye className="h-4 w-4" />
-      </Button>
-    </TableCell>
-  </TableRow>
-);
+import SubequipamentoRow from "./equipamento/SubequipamentoRow";
+import EquipamentoActions from "./equipamento/EquipamentoActions";
 
 const EquipamentoTable = ({ equipamentos, onEdit, onDelete }) => {
   const [expandedRows, setExpandedRows] = useState({});
@@ -64,16 +31,6 @@ const EquipamentoTable = ({ equipamentos, onEdit, onDelete }) => {
   const handleView = (equipamento) => {
     setSelectedEquipamento(equipamento);
     setViewDialogOpen(true);
-  };
-
-  const handleEdit = (equipamento, e) => {
-    e.stopPropagation();
-    onEdit(equipamento);
-  };
-
-  const handleDelete = (id, e) => {
-    e.stopPropagation();
-    onDelete(id);
   };
 
   const sortedEquipamentos = getSortedData(equipamentos);
@@ -176,29 +133,12 @@ const EquipamentoTable = ({ equipamentos, onEdit, onDelete }) => {
                   </TableCell>
                   <TableCell>{equip.ultimaManutencao}</TableCell>
                   <TableCell>{equip.proximaManutencao}</TableCell>
-                  <TableCell className="text-right">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={(e) => handleView(equip)}
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={(e) => handleEdit(equip, e)}
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={(e) => handleDelete(equip.id, e)}
-                    >
-                      <Trash2 className="h-4 w-4 text-red-500" />
-                    </Button>
-                  </TableCell>
+                  <EquipamentoActions 
+                    equipamento={equip}
+                    onView={handleView}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
+                  />
                 </TableRow>
                 {expandedRows[equip.id] &&
                   equip.subequipamentos?.map((sub, index) => (
