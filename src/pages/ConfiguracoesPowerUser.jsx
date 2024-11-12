@@ -34,7 +34,8 @@ const ConfiguracoesPowerUser = () => {
 
     locationService.add(newLocation);
     loadData();
-    setNewLocation({ name: "", companyId: "" });
+    // Only clear the name, keeping the selected company
+    setNewLocation(prev => ({ ...prev, name: "" }));
     toast.success("Local adicionado com sucesso!");
   };
 
