@@ -86,7 +86,12 @@ const ResizableTable = ({ children, className }) => {
                         <>
                           {headerCell.props.children}
                           <div
-                            className="absolute top-0 right-0 bottom-0 w-1 cursor-col-resize hover:bg-accent/50 transition-colors"
+                            className={cn(
+                              "absolute top-0 right-0 bottom-0 w-2 cursor-col-resize",
+                              "bg-border/20 hover:bg-accent/50 transition-colors",
+                              "after:content-[''] after:absolute after:right-0 after:top-0 after:bottom-0",
+                              "after:w-px after:bg-border/40"
+                            )}
                             onMouseDown={(e) => handleMouseDown(e, index)}
                           />
                         </>
