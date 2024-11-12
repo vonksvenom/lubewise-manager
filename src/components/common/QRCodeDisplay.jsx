@@ -19,14 +19,18 @@ const QRCodeDisplay = ({ data, showDownload = false }) => {
       try {
         const canvas = await html2canvas(element, {
           backgroundColor: '#FFFFFF',
-          scale: 3,
+          scale: 5, // Increased from 3 to 5 for better quality
           logging: false,
           useCORS: true,
           allowTaint: true,
           width: element.offsetWidth,
           height: element.offsetHeight,
           x: 0,
-          y: 0
+          y: 0,
+          imageTimeout: 0,
+          pixelRatio: 3, // Added to improve resolution
+          windowWidth: element.offsetWidth,
+          windowHeight: element.offsetHeight
         });
 
         const link = document.createElement("a");
@@ -55,9 +59,12 @@ const QRCodeDisplay = ({ data, showDownload = false }) => {
       >
         <QRCodeSVG
           value={JSON.stringify(qrData)}
-          size={256}
+          size={300} // Increased from 256 to 300
           level="H"
           includeMargin={true}
+          style={{
+            shapeRendering: 'crispEdges', // Added for sharper edges
+          }}
         />
       </div>
       {showDownload && (
