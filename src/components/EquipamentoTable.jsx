@@ -96,7 +96,7 @@ const EquipamentoTable = ({ equipamentos, onEdit, onDelete }) => {
                     </TableCell>
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-2">
-                        {equip.subequipamentos?.length > 0 && (
+                        {equip.sistemas?.length > 0 && (
                           <Button
                             variant="ghost"
                             size="icon"
@@ -143,10 +143,10 @@ const EquipamentoTable = ({ equipamentos, onEdit, onDelete }) => {
                     />
                   </TableRow>
                   {expandedRows[equip.id] &&
-                    equip.subequipamentos?.map((sub, index) => (
+                    equip.sistemas?.map((sistema) => (
                       <SubequipamentoRow
-                        key={`${equip.id}-${index}`}
-                        subequipamento={sub}
+                        key={sistema.id}
+                        item={sistema}
                         onView={handleView}
                       />
                     ))}
