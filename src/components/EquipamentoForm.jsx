@@ -29,7 +29,7 @@ const EquipamentoForm = ({ initialData, onSave }) => {
       fabricante: "",
       numeroSerie: "",
       dataFabricacao: "",
-      subequipamentos: [], // Ensure this is always initialized as an empty array
+      subequipamentos: [],
       manual: null,
     }
   );
@@ -45,7 +45,29 @@ const EquipamentoForm = ({ initialData, onSave }) => {
   };
 
   const handleChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (field === "area") {
+      // When area changes, update the area for all subequipamentos recursively
+      const updateAreaInHierarchy = (items) => {
+        return items.map(item => ({
+          ...item,
+          area: value,
+          sistemas: item.sistemas ? updateAreaInHierarchy(item.sistemas) : undefined,
+          conjuntos: item.conjuntos ? updateAreaInHierarchy(item.conjuntos) : undefined,
+          subconjuntos: item.subconjuntos ? updateAreaInHierarchy(item.subconjuntos) : undefined,
+          componentes: item.componentes ? updateAreaInHierarchy(item.componentes) : undefined
+        }));
+      };
+
+      setFormData(prev => ({
+        ...prev,
+        [field]: value,
+        subequipamentos: updateAreaInHierarchy(prev.subequipamentos || [])
+      }));
+
+      toast.success("Área atualizada em toda a hierarquia do equipamento");
+    } else {
+      setFormData(prev => ({ ...prev, [field]: value }));
+    }
   };
 
   const handleManualUpload = (e) => {
@@ -65,9 +87,15 @@ const EquipamentoForm = ({ initialData, onSave }) => {
   };
 
   const handleSubequipamentoAdd = (subequipamento) => {
+    // Ensure new subequipamento inherits the area
+    const newSubequipamento = {
+      ...subequipamento,
+      area: formData.area
+    };
+    
     setFormData((prev) => ({
       ...prev,
-      subequipamentos: [...(prev.subequipamentos || []), subequipamento],
+      subequipamentos: [...(prev.subequipamentos || []), newSubequipamento],
     }));
   };
 
