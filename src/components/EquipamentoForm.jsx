@@ -7,11 +7,13 @@ import EquipamentoDetails from "./equipamento/EquipamentoDetails";
 import HierarchyEditDialog from "./equipamento/HierarchyEditDialog";
 import MaintenancePlanForm from "./equipamento/MaintenancePlanForm";
 import { useEquipamentoForm } from "./equipamento/EquipamentoFormLogic";
-import { Network } from "lucide-react";
+import { Network, Tool } from "lucide-react";
 import { useState } from "react";
+import MaintenancePlanDialog from "./equipamento/MaintenancePlanDialog";
 
 const EquipamentoForm = ({ initialData, onSave }) => {
   const [hierarchyDialogOpen, setHierarchyDialogOpen] = useState(false);
+  const [maintenanceDialogOpen, setMaintenanceDialogOpen] = useState(false);
   const {
     formData,
     handleChange,
@@ -40,10 +42,27 @@ const EquipamentoForm = ({ initialData, onSave }) => {
         onValueChange={(value) => handleChange("status", value)}
       />
 
-      <MaintenancePlanForm
-        plans={formData.maintenancePlans || []}
-        onPlanChange={(plans) => handleChange("maintenancePlans", plans)}
-      />
+      <div className="flex gap-2">
+        <Button
+          type="button"
+          variant="outline"
+          className="flex-1 flex items-center justify-center gap-2"
+          onClick={() => setHierarchyDialogOpen(true)}
+        >
+          <Network className="h-4 w-4" />
+          Hierarquia
+        </Button>
+
+        <Button
+          type="button"
+          variant="outline"
+          className="flex-1 flex items-center justify-center gap-2"
+          onClick={() => setMaintenanceDialogOpen(true)}
+        >
+          <Tool className="h-4 w-4" />
+          Planos de Manutenção
+        </Button>
+      </div>
 
       <div className="space-y-2">
         <label htmlFor="manual" className="text-sm font-medium">Manual do Equipamento</label>
@@ -59,16 +78,6 @@ const EquipamentoForm = ({ initialData, onSave }) => {
           </p>
         )}
       </div>
-
-      <Button
-        type="button"
-        variant="outline"
-        className="w-full flex items-center justify-center gap-2"
-        onClick={() => setHierarchyDialogOpen(true)}
-      >
-        <Network className="h-4 w-4" />
-        Hierarquia
-      </Button>
 
       <div className="flex justify-end gap-2">
         <DialogClose asChild>
@@ -87,6 +96,13 @@ const EquipamentoForm = ({ initialData, onSave }) => {
           handleChange("subconjuntos", updatedData.subconjuntos);
           handleChange("componentes", updatedData.componentes);
         }}
+      />
+
+      <MaintenancePlanDialog
+        plans={formData.maintenancePlans || []}
+        open={maintenanceDialogOpen}
+        onOpenChange={setMaintenanceDialogOpen}
+        onUpdate={(plans) => handleChange("maintenancePlans", plans)}
       />
     </form>
   );
