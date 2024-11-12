@@ -107,63 +107,116 @@ export const CalendarContent = ({ ordensServico, filters, handleEventClick, equi
   const events = filteredOrdens.flatMap(generateRecurringEvents);
 
   return (
-    <Card className="mt-6 p-6 shadow-neo bg-gradient-to-br from-background to-muted/50">
+    <Card className="mt-4 p-4 shadow-neo bg-gradient-to-br from-background/80 to-muted/30 backdrop-blur-sm">
       <div className="fullcalendar-custom">
         <style>
           {`
             .fullcalendar-custom .fc {
-              max-height: calc(100vh - 300px);
-              min-height: 600px;
+              max-height: calc(100vh - 350px);
+              min-height: 550px;
             }
             .fullcalendar-custom .fc-toolbar-title {
               font-size: 1.25rem !important;
               font-weight: 600;
+              color: var(--foreground);
             }
             .fullcalendar-custom .fc-button {
-              background-color: hsl(var(--primary)) !important;
-              border-color: hsl(var(--primary)) !important;
+              background: var(--primary) !important;
+              border: none !important;
               box-shadow: var(--shadow-neo-sm);
               transition: all 0.2s;
+              text-transform: capitalize;
+              padding: 0.5rem 1rem;
             }
             .fullcalendar-custom .fc-button:hover {
               opacity: 0.9;
+              transform: translateY(-1px);
               box-shadow: var(--shadow-neo);
             }
             .fullcalendar-custom .fc-button-active {
-              background-color: hsl(var(--primary)/0.8) !important;
+              background: var(--primary) !important;
+              opacity: 0.8;
             }
             .fullcalendar-custom .fc-toolbar {
               flex-wrap: wrap;
               gap: 1rem;
-            }
-            .fullcalendar-custom .fc-view {
-              background: white;
-              border-radius: 0.5rem;
-              overflow: hidden;
-              box-shadow: var(--shadow-neo-sm);
-            }
-            .fullcalendar-custom .fc-header-toolbar {
               margin-bottom: 1.5rem !important;
             }
+            .fullcalendar-custom .fc-view {
+              background: var(--background);
+              border-radius: 0.75rem;
+              overflow: hidden;
+              box-shadow: var(--shadow-neo-sm);
+              border: 1px solid var(--border);
+            }
+            .fullcalendar-custom .fc-scrollgrid {
+              border: none !important;
+            }
+            .fullcalendar-custom .fc-scrollgrid td {
+              border: 1px solid var(--border) !important;
+            }
+            .fullcalendar-custom .fc-col-header-cell {
+              background: var(--muted);
+              padding: 1rem 0.5rem;
+              font-weight: 600;
+              color: var(--foreground);
+            }
             .fullcalendar-custom .fc-daygrid-day {
-              min-height: 100px !important;
+              min-height: 80px !important;
+              max-height: 120px !important;
+              transition: background-color 0.2s;
+            }
+            .fullcalendar-custom .fc-daygrid-day:hover {
+              background: var(--accent);
+            }
+            .fullcalendar-custom .fc-daygrid-day-number {
+              font-size: 0.875rem;
+              padding: 0.5rem;
+              color: var(--foreground);
             }
             .fullcalendar-custom .fc-daygrid-day-events {
-              margin-bottom: 0 !important;
+              margin: 0 !important;
+              padding: 0 0.25rem;
             }
             .fullcalendar-custom .fc-event {
-              margin: 1px 2px !important;
+              margin: 1px 0 !important;
               padding: 2px 4px !important;
               font-size: 0.75rem !important;
               border-radius: 4px !important;
               cursor: pointer !important;
+              border: none !important;
+              transition: transform 0.2s, box-shadow 0.2s;
+            }
+            .fullcalendar-custom .fc-event:hover {
+              transform: translateX(2px);
+              box-shadow: var(--shadow-neo-sm);
             }
             .fullcalendar-custom .fc-more-link {
               font-size: 0.75rem !important;
-              padding: 2px !important;
-              margin: 0 2px !important;
-              background: hsl(var(--muted));
+              padding: 2px 4px !important;
+              margin: 2px 0 !important;
+              background: var(--accent);
+              color: var(--foreground);
               border-radius: 4px;
+              transition: all 0.2s;
+            }
+            .fullcalendar-custom .fc-more-link:hover {
+              background: var(--muted);
+              text-decoration: none;
+            }
+            .fullcalendar-custom .fc-day-today {
+              background: var(--accent) !important;
+            }
+            .fullcalendar-custom .fc-popover {
+              background: var(--background);
+              border: 1px solid var(--border);
+              box-shadow: var(--shadow-neo);
+              border-radius: 0.5rem;
+            }
+            .fullcalendar-custom .fc-popover-header {
+              background: var(--muted);
+              padding: 0.5rem;
+              color: var(--foreground);
             }
           `}
         </style>
@@ -179,8 +232,8 @@ export const CalendarContent = ({ ordensServico, filters, handleEventClick, equi
             right: "dayGridMonth,dayGridWeek",
           }}
           eventClick={handleEventClick}
-          className="bg-background rounded-lg"
           dayMaxEvents={3}
+          className="bg-background rounded-lg"
         />
       </div>
     </Card>
