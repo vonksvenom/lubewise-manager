@@ -11,7 +11,8 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 
-const VOLUMES_PADRAO = ["1000L", "200L", "20L", "5L", "1L", "500ml"];
+const OLEO_VOLUMES = ["1000L", "200L", "20L", "5L", "1L", "500mL", "Outros"];
+const GRAXA_VOLUMES = ["180Kg", "20Kg", "2Kg", "1Kg", "500g", "400g", "Outros"];
 
 const LubrificanteForm = ({ initialData, onSave }) => {
   const [formData, setFormData] = useState(
@@ -20,19 +21,49 @@ const LubrificanteForm = ({ initialData, onSave }) => {
       codigoLIS: "",
       fornecedor: "",
       viscosidade: "",
-      volumePadrao: "200L",
+      volumePadrao: "",
       type: "Óleo",
+      customVolume: "",
       fispq: null,
     }
   );
 
+  const [showCustomVolume, setShowCustomVolume] = useState(
+    initialData?.volumePadrao === "Outros"
+  );
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+    if (formData.volumePadrao === "Outros" && !formData.customVolume) {
+      toast.error("Por favor, preencha o volume personalizado");
+      return;
+    }
+    const dataToSave = {
+      ...formData,
+      volumePadrao: formData.volumePadrao === "Outros" 
+        ? `${formData.customVolume}${formData.type === "Óleo" ? "L" : "g"}`
+        : formData.volumePadrao
+    };
+    onSave(dataToSave);
   };
 
   const handleChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (field === "volumePadrao") {
+      setShowCustomVolume(value === "Outros");
+      if (value !== "Outros") {
+        setFormData(prev => ({ ...prev, customVolume: "" }));
+      }
+    }
+    if (field === "type") {
+      setFormData(prev => ({
+        ...prev,
+        [field]: value,
+        volumePadrao: "",
+        customVolume: ""
+      }));
+      setShowCustomVolume(false);
+    }
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const handleFISPQUpload = (e) => {
@@ -51,6 +82,8 @@ const LubrificanteForm = ({ initialData, onSave }) => {
       toast.error("Por favor, selecione um arquivo PDF válido");
     }
   };
+
+  const volumeOptions = formData.type === "Óleo" ? OLEO_VOLUMES : GRAXA_VOLUMES;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
@@ -133,7 +166,7 @@ const LubrificanteForm = ({ initialData, onSave }) => {
               <SelectValue placeholder="Selecione o volume" />
             </SelectTrigger>
             <SelectContent>
-              {VOLUMES_PADRAO.map((volume) => (
+              {volumeOptions.map((volume) => (
                 <SelectItem key={volume} value={volume}>
                   {volume}
                 </SelectItem>
@@ -142,6 +175,24 @@ const LubrificanteForm = ({ initialData, onSave }) => {
           </Select>
         </div>
       </div>
+
+      {showCustomVolume && (
+        <div className="space-y-2">
+          <label htmlFor="customVolume" className="text-sm font-medium">
+            Volume Personalizado ({formData.type === "Óleo" ? "L" : "g"})
+          </label>
+          <Input
+            id="customVolume"
+            type="number"
+            min="0"
+            step="0.001"
+            value={formData.customVolume}
+            onChange={(e) => handleChange("customVolume", e.target.value)}
+            required
+            placeholder={`Digite o volume em ${formData.type === "Óleo" ? "litros" : "gramas"}`}
+          />
+        </div>
+      )}
 
       <div className="space-y-2">
         <label htmlFor="fispq" className="text-sm font-medium">
