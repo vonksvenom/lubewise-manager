@@ -24,10 +24,9 @@ const Layout = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Reset cookies and refresh data on each visit
+  // Inicializa dados do usuário e tema apenas se necessário
   useEffect(() => {
-    localStorage.clear();
-    const resetData = () => {
+    const resetUserData = () => {
       const currentUser = userService.getCurrentUser();
       if (currentUser) {
         localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(currentUser));
@@ -44,10 +43,9 @@ const Layout = ({ children }) => {
       }
     };
 
-    resetData();
+    resetUserData();
   }, []);
 
-  // Auto collapse sidebar on mobile when navigating
   useEffect(() => {
     if (window.innerWidth < 1024) {
       setSidebarOpen(false);
