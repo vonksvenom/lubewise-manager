@@ -24,7 +24,7 @@ const MaintenanceOrdersDialog = ({
   onOpenChange, 
   orders, 
   title,
-  onEdit 
+  onEdit = () => {} // Add default empty function
 }) => {
   const { isAdmin, isPowerUser } = useAuth();
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -37,8 +37,10 @@ const MaintenanceOrdersDialog = ({
 
   const handleEdit = (order) => {
     if (isAdmin || isPowerUser) {
-      onEdit(order);
-      onOpenChange(false);
+      if (typeof onEdit === 'function') {
+        onEdit(order);
+        onOpenChange(false);
+      }
     }
   };
 
