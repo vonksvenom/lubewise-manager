@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { themes } from "@/config/themes";
 import { userService } from "@/services/dataService";
 import { toast } from "sonner";
+import { useLocation, useNavigate } from "react-router-dom";
 import { navItems } from "../nav-items";
 import LayoutHeader from "./layout/LayoutHeader";
 import LayoutSidebar from "./layout/LayoutSidebar";
@@ -20,8 +21,12 @@ const Layout = ({ children }) => {
   const { t, i18n } = useTranslation();
   const { user, isAdmin, isPowerUser, logout } = useAuth();
   const currentUser = userService.getCurrentUser();
+  const location = useLocation();
+  const navigate = useNavigate();
 
+  // Reset cookies and refresh data on each visit
   useEffect(() => {
+    localStorage.clear();
     const resetData = () => {
       const currentUser = userService.getCurrentUser();
       if (currentUser) {
@@ -41,6 +46,13 @@ const Layout = ({ children }) => {
 
     resetData();
   }, []);
+
+  // Auto collapse sidebar on mobile when navigating
+  useEffect(() => {
+    if (window.innerWidth < 1024) {
+      setSidebarOpen(false);
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     const userTheme = localStorage.getItem(`theme_${currentUser?.id}`);

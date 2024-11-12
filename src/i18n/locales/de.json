@@ -1,0 +1,16 @@
+{
+  "dashboard": "Dashboard",
+  "equipment": "Ausrüstung",
+  "workOrders": "Arbeitsaufträge",
+  "maintenance": "Wartung",
+  "inventory": "Inventar",
+  "stats": {
+    "equipment": "Ausrüstung",
+    "pendingMaintenance": "Ausstehende Wartung",
+    "completedMonth": "Abgeschlossen (Monat)",
+    "lubricants": "Schmierstoffe"
+  },
+  "recentActivities": "Letzte Aktivitäten",
+  "scheduledMaintenance": "Vorbeugende Wartung - Maschine #23",
+  "scheduledFor": "Geplant für heute um 14:00 Uhr"
+}

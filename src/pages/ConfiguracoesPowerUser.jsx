@@ -11,11 +11,11 @@ const ConfiguracoesPowerUser = () => {
   const { isAdmin, isPowerUser } = useAuth();
   const [locations, setLocations] = useState([]);
   const [companies, setCompanies] = useState([]);
+  const [selectedCompany, setSelectedCompany] = useState("");
   const [newLocation, setNewLocation] = useState({ name: "", companyId: "" });
   const [newCompany, setNewCompany] = useState({ name: "" });
 
   useEffect(() => {
-    // Load locations and companies
     const loadData = () => {
       const storedLocations = JSON.parse(localStorage.getItem("locations") || "[]");
       const storedCompanies = JSON.parse(localStorage.getItem("companies") || "[]");
@@ -42,6 +42,11 @@ const ConfiguracoesPowerUser = () => {
   };
 
   const handleAddCompany = () => {
+    if (!isAdmin) {
+      toast.error("Apenas administradores podem adicionar empresas");
+      return;
+    }
+
     if (!newCompany.name) {
       toast.error("Nome da empresa é obrigatório");
       return;
@@ -56,6 +61,10 @@ const ConfiguracoesPowerUser = () => {
     setNewCompany({ name: "" });
     toast.success("Empresa adicionada com sucesso!");
   };
+
+  const filteredLocations = locations.filter(
+    location => !selectedCompany || location.companyId === selectedCompany
+  );
 
   if (!isAdmin && !isPowerUser) {
     return (
@@ -98,10 +107,29 @@ const ConfiguracoesPowerUser = () => {
           <Button onClick={handleAddLocation}>Adicionar Local</Button>
         </div>
 
-        <div className="mt-4">
+        <div className="mt-6">
+          <div className="mb-4">
+            <Select
+              value={selectedCompany}
+              onValueChange={setSelectedCompany}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Filtrar por empresa" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">Todas as empresas</SelectItem>
+                {companies.map((company) => (
+                  <SelectItem key={company.id} value={company.id}>
+                    {company.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
           <h3 className="font-medium mb-2">Locais Cadastrados:</h3>
           <div className="space-y-2">
-            {locations.map((location) => (
+            {filteredLocations.map((location) => (
               <div key={location.id} className="flex justify-between items-center p-2 bg-muted rounded-lg">
                 <span>{location.name}</span>
                 <span className="text-sm text-muted-foreground">

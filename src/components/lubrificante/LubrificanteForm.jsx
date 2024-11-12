@@ -20,7 +20,7 @@ const LubrificanteForm = ({ initialData, onSave }) => {
       fornecedor: "",
       viscosidade: "",
       volumePadrao: "200L",
-      type: "Óleo", // Default value
+      type: "Óleo",
     }
   );
 
@@ -47,18 +47,19 @@ const LubrificanteForm = ({ initialData, onSave }) => {
         />
       </div>
 
+      <div className="space-y-2">
+        <label htmlFor="codigoLIS" className="text-sm font-medium">
+          Código LIS
+        </label>
+        <Input
+          id="codigoLIS"
+          value={formData.codigoLIS}
+          onChange={(e) => handleChange("codigoLIS", e.target.value)}
+          required
+        />
+      </div>
+
       <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <label htmlFor="codigoLIS" className="text-sm font-medium">
-            Código LIS
-          </label>
-          <Input
-            id="codigoLIS"
-            value={formData.codigoLIS}
-            onChange={(e) => handleChange("codigoLIS", e.target.value)}
-            required
-          />
-        </div>
         <div className="space-y-2">
           <label htmlFor="fornecedor" className="text-sm font-medium">
             Fornecedor
@@ -70,9 +71,6 @@ const LubrificanteForm = ({ initialData, onSave }) => {
             required
           />
         </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <label htmlFor="type" className="text-sm font-medium">
             Tipo
@@ -90,6 +88,9 @@ const LubrificanteForm = ({ initialData, onSave }) => {
             </SelectContent>
           </Select>
         </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <label htmlFor="viscosidade" className="text-sm font-medium">
             Viscosidade
@@ -101,27 +102,26 @@ const LubrificanteForm = ({ initialData, onSave }) => {
             required
           />
         </div>
-      </div>
-
-      <div className="space-y-2">
-        <label htmlFor="volumePadrao" className="text-sm font-medium">
-          Volume Padrão
-        </label>
-        <Select
-          value={formData.volumePadrao}
-          onValueChange={(value) => handleChange("volumePadrao", value)}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Selecione o volume" />
-          </SelectTrigger>
-          <SelectContent>
-            {VOLUMES_PADRAO.map((volume) => (
-              <SelectItem key={volume} value={volume}>
-                {volume}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="space-y-2">
+          <label htmlFor="volumePadrao" className="text-sm font-medium">
+            Volume Padrão
+          </label>
+          <Select
+            value={formData.volumePadrao}
+            onValueChange={(value) => handleChange("volumePadrao", value)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Selecione o volume" />
+            </SelectTrigger>
+            <SelectContent>
+              {VOLUMES_PADRAO.map((volume) => (
+                <SelectItem key={volume} value={volume}>
+                  {volume}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       <div className="flex justify-end gap-2">
