@@ -16,7 +16,7 @@ const LayoutSidebar = ({
     } rounded-r-2xl`}
   >
     <div className="flex flex-col h-full">
-      <div className="p-4 flex justify-center items-center mb-6">
+      <div className="p-3 flex justify-center items-center">
         <img
           src={logoUrl}
           alt="Company Logo"
