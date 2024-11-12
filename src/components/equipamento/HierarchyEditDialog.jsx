@@ -3,17 +3,25 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useState } from "react";
 import HierarchyItem from "./HierarchyItem";
+import { toast } from "sonner";
 
 const HierarchyEditDialog = ({ equipamento, open, onOpenChange, onUpdate }) => {
   const [hierarchyData, setHierarchyData] = useState(equipamento);
 
   const handleUpdate = (updatedData) => {
     setHierarchyData(updatedData);
-    onUpdate(updatedData);
+  };
+
+  const handleSave = () => {
+    onUpdate(hierarchyData);
+    toast.success("Hierarquia salva com sucesso!");
+    onOpenChange(false);
   };
 
   return (
@@ -29,6 +37,14 @@ const HierarchyEditDialog = ({ equipamento, open, onOpenChange, onUpdate }) => {
             onDelete={() => {}}
           />
         </ScrollArea>
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            Cancelar
+          </Button>
+          <Button onClick={handleSave}>
+            Salvar Hierarquia
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
