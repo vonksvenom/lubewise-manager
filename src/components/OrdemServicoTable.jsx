@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2 } from "lucide-react";
-import { format } from "date-fns";
+import { format, isValid, parseISO } from "date-fns";
 import { useState } from "react";
 import OrdemServicoViewDialog from "./ordem-servico/OrdemServicoViewDialog";
 import { userService } from "@/services/dataService";
@@ -31,9 +31,22 @@ const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) =>
     return tecnico ? tecnico.name : "N/A";
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    const date = parseISO(dateString);
+    return isValid(date) ? format(date, "dd/MM/yyyy") : "Data inválida";
+  };
+
   const getStatusDisplay = (ordem) => {
     const now = new Date();
-    const dataExecucao = new Date(ordem.dataExecucao);
+    const dataExecucao = parseISO(ordem.dataExecucao);
+    
+    if (!isValid(dataExecucao)) {
+      return {
+        label: ordem.status,
+        className: "bg-yellow-100 text-yellow-800"
+      };
+    }
     
     if (ordem.status === "Concluída") {
       return {
@@ -131,7 +144,7 @@ const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) =>
                     </span>
                   </TableCell>
                   <TableCell>
-                    {format(new Date(ordem.dataExecucao), "dd/MM/yyyy")}
+                    {formatDate(ordem.dataExecucao)}
                   </TableCell>
                   <TableCell>
                     {ordem.recorrencia === "none" ? "Sem recorrência" : 
