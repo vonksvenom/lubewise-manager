@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 import EquipamentoBasicInfo from "./equipamento/EquipamentoBasicInfo";
 import EquipamentoStatusSelect from "./equipamento/EquipamentoStatusSelect";
 import EquipamentoSubequipamentos from "./equipamento/EquipamentoSubequipamentos";
@@ -28,7 +29,8 @@ const EquipamentoForm = ({ initialData, onSave }) => {
       fabricante: "",
       numeroSerie: "",
       dataFabricacao: "",
-      subequipamentos: [], // Array to store nested equipment
+      subequipamentos: [],
+      manual: null, // New field for manual
     }
   );
 
@@ -44,6 +46,22 @@ const EquipamentoForm = ({ initialData, onSave }) => {
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleManualUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        handleChange("manual", {
+          name: file.name,
+          content: reader.result,
+          type: file.type,
+        });
+        toast.success("Manual anexado com sucesso!");
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubequipamentoAdd = (subequipamento) => {
@@ -130,6 +148,21 @@ const EquipamentoForm = ({ initialData, onSave }) => {
           onChange={(e) => handleChange("descricao", e.target.value)}
           rows={3}
         />
+      </div>
+
+      <div className="space-y-2">
+        <label htmlFor="manual" className="text-sm font-medium">Manual do Equipamento</label>
+        <Input
+          id="manual"
+          type="file"
+          onChange={handleManualUpload}
+          className="cursor-pointer"
+        />
+        {formData.manual && (
+          <p className="text-sm text-muted-foreground">
+            Arquivo atual: {formData.manual.name}
+          </p>
+        )}
       </div>
 
       <EquipamentoSubequipamentos

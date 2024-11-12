@@ -4,11 +4,24 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { FileDown } from "lucide-react";
 import QRCodeDisplay from "../common/QRCodeDisplay";
 import { format } from "date-fns";
 
 const EquipamentoViewDialog = ({ equipamento, open, onOpenChange }) => {
   if (!equipamento) return null;
+
+  const handleDownloadManual = () => {
+    if (equipamento.manual) {
+      const link = document.createElement('a');
+      link.href = equipamento.manual.content;
+      link.download = equipamento.manual.name;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -40,7 +53,7 @@ const EquipamentoViewDialog = ({ equipamento, open, onOpenChange }) => {
               )}
             </div>
           </div>
-          
+
           <div className="space-y-4">
             <div className="flex justify-center">
               <QRCodeDisplay data={equipamento} showDownload={true} />
@@ -56,6 +69,20 @@ const EquipamentoViewDialog = ({ equipamento, open, onOpenChange }) => {
               <div className="space-y-2">
                 <h3 className="font-semibold">Descrição</h3>
                 <p className="text-sm text-gray-600">{equipamento.descricao}</p>
+              </div>
+            )}
+
+            {equipamento.manual && (
+              <div className="space-y-2">
+                <h3 className="font-semibold">Manual do Equipamento</h3>
+                <Button 
+                  variant="outline" 
+                  className="w-full flex items-center gap-2"
+                  onClick={handleDownloadManual}
+                >
+                  <FileDown className="h-4 w-4" />
+                  Baixar Manual ({equipamento.manual.name})
+                </Button>
               </div>
             )}
           </div>
