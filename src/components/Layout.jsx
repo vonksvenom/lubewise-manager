@@ -24,7 +24,6 @@ const Layout = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Inicializa dados do usuário e tema apenas se necessário
   useEffect(() => {
     const resetUserData = () => {
       const currentUser = userService.getCurrentUser();
@@ -98,6 +97,11 @@ const Layout = ({ children }) => {
     }
   };
 
+  const handleLogoChange = (newLogo) => {
+    setLogoUrl(newLogo);
+    localStorage.setItem('logoUrl', newLogo);
+  };
+
   const filteredNavItems = navItems.filter(item => 
     (!item.adminOnly || (item.adminOnly && isAdmin)) &&
     (!item.adminOrPowerUserOnly || (item.adminOrPowerUserOnly && (isAdmin || isPowerUser)))
@@ -113,6 +117,7 @@ const Layout = ({ children }) => {
         setSidebarCollapsed={setSidebarCollapsed}
         logoUrl={logoUrl}
         navItems={filteredNavItems}
+        onLogoChange={handleLogoChange}
       />
 
       <div className={`transition-all duration-200 ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'} min-h-screen`}>
@@ -128,10 +133,6 @@ const Layout = ({ children }) => {
             isPowerUser={isPowerUser}
             onThemeChange={handleThemeChange}
             currentTheme={currentTheme}
-            onLogoChange={(newLogo) => {
-              setLogoUrl(newLogo);
-              localStorage.setItem('logoUrl', newLogo);
-            }}
             i18n={i18n}
             logout={logout}
           />

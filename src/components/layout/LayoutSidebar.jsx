@@ -24,9 +24,11 @@ const LayoutSidebar = ({
       if (file) {
         const reader = new FileReader();
         reader.onloadend = () => {
-          onLogoChange(reader.result);
-          setDialogOpen(false);
-          toast.success("Logo atualizado com sucesso!");
+          if (typeof onLogoChange === 'function') {
+            onLogoChange(reader.result);
+            setDialogOpen(false);
+            toast.success("Logo atualizado com sucesso!");
+          }
         };
         reader.readAsDataURL(file);
       }
