@@ -38,11 +38,13 @@ const Usuarios = () => {
       role: formData.get("role"),
       department: formData.get("department"),
       isAdmin: formData.get("isAdmin") === "true",
+      isPowerUser: formData.get("isPowerUser") === "true",
+      companyId: formData.get("companyId"),
+      locationId: formData.get("locationId"),
     };
 
     try {
       if (selectedUser) {
-        // Se a senha estiver vazia, não a incluímos na atualização
         if (!data.password) {
           delete data.password;
         }
@@ -127,7 +129,6 @@ const Usuarios = () => {
         />
       </Card>
 
-      {/* Botão de alterar senha (visível apenas para o próprio usuário) */}
       <div className="flex justify-end">
         <ChangePasswordDialog userId={user?.id} />
       </div>

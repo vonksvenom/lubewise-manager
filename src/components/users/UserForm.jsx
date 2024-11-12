@@ -109,16 +109,30 @@ const UserForm = ({ onSubmit, selectedUser, onClose }) => {
         </div>
       )}
 
-      <div className="flex items-center space-x-2">
-        <input
-          type="checkbox"
-          name="isAdmin"
-          value="true"
-          defaultChecked={selectedUser?.isAdmin}
-          className="rounded border-gray-300"
-        />
-        <label className="text-sm">Administrador</label>
-      </div>
+      {isAdmin && (
+        <div className="space-y-4">
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              name="isAdmin"
+              value="true"
+              defaultChecked={selectedUser?.isAdmin}
+              className="rounded border-gray-300"
+            />
+            <label className="text-sm">Administrador</label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              name="isPowerUser"
+              value="true"
+              defaultChecked={selectedUser?.isPowerUser}
+              className="rounded border-gray-300"
+            />
+            <label className="text-sm">Power User</label>
+          </div>
+        </div>
+      )}
       <Button type="submit">Salvar</Button>
     </form>
   );
