@@ -12,6 +12,7 @@ import { format, isValid, parseISO } from "date-fns";
 import { useState } from "react";
 import OrdemServicoViewDialog from "./ordem-servico/OrdemServicoViewDialog";
 import { userService } from "@/services/dataService";
+import { RECURRENCE_OPTIONS } from "@/constants/recurrenceOptions";
 
 const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) => {
   const [selectedOrdem, setSelectedOrdem] = useState(null);
