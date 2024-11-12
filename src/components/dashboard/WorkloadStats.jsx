@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { DashboardCard } from "@/components/DashboardCard";
 import { Clock, AlertTriangle, Timer, Users } from "lucide-react";
-import { isAfter, isBefore, addWeeks, startOfWeek, addMonths } from "date-fns";
+import { isAfter, isBefore, addWeeks, startOfWeek, addMonths, isWithinInterval } from "date-fns";
 import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { userService } from "@/services/dataService";
@@ -31,18 +31,25 @@ const WorkloadStats = ({ ordensServico = [] }) => {
 
     ordensServico.forEach(ordem => {
       const dataFim = new Date(ordem.dataFim);
-      const horasEstimadas = ordem.horasEstimadas || 0;
+      const dataInicio = new Date(ordem.dataInicio);
+      const horasEstimadas = Number(ordem.horasEstimadas) || 0;
 
+      // Calcula horas vencidas
       if (isBefore(dataFim, today) && ordem.status !== "Concluída") {
         horasVencidas += horasEstimadas;
-      } else if (timeframe === "week" && 
-                 isAfter(dataFim, nextWeekStart) && 
-                 isBefore(dataFim, addWeeks(nextWeekStart, 1))) {
-        horasPrevistas += horasEstimadas;
-      } else if (timeframe === "month" && 
-                 isAfter(dataFim, today) && 
-                 isBefore(dataFim, nextMonthStart)) {
-        horasPrevistas += horasEstimadas;
+      }
+
+      // Calcula horas previstas baseado no timeframe selecionado
+      if (timeframe === "week") {
+        const nextWeekEnd = addWeeks(nextWeekStart, 1);
+        if (isWithinInterval(dataInicio, { start: today, end: nextWeekEnd })) {
+          horasPrevistas += horasEstimadas;
+        }
+      } else if (timeframe === "month") {
+        const nextMonthEnd = addMonths(today, 1);
+        if (isWithinInterval(dataInicio, { start: today, end: nextMonthEnd })) {
+          horasPrevistas += horasEstimadas;
+        }
       }
     });
 
@@ -51,13 +58,19 @@ const WorkloadStats = ({ ordensServico = [] }) => {
 
   const { horasVencidas, horasPrevistas } = calculateWorkload();
   
+  // Calcula a porcentagem de aderência
   const adherencePercentage = totalAvailableHours > 0 
-    ? Math.round((horasPrevistas / totalAvailableHours) * 100) 
+    ? Math.min(100, Math.round((horasPrevistas / totalAvailableHours) * 100))
     : 0;
 
-  const additionalTechniciansNeeded = Math.ceil(
-    horasVencidas / (totalAvailableHours / technicians.length)
-  );
+  // Calcula o número de técnicos adicionais necessários
+  const horasDisponiveisPorTecnico = technicians.length > 0 
+    ? totalAvailableHours / technicians.length 
+    : 0;
+    
+  const additionalTechniciansNeeded = horasDisponiveisPorTecnico > 0
+    ? Math.max(0, Math.ceil(horasVencidas / horasDisponiveisPorTecnico))
+    : 0;
 
   const handleOverdueClick = () => {
     const overdueOrders = ordensServico.filter(ordem => 
