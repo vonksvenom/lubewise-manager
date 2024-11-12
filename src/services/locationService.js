@@ -5,14 +5,8 @@ const STORAGE_KEY = 'locations';
 const init = () => {
   const existingLocations = localStorage.getItem(STORAGE_KEY);
   if (!existingLocations) {
-    // Initialize with initial locations if no locations exist
     localStorage.setItem(STORAGE_KEY, JSON.stringify(initialLocations));
   }
-};
-
-const reset = () => {
-  // Force reset the locations to initial state
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(initialLocations));
 };
 
 const getAll = () => {
@@ -56,7 +50,6 @@ const remove = (id) => {
 
 export const locationService = {
   init,
-  reset,
   getAll,
   getById,
   add,
