@@ -7,32 +7,23 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import ThemeSelector from "./ThemeSelector";
-import LogoUploader from "./LogoUploader";
 
 const LayoutControls = ({ 
   isAdmin, 
   isPowerUser, 
   onThemeChange, 
   currentTheme,
-  onLogoChange,
   i18n,
   logout 
 }) => (
   <div className="fixed bottom-4 right-4 flex gap-2">
     {(isAdmin || isPowerUser) && (
-      <>
-        <ThemeSelector 
-          isAdmin={isAdmin} 
-          isPowerUser={isPowerUser} 
-          onThemeChange={onThemeChange}
-          currentTheme={currentTheme}
-        />
-        <LogoUploader 
-          isAdmin={isAdmin} 
-          isPowerUser={isPowerUser} 
-          onLogoChange={onLogoChange}
-        />
-      </>
+      <ThemeSelector 
+        isAdmin={isAdmin} 
+        isPowerUser={isPowerUser} 
+        onThemeChange={onThemeChange}
+        currentTheme={currentTheme}
+      />
     )}
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
