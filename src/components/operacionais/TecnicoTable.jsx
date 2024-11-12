@@ -84,7 +84,7 @@ const TecnicoTable = () => {
                 onSort={sortData}
               />
               <SortableHeader 
-                label="Horas Disponíveis/Dia"
+                label="Jornada/Dia"
                 sortKey="horasDisponiveis"
                 sortConfig={sortConfig}
                 onSort={sortData}
