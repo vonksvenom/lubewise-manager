@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { companyService, locationService } from "@/services/dataService";
+import { X } from "lucide-react";
 
 const ConfiguracoesPowerUser = () => {
   const { isAdmin, isPowerUser } = useAuth();
@@ -34,9 +35,14 @@ const ConfiguracoesPowerUser = () => {
 
     locationService.add(newLocation);
     loadData();
-    // Only clear the name, keeping the selected company
     setNewLocation(prev => ({ ...prev, name: "" }));
     toast.success("Local adicionado com sucesso!");
+  };
+
+  const handleDeleteLocation = (locationId) => {
+    locationService.delete(locationId);
+    loadData();
+    toast.success("Local removido com sucesso!");
   };
 
   const handleAddCompany = () => {
@@ -54,6 +60,17 @@ const ConfiguracoesPowerUser = () => {
     loadData();
     setNewCompany({ name: "" });
     toast.success("Empresa adicionada com sucesso!");
+  };
+
+  const handleDeleteCompany = (companyId) => {
+    if (!isAdmin) {
+      toast.error("Apenas administradores podem remover empresas");
+      return;
+    }
+
+    companyService.delete(companyId);
+    loadData();
+    toast.success("Empresa removida com sucesso!");
   };
 
   // Filtra os locais baseado na empresa selecionada
@@ -126,10 +143,20 @@ const ConfiguracoesPowerUser = () => {
           <div className="space-y-2">
             {filteredLocations.map((location) => (
               <div key={location.id} className="flex justify-between items-center p-2 bg-muted rounded-lg">
-                <span>{location.name}</span>
-                <span className="text-sm text-muted-foreground">
-                  {companies.find(c => c.id === location.companyId)?.name}
-                </span>
+                <div className="flex-1">
+                  <span>{location.name}</span>
+                  <span className="text-sm text-muted-foreground ml-2">
+                    {companies.find(c => c.id === location.companyId)?.name}
+                  </span>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => handleDeleteLocation(location.id)}
+                  className="h-8 w-8"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
               </div>
             ))}
           </div>
@@ -152,8 +179,16 @@ const ConfiguracoesPowerUser = () => {
             <h3 className="font-medium mb-2">Empresas Cadastradas:</h3>
             <div className="space-y-2">
               {companies.map((company) => (
-                <div key={company.id} className="p-2 bg-muted rounded-lg">
-                  {company.name}
+                <div key={company.id} className="flex justify-between items-center p-2 bg-muted rounded-lg">
+                  <span>{company.name}</span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleDeleteCompany(company.id)}
+                    className="h-8 w-8"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
                 </div>
               ))}
             </div>
