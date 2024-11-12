@@ -15,16 +15,16 @@ const OrdemServicoFilters = ({ filters, onFilterChange }) => {
   const prioridades = ["Todos", "Baixa", "Media", "Alta", "Urgente"];
 
   return (
-    <div className="flex flex-wrap gap-4 mb-6">
-      <div className="w-48">
-        <label className="text-sm font-medium mb-1.5 block">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-gradient-to-br from-muted to-accent/10 rounded-lg shadow-neo mb-6">
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-foreground/80">
           Tipo
         </label>
         <Select
           value={filters.tipo || "Todos"}
           onValueChange={(value) => onFilterChange("tipo", value)}
         >
-          <SelectTrigger>
+          <SelectTrigger className="w-full shadow-neo-sm">
             <SelectValue placeholder="Selecione o tipo" />
           </SelectTrigger>
           <SelectContent>
@@ -37,15 +37,15 @@ const OrdemServicoFilters = ({ filters, onFilterChange }) => {
         </Select>
       </div>
 
-      <div className="w-48">
-        <label className="text-sm font-medium mb-1.5 block">
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-foreground/80">
           Técnico
         </label>
         <Select
           value={filters.tecnicoId || "Todos"}
           onValueChange={(value) => onFilterChange("tecnicoId", value)}
         >
-          <SelectTrigger>
+          <SelectTrigger className="w-full shadow-neo-sm">
             <SelectValue placeholder="Selecione o técnico" />
           </SelectTrigger>
           <SelectContent>
@@ -59,15 +59,15 @@ const OrdemServicoFilters = ({ filters, onFilterChange }) => {
         </Select>
       </div>
 
-      <div className="w-48">
-        <label className="text-sm font-medium mb-1.5 block">
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-foreground/80">
           Status
         </label>
         <Select
           value={filters.status || "Todos"}
           onValueChange={(value) => onFilterChange("status", value)}
         >
-          <SelectTrigger>
+          <SelectTrigger className="w-full shadow-neo-sm">
             <SelectValue placeholder="Selecione o status" />
           </SelectTrigger>
           <SelectContent>
@@ -80,15 +80,15 @@ const OrdemServicoFilters = ({ filters, onFilterChange }) => {
         </Select>
       </div>
 
-      <div className="w-48">
-        <label className="text-sm font-medium mb-1.5 block">
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-foreground/80">
           Prioridade
         </label>
         <Select
           value={filters.prioridade || "Todos"}
           onValueChange={(value) => onFilterChange("prioridade", value)}
         >
-          <SelectTrigger>
+          <SelectTrigger className="w-full shadow-neo-sm">
             <SelectValue placeholder="Selecione a prioridade" />
           </SelectTrigger>
           <SelectContent>

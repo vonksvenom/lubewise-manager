@@ -170,32 +170,35 @@ const Calendario = () => {
         <Button 
           variant="outline"
           onClick={() => setBalanceamentoOpen(true)}
-          className="gap-2"
+          className="gap-2 shadow-neo hover:shadow-neo-sm transition-shadow"
         >
           <Scale className="h-4 w-4" />
           Balanceamento Automático
         </Button>
       </div>
 
-      <Card className="p-6">
+      <Card className="p-6 shadow-neo bg-gradient-to-br from-muted to-accent/10">
         <OrdemServicoFilters 
           filters={filters}
           onFilterChange={handleFilterChange}
         />
         
-        <FullCalendar
-          plugins={[dayGridPlugin]}
-          initialView="dayGridMonth"
-          events={events}
-          height="auto"
-          locale="pt-br"
-          headerToolbar={{
-            left: "prev,next today",
-            center: "title",
-            right: "dayGridMonth,dayGridWeek",
-          }}
-          eventClick={handleEventClick}
-        />
+        <div className="mt-6">
+          <FullCalendar
+            plugins={[dayGridPlugin]}
+            initialView="dayGridMonth"
+            events={events}
+            height="auto"
+            locale="pt-br"
+            headerToolbar={{
+              left: "prev,next today",
+              center: "title",
+              right: "dayGridMonth,dayGridWeek",
+            }}
+            eventClick={handleEventClick}
+            className="bg-background rounded-lg p-4 shadow-neo-sm"
+          />
+        </div>
       </Card>
 
       <OrdemServicoViewDialog

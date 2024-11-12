@@ -139,6 +139,7 @@ const OrdensServico = () => {
           <Button
             variant="outline"
             onClick={() => setBalanceamentoOpen(true)}
+            className="shadow-neo hover:shadow-neo-sm transition-shadow"
           >
             <Scale className="h-4 w-4 mr-2" />
             Balanceamento Automático
@@ -146,7 +147,7 @@ const OrdensServico = () => {
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
               <Button
-                className="bg-primary hover:bg-primary/90"
+                className="bg-primary hover:bg-primary/90 shadow-neo hover:shadow-neo-sm transition-shadow"
                 onClick={() => setSelectedOrdem(null)}
               >
                 <Plus className="h-4 w-4 mr-2" />
@@ -177,32 +178,30 @@ const OrdensServico = () => {
         </div>
       </div>
 
-      <Card className="p-6">
-        <div className="space-y-4">
-          <div className="flex gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <Input
-                placeholder="Buscar ordens de serviço..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10"
-              />
-            </div>
+      <Card className="p-6 shadow-neo bg-gradient-to-br from-muted to-accent/10">
+        <div className="space-y-6">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+            <Input
+              placeholder="Buscar ordens de serviço..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10 shadow-neo-sm"
+            />
           </div>
 
           <OrdemServicoFilters 
             filters={filters}
             onFilterChange={handleFilterChange}
           />
-        </div>
 
-        <OrdemServicoTable
-          ordensServico={filteredOrdensServico}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          equipamentos={equipamentos}
-        />
+          <OrdemServicoTable
+            ordensServico={filteredOrdensServico}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            equipamentos={equipamentos}
+          />
+        </div>
       </Card>
 
       <BalanceamentoDialog 
