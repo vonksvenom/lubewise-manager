@@ -19,7 +19,7 @@ const QRCodeDisplay = ({ data, showDownload = false }) => {
       try {
         const canvas = await html2canvas(element, {
           backgroundColor: '#FFFFFF',
-          scale: 5, // Increased from 3 to 5 for better quality
+          scale: 8, // Increased from 5 to 8 for even better quality
           logging: false,
           useCORS: true,
           allowTaint: true,
@@ -28,7 +28,7 @@ const QRCodeDisplay = ({ data, showDownload = false }) => {
           x: 0,
           y: 0,
           imageTimeout: 0,
-          pixelRatio: 3, // Added to improve resolution
+          pixelRatio: 5, // Increased from 3 to 5 for better resolution
           windowWidth: element.offsetWidth,
           windowHeight: element.offsetHeight
         });
@@ -47,11 +47,11 @@ const QRCodeDisplay = ({ data, showDownload = false }) => {
     <div className="flex flex-col items-center gap-2">
       <div
         id={`qr-${data.id}`}
-        className="bg-white p-8 rounded-lg"
+        className="bg-white p-4 rounded-lg"
         style={{ 
           width: 'fit-content',
-          minWidth: '300px',
-          minHeight: '300px',
+          minWidth: '200px', // Reduced from 300px
+          minHeight: '200px', // Reduced from 300px
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center'
@@ -59,11 +59,11 @@ const QRCodeDisplay = ({ data, showDownload = false }) => {
       >
         <QRCodeSVG
           value={JSON.stringify(qrData)}
-          size={300} // Increased from 256 to 300
+          size={180} // Reduced from 300 to 180 for display
           level="H"
           includeMargin={true}
           style={{
-            shapeRendering: 'crispEdges', // Added for sharper edges
+            shapeRendering: 'crispEdges',
           }}
         />
       </div>
