@@ -16,7 +16,7 @@ const LayoutControls = ({
   i18n,
   logout 
 }) => (
-  <div className="fixed bottom-4 right-4 flex gap-2">
+  <div className="fixed bottom-4 right-4 flex gap-2 z-50">
     {(isAdmin || isPowerUser) && (
       <ThemeSelector 
         isAdmin={isAdmin} 
