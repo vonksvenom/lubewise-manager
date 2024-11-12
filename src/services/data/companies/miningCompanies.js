@@ -14,5 +14,21 @@ export const miningCompanies = [
     sector: "Mineração e Siderurgia",
     mainProducts: ["Minério de Ferro", "Aço", "Cimento"],
     foundedYear: 1941
+  },
+  {
+    id: "7",
+    name: "Anglo American",
+    active: true,
+    sector: "Mineração",
+    mainProducts: ["Minério de Ferro", "Níquel", "Fosfatos"],
+    foundedYear: 1917
+  },
+  {
+    id: "8",
+    name: "Samarco",
+    active: true,
+    sector: "Mineração",
+    mainProducts: ["Minério de Ferro", "Pelotas"],
+    foundedYear: 1977
   }
 ];

@@ -40,5 +40,26 @@ export const initialTechnicianUsers = [
       editWorkOrders: true,
       editInventory: true,
     }
+  },
+  {
+    id: "15",
+    name: "Ana Costa",
+    email: "ana.costa@csn.com",
+    password: "tec789",
+    role: "technician",
+    department: "Manutenção",
+    nivel: "senior",
+    horasDisponiveis: "8",
+    companyId: "2",
+    locationId: "6",
+    phone: "+55 31 97777-8888",
+    registrationNumber: "T003",
+    startDate: "2016-03-10",
+    specializations: ["Elétrica", "Instrumentação"],
+    certifications: ["NR-10", "NR-35"],
+    permissions: {
+      editWorkOrders: true,
+      editInventory: true,
+    }
   }
 ];

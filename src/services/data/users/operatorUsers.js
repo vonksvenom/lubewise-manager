@@ -51,7 +51,7 @@ export const initialOperatorUsers = [
     role: "operator",
     department: "Produção",
     isAdmin: false,
-    companyId: "3",
+    companyId: "6",
     locationId: "10",
     permissions: {
       createUsers: false,

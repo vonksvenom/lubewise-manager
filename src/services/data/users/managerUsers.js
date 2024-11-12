@@ -52,5 +52,32 @@ export const initialManagerUsers = [
       editInventory: true,
       editAreas: true
     }
+  },
+  {
+    id: "14",
+    name: "Fernando Oliveira",
+    email: "fernando.oliveira@petrobras.com",
+    password: "ger123",
+    role: "manager",
+    department: "Manutenção",
+    isAdmin: false,
+    companyId: "6",
+    locationId: "10",
+    phone: "+55 21 96666-5555",
+    registrationNumber: "M003",
+    startDate: "2017-08-20",
+    specializations: ["Gestão de Manutenção", "Confiabilidade"],
+    certifications: ["PMP", "CMRP"],
+    permissions: {
+      createUsers: false,
+      deleteUsers: false,
+      editSettings: false,
+      manageCompany: false,
+      viewReports: true,
+      editEquipments: true,
+      editWorkOrders: true,
+      editInventory: true,
+      editAreas: true
+    }
   }
 ];
