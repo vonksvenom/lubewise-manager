@@ -25,6 +25,7 @@ const add = (equipamento) => {
   const newEquipamento = {
     ...equipamento,
     id: Date.now().toString(),
+    lessonsLearned: [],
   };
   equipamentos.push(newEquipamento);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(equipamentos));
@@ -36,6 +37,20 @@ const update = (id, equipamento) => {
   const index = equipamentos.findIndex(e => e.id === id);
   if (index !== -1) {
     equipamentos[index] = { ...equipamentos[index], ...equipamento };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(equipamentos));
+    return equipamentos[index];
+  }
+  return null;
+};
+
+const addLessonLearned = (equipamentoId, lesson) => {
+  const equipamentos = getAll();
+  const index = equipamentos.findIndex(e => e.id === equipamentoId);
+  if (index !== -1) {
+    if (!equipamentos[index].lessonsLearned) {
+      equipamentos[index].lessonsLearned = [];
+    }
+    equipamentos[index].lessonsLearned.push(lesson);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(equipamentos));
     return equipamentos[index];
   }
@@ -54,5 +69,6 @@ export const equipamentoService = {
   getById,
   add,
   update,
+  addLessonLearned,
   delete: remove
 };

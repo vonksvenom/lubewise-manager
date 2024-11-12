@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 
 const VOLUMES_PADRAO = ["1000L", "200L", "20L", "5L", "1L", "500ml"];
 
@@ -21,6 +22,7 @@ const LubrificanteForm = ({ initialData, onSave }) => {
       viscosidade: "",
       volumePadrao: "200L",
       type: "Óleo",
+      fispq: null,
     }
   );
 
@@ -31,6 +33,23 @@ const LubrificanteForm = ({ initialData, onSave }) => {
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleFISPQUpload = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type === "application/pdf") {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        handleChange("fispq", {
+          name: file.name,
+          content: reader.result,
+          uploadDate: new Date().toISOString(),
+        });
+      };
+      reader.readAsDataURL(file);
+    } else {
+      toast.error("Por favor, selecione um arquivo PDF válido");
+    }
   };
 
   return (
@@ -122,6 +141,24 @@ const LubrificanteForm = ({ initialData, onSave }) => {
             </SelectContent>
           </Select>
         </div>
+      </div>
+
+      <div className="space-y-2">
+        <label htmlFor="fispq" className="text-sm font-medium">
+          FISPQ (PDF)
+        </label>
+        <Input
+          id="fispq"
+          type="file"
+          accept=".pdf"
+          onChange={handleFISPQUpload}
+          className="cursor-pointer"
+        />
+        {formData.fispq && (
+          <p className="text-sm text-muted-foreground">
+            Arquivo atual: {formData.fispq.name}
+          </p>
+        )}
       </div>
 
       <div className="flex justify-end gap-2">
