@@ -4,17 +4,26 @@ import { Download } from "lucide-react";
 import html2canvas from "html2canvas";
 
 const QRCodeDisplay = ({ data, showDownload = false }) => {
-  // Create a minimal version of the data for QR code
+  // Create a more detailed version of the data for QR code
   const qrData = {
     id: data.id,
     tag: data.tag,
     nome: data.nome,
+    modelo: data.modelo,
+    fabricante: data.fabricante,
+    numeroSerie: data.numeroSerie,
     status: data.status,
+    area: data.area,
+    responsavel: data.responsavel,
     lubrificante: data.lubrificante ? {
-      descricaoComercial: data.lubrificante.descricaoComercial || "N/A",
-      recorrenciaRelubrificacao: data.lubrificante.recorrenciaRelubrificacao || "N/A",
-      quantidadeRelubrificacao: data.lubrificante.quantidadeRelubrificacao || "N/A"
-    } : null
+      descricaoComercial: data.lubrificante.descricaoComercial,
+      recorrenciaRelubrificacao: data.lubrificante.recorrenciaRelubrificacao,
+      quantidadeRelubrificacao: data.lubrificante.quantidadeRelubrificacao,
+      pontoLubrificacao: data.lubrificante.pontoLubrificacao,
+      tipo: data.lubrificante.tipo
+    } : null,
+    ultimaManutencao: data.ultimaManutencao,
+    proximaManutencao: data.proximaManutencao
   };
 
   const handleDownload = async () => {
@@ -64,7 +73,7 @@ const QRCodeDisplay = ({ data, showDownload = false }) => {
         <QRCodeSVG
           value={JSON.stringify(qrData)}
           size={180}
-          level="M"
+          level="L"
           includeMargin={true}
           style={{
             shapeRendering: 'crispEdges',
