@@ -7,7 +7,7 @@ import EquipamentoDetails from "./equipamento/EquipamentoDetails";
 import HierarchyEditDialog from "./equipamento/HierarchyEditDialog";
 import MaintenancePlanForm from "./equipamento/MaintenancePlanForm";
 import { useEquipamentoForm } from "./equipamento/EquipamentoFormLogic";
-import { Network, Tool } from "lucide-react";
+import { Network, Wrench } from "lucide-react";
 import { useState } from "react";
 import MaintenancePlanDialog from "./equipamento/MaintenancePlanDialog";
 
@@ -59,7 +59,7 @@ const EquipamentoForm = ({ initialData, onSave }) => {
           className="flex-1 flex items-center justify-center gap-2"
           onClick={() => setMaintenanceDialogOpen(true)}
         >
-          <Tool className="h-4 w-4" />
+          <Wrench className="h-4 w-4" />
           Planos de Manutenção
         </Button>
       </div>
