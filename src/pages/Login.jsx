@@ -25,7 +25,7 @@ const Login = () => {
       <Card className="w-full max-w-md p-6 space-y-6">
         <div className="flex justify-center mb-8">
           <img
-            src="https://images.cws.digital/fornecedores/m/sotreq-industrial.jpg"
+            src="/sotreq-industrial-logo.png"
             alt="Logo"
             className="h-16 object-contain"
           />
