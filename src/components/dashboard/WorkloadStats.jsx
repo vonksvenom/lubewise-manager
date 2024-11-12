@@ -122,7 +122,7 @@ const WorkloadStats = ({ ordensServico = [] }) => {
             <Users className="h-6 w-6 text-purple-500" />
           </div>
           <div>
-            <p className="text-sm text-gray-400">Técnicos Adicionais Necessários</p>
+            <p className="text-sm text-gray-400">Operacionais Adicionais Necessários</p>
             <p className="text-2xl font-bold text-purple-500">{additionalTechniciansNeeded}</p>
           </div>
         </div>
