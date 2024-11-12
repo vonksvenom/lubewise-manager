@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { companyService, locationService } from "@/services/dataService";
-import { X } from "lucide-react";
+import { X, RefreshCw } from "lucide-react";
 
 const ConfiguracoesPowerUser = () => {
   const { isAdmin, isPowerUser } = useAuth();
@@ -73,6 +73,13 @@ const ConfiguracoesPowerUser = () => {
     toast.success("Empresa removida com sucesso!");
   };
 
+  const handleResetData = () => {
+    companyService.reset();
+    locationService.reset();
+    loadData();
+    toast.success("Dados resetados com sucesso!");
+  };
+
   // Filtra os locais baseado na empresa selecionada
   const filteredLocations = locations.filter(
     location => selectedCompany === "all" || location.companyId === selectedCompany
@@ -89,7 +96,17 @@ const ConfiguracoesPowerUser = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-catYellow">Configurações PowerUser</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-3xl font-bold text-catYellow">Configurações PowerUser</h1>
+        <Button
+          onClick={handleResetData}
+          variant="outline"
+          className="flex items-center gap-2"
+        >
+          <RefreshCw className="h-4 w-4" />
+          Resetar Dados
+        </Button>
+      </div>
 
       <Card className="p-6">
         <h2 className="text-xl font-semibold mb-4">Gerenciar Locais</h2>

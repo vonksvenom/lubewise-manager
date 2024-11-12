@@ -10,6 +10,11 @@ const init = () => {
   }
 };
 
+const reset = () => {
+  // Force reset the locations to initial state
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(initialLocations));
+};
+
 const getAll = () => {
   init();
   const data = localStorage.getItem(STORAGE_KEY);
@@ -51,6 +56,7 @@ const remove = (id) => {
 
 export const locationService = {
   init,
+  reset,
   getAll,
   getById,
   add,

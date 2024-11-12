@@ -9,6 +9,11 @@ const init = () => {
   }
 };
 
+const reset = () => {
+  // Force reset the companies to initial state
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(initialCompanies));
+};
+
 const getAll = () => {
   init();
   const data = localStorage.getItem(STORAGE_KEY);
@@ -50,6 +55,7 @@ const remove = (id) => {
 
 export const companyService = {
   init,
+  reset,
   getAll,
   getById,
   add,
