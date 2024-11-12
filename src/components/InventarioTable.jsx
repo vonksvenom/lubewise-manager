@@ -19,16 +19,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import InventarioForm from "./inventario/InventarioForm";
 
 const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo" }) => {
   const [items, setItems] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
     setItems(inventarioService.getAll());
   }, []);
 
-  const handleDelete = (id) => {
+  const handleDelete = (id, e) => {
+    e.stopPropagation(); // Prevent row click when deleting
     if (window.confirm("Tem certeza que deseja excluir este item?")) {
       inventarioService.delete(id);
       setItems(inventarioService.getAll());
@@ -39,15 +49,24 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo" }) => {
     }
   };
 
-  const handleEdit = (item) => {
-    if (onEdit) {
-      onEdit(item);
-    } else {
+  const handleEdit = (item, e) => {
+    if (e) {
+      e.stopPropagation(); // Prevent row click when clicking edit button
+    }
+    setSelectedItem(item);
+    setDialogOpen(true);
+  };
+
+  const handleSave = (updatedItem) => {
+    if (selectedItem) {
+      inventarioService.update(selectedItem.id, updatedItem);
+      setItems(inventarioService.getAll());
       toast({
-        title: "Em desenvolvimento",
-        description: "A funcionalidade de edição será implementada em breve.",
+        title: "Item atualizado",
+        description: "O item foi atualizado com sucesso.",
       });
     }
+    setDialogOpen(false);
   };
 
   const filteredItems = items.filter(
@@ -90,7 +109,11 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo" }) => {
         </TableHeader>
         <TableBody>
           {filteredItems.map((item) => (
-            <TableRow key={item.id}>
+            <TableRow 
+              key={item.id}
+              className="cursor-pointer hover:bg-muted/50"
+              onClick={() => handleEdit(item)}
+            >
               <TableCell>{item.name}</TableCell>
               <TableCell>{viewMode === "tipo" ? item.type : item.descricaoComercial}</TableCell>
               <TableCell>{item.quantity}</TableCell>
@@ -105,14 +128,14 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo" }) => {
                   <Button
                     variant="outline"
                     size="icon"
-                    onClick={() => handleEdit(item)}
+                    onClick={(e) => handleEdit(item, e)}
                   >
                     <Pencil className="h-4 w-4" />
                   </Button>
                   <Button
                     variant="outline"
                     size="icon"
-                    onClick={() => handleDelete(item.id)}
+                    onClick={(e) => handleDelete(item.id, e)}
                     className="text-red-500 hover:text-red-700"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -123,6 +146,21 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo" }) => {
           ))}
         </TableBody>
       </Table>
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar Item do Inventário</DialogTitle>
+          </DialogHeader>
+          <InventarioForm 
+            initialData={selectedItem} 
+            onSave={(data) => {
+              handleSave(data);
+              setDialogOpen(false);
+            }} 
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
