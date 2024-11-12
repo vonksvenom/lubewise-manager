@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, Scale } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
@@ -16,6 +16,7 @@ import OrdemServicoForm from "@/components/OrdemServicoForm";
 import OrdemServicoTable from "@/components/OrdemServicoTable";
 import { ordemServicoService, equipamentoService } from "@/services/dataService";
 import BulkImportDialog from "@/components/common/BulkImportDialog";
+import BalanceamentoDialog from "@/components/ordem-servico/BalanceamentoDialog";
 
 const OrdensServico = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -23,6 +24,7 @@ const OrdensServico = () => {
   const [selectedOrdem, setSelectedOrdem] = useState(null);
   const [equipamentos, setEquipamentos] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [balanceamentoOpen, setBalanceamentoOpen] = useState(false);
   const { t } = useTranslation();
   const { toast } = useToast();
 
@@ -112,6 +114,13 @@ const OrdensServico = () => {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">{t("workOrders")}</h1>
         <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={() => setBalanceamentoOpen(true)}
+          >
+            <Scale className="h-4 w-4 mr-2" />
+            Balanceamento Automático
+          </Button>
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
               <Button
@@ -166,6 +175,11 @@ const OrdensServico = () => {
           equipamentos={equipamentos}
         />
       </Card>
+
+      <BalanceamentoDialog 
+        open={balanceamentoOpen}
+        onOpenChange={setBalanceamentoOpen}
+      />
     </div>
   );
 };
