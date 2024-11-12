@@ -1,4 +1,5 @@
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const EquipamentoBasicInfo = ({ formData, handleChange }) => {
   const handleImageUpload = (e) => {
@@ -34,6 +35,21 @@ const EquipamentoBasicInfo = ({ formData, handleChange }) => {
           />
         </div>
       </div>
+      
+      <div className="flex items-center space-x-2">
+        <Checkbox
+          id="critico"
+          checked={formData.critico}
+          onCheckedChange={(checked) => handleChange("critico", checked)}
+        />
+        <label
+          htmlFor="critico"
+          className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
+          Equipamento Crítico
+        </label>
+      </div>
+
       <div className="space-y-2">
         <label htmlFor="imagem" className="text-sm font-medium">Imagem do Equipamento</label>
         <Input

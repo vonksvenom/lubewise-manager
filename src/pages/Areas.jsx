@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,17 +16,18 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, Pencil, Trash2 } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { Plus, Pencil, Eye } from "lucide-react";
+import { toast } from "sonner";
 import { areaService } from "@/services/areaService";
 
 const Areas = () => {
+  const { isAdmin, isPowerUser } = useAuth();
   const [areas, setAreas] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedArea, setSelectedArea] = useState(null);
-  const { toast } = useToast();
+  const [isViewMode, setIsViewMode] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     setAreas(areaService.getAll());
@@ -42,30 +44,30 @@ const Areas = () => {
 
     if (selectedArea) {
       areaService.update(selectedArea.id, data);
-      toast({
-        title: "Área atualizada",
-        description: "As alterações foram salvas com sucesso.",
-      });
+      toast.success("Área atualizada com sucesso");
     } else {
       areaService.add(data);
-      toast({
-        title: "Área adicionada",
-        description: "A nova área foi cadastrada com sucesso.",
-      });
+      toast.success("Área adicionada com sucesso");
     }
     setAreas(areaService.getAll());
     setSelectedArea(null);
+    setDialogOpen(false);
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm("Tem certeza que deseja excluir esta área?")) {
-      areaService.delete(id);
-      setAreas(areaService.getAll());
-      toast({
-        title: "Área excluída",
-        description: "A área foi removida com sucesso.",
-      });
+  const handleView = (area) => {
+    setSelectedArea(area);
+    setIsViewMode(true);
+    setDialogOpen(true);
+  };
+
+  const handleEdit = (area) => {
+    if (!isAdmin && !isPowerUser) {
+      toast.error("Apenas administradores e power users podem editar áreas");
+      return;
     }
+    setSelectedArea(area);
+    setIsViewMode(false);
+    setDialogOpen(true);
   };
 
   const filteredAreas = areas.filter(
@@ -77,58 +79,17 @@ const Areas = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-catYellow">Áreas</h1>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button onClick={() => setSelectedArea(null)}>
-              <Plus className="h-4 w-4 mr-2" />
-              Nova Área
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>
-                {selectedArea ? "Editar Área" : "Nova Área"}
-              </DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSave} className="space-y-4">
-              <div className="space-y-2">
-                <label htmlFor="nome" className="text-sm font-medium">
-                  Nome da Área
-                </label>
-                <Input
-                  id="nome"
-                  name="nome"
-                  defaultValue={selectedArea?.nome}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <label htmlFor="descricao" className="text-sm font-medium">
-                  Descrição
-                </label>
-                <Input
-                  id="descricao"
-                  name="descricao"
-                  defaultValue={selectedArea?.descricao}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <label htmlFor="responsavel" className="text-sm font-medium">
-                  Responsável
-                </label>
-                <Input
-                  id="responsavel"
-                  name="responsavel"
-                  defaultValue={selectedArea?.responsavel}
-                  required
-                />
-              </div>
-              <Button type="submit">Salvar</Button>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <h1 className="text-3xl font-bold">Áreas</h1>
+        {(isAdmin || isPowerUser) && (
+          <Button onClick={() => {
+            setSelectedArea(null);
+            setIsViewMode(false);
+            setDialogOpen(true);
+          }}>
+            <Plus className="h-4 w-4 mr-2" />
+            Nova Área
+          </Button>
+        )}
       </div>
 
       <Card className="p-6">
@@ -152,26 +113,34 @@ const Areas = () => {
           <TableBody>
             {filteredAreas.map((area) => (
               <TableRow key={area.id}>
-                <TableCell>{area.nome}</TableCell>
+                <TableCell>
+                  <button
+                    onClick={() => handleView(area)}
+                    className="hover:underline text-left"
+                  >
+                    {area.nome}
+                  </button>
+                </TableCell>
                 <TableCell>{area.descricao}</TableCell>
                 <TableCell>{area.responsavel}</TableCell>
                 <TableCell>
                   <div className="flex gap-2">
                     <Button
-                      variant="outline"
+                      variant="ghost"
                       size="icon"
-                      onClick={() => setSelectedArea(area)}
+                      onClick={() => handleView(area)}
                     >
-                      <Pencil className="h-4 w-4" />
+                      <Eye className="h-4 w-4" />
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => handleDelete(area.id)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                    {(isAdmin || isPowerUser) && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => handleEdit(area)}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                    )}
                   </div>
                 </TableCell>
               </TableRow>
@@ -179,6 +148,59 @@ const Areas = () => {
           </TableBody>
         </Table>
       </Card>
+
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {isViewMode 
+                ? "Visualizar Área" 
+                : selectedArea 
+                  ? "Editar Área" 
+                  : "Nova Área"}
+            </DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSave} className="space-y-4">
+            <div className="space-y-2">
+              <label htmlFor="nome" className="text-sm font-medium">
+                Nome da Área
+              </label>
+              <Input
+                id="nome"
+                name="nome"
+                defaultValue={selectedArea?.nome}
+                required
+                readOnly={isViewMode}
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="descricao" className="text-sm font-medium">
+                Descrição
+              </label>
+              <Input
+                id="descricao"
+                name="descricao"
+                defaultValue={selectedArea?.descricao}
+                required
+                readOnly={isViewMode}
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="responsavel" className="text-sm font-medium">
+                Responsável
+              </label>
+              <Input
+                id="responsavel"
+                name="responsavel"
+                defaultValue={selectedArea?.responsavel}
+                required
+                readOnly={isViewMode}
+              />
+            </div>
+            {!isViewMode && <Button type="submit">Salvar</Button>}
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

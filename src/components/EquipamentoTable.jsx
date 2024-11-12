@@ -24,9 +24,12 @@ const SubequipamentoRow = ({ subequipamento, depth = 1, onView }) => (
       )}
     </TableCell>
     <TableCell className="font-medium">
-      <div className="flex items-center gap-2">
+      <button
+        onClick={() => onView(subequipamento)}
+        className="hover:underline text-left flex items-center gap-2"
+      >
         <span>└─ {subequipamento.nome}</span>
-      </div>
+      </button>
     </TableCell>
     <TableCell>{subequipamento.tag}</TableCell>
     <TableCell>{subequipamento.tipo || "-"}</TableCell>
@@ -79,7 +82,17 @@ const EquipamentoTable = ({ equipamentos, onEdit, onDelete }) => {
           <TableBody>
             {equipamentos.map((equip) => (
               <>
-                <TableRow key={equip.id}>
+                <TableRow 
+                  key={equip.id}
+                  className="cursor-pointer hover:bg-muted/50"
+                  onClick={(e) => {
+                    // Prevent row click when clicking expand button
+                    if (e.target.closest('button')?.classList.contains('expand-button')) {
+                      return;
+                    }
+                    handleView(equip);
+                  }}
+                >
                   <TableCell>
                     {equip.imagem && (
                       <img
@@ -95,8 +108,11 @@ const EquipamentoTable = ({ equipamentos, onEdit, onDelete }) => {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-5 w-5"
-                          onClick={() => toggleExpand(equip.id)}
+                          className="h-5 w-5 expand-button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleExpand(equip.id);
+                          }}
                         >
                           {expandedRows[equip.id] ? (
                             <ChevronDown className="h-4 w-4" />
@@ -106,6 +122,11 @@ const EquipamentoTable = ({ equipamentos, onEdit, onDelete }) => {
                         </Button>
                       )}
                       {equip.nome}
+                      {equip.critico && (
+                        <span className="text-red-500 text-sm font-medium ml-2">
+                          (Crítico)
+                        </span>
+                      )}
                     </div>
                   </TableCell>
                   <TableCell>{equip.tag}</TableCell>
@@ -126,21 +147,30 @@ const EquipamentoTable = ({ equipamentos, onEdit, onDelete }) => {
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => handleView(equip)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleView(equip);
+                      }}
                     >
                       <Eye className="h-4 w-4" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => onEdit(equip)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onEdit(equip);
+                      }}
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => onDelete(equip.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete(equip.id);
+                      }}
                     >
                       <Trash2 className="h-4 w-4 text-red-500" />
                     </Button>
