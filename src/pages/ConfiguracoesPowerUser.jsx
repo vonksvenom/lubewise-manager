@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import { companyService, locationService } from "@/services/dataService";
 
 const ConfiguracoesPowerUser = () => {
   const { isAdmin, isPowerUser } = useAuth();
@@ -15,14 +16,15 @@ const ConfiguracoesPowerUser = () => {
   const [newCompany, setNewCompany] = useState({ name: "" });
 
   useEffect(() => {
-    const loadData = () => {
-      const storedLocations = JSON.parse(localStorage.getItem("locations") || "[]");
-      const storedCompanies = JSON.parse(localStorage.getItem("companies") || "[]");
-      setLocations(storedLocations);
-      setCompanies(storedCompanies);
-    };
     loadData();
   }, []);
+
+  const loadData = () => {
+    const loadedCompanies = companyService.getAll();
+    const loadedLocations = locationService.getAll();
+    setCompanies(loadedCompanies);
+    setLocations(loadedLocations);
+  };
 
   const handleAddLocation = () => {
     if (!newLocation.name || !newLocation.companyId) {
@@ -30,12 +32,8 @@ const ConfiguracoesPowerUser = () => {
       return;
     }
 
-    const updatedLocations = [...locations, { 
-      id: Date.now().toString(),
-      ...newLocation 
-    }];
-    setLocations(updatedLocations);
-    localStorage.setItem("locations", JSON.stringify(updatedLocations));
+    locationService.add(newLocation);
+    loadData();
     setNewLocation({ name: "", companyId: "" });
     toast.success("Local adicionado com sucesso!");
   };
@@ -51,12 +49,8 @@ const ConfiguracoesPowerUser = () => {
       return;
     }
 
-    const updatedCompanies = [...companies, { 
-      id: Date.now().toString(),
-      ...newCompany 
-    }];
-    setCompanies(updatedCompanies);
-    localStorage.setItem("companies", JSON.stringify(updatedCompanies));
+    companyService.add(newCompany);
+    loadData();
     setNewCompany({ name: "" });
     toast.success("Empresa adicionada com sucesso!");
   };

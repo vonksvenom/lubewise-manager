@@ -1,11 +1,10 @@
-import { initialCompanies } from './initialData';
-
 const STORAGE_KEY = 'companies';
 
 const init = () => {
   const existingCompanies = localStorage.getItem(STORAGE_KEY);
   if (!existingCompanies) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialCompanies));
+    // Initialize with empty array if no companies exist
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
   }
 };
 
