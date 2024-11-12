@@ -1,14 +1,25 @@
 import { useState } from "react";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card } from "@/components/ui/card";
-import { X } from "lucide-react";
 import { toast } from "sonner";
 import { locationService } from "@/services/dataService";
+import { X } from "lucide-react";
 
-const LocationManager = ({ companies, loadData }) => {
+const LocationManager = ({ companies }) => {
+  const [locations, setLocations] = useState([]);
+  const [selectedCompany, setSelectedCompany] = useState("");
   const [newLocation, setNewLocation] = useState({ name: "", companyId: "" });
+
+  const loadData = () => {
+    const loadedLocations = locationService.getAll();
+    setLocations(loadedLocations);
+  };
+
+  useState(() => {
+    loadData();
+  }, []);
 
   const handleAddLocation = () => {
     if (!newLocation.name || !newLocation.companyId) {
@@ -28,7 +39,10 @@ const LocationManager = ({ companies, loadData }) => {
     toast.success("Local removido com sucesso!");
   };
 
-  const locations = locationService.getAll();
+  // Filtra os locais baseado na empresa selecionada no formulário
+  const filteredLocations = locations.filter(
+    location => !selectedCompany || location.companyId === selectedCompany
+  );
 
   return (
     <Card className="p-6">
@@ -62,7 +76,7 @@ const LocationManager = ({ companies, loadData }) => {
       <div className="mt-6">
         <h3 className="font-medium mb-2">Locais Cadastrados:</h3>
         <div className="space-y-2">
-          {locations.map((location) => (
+          {filteredLocations.map((location) => (
             <div key={location.id} className="flex justify-between items-center p-2 bg-muted rounded-lg">
               <div className="flex-1">
                 <span>{location.name}</span>

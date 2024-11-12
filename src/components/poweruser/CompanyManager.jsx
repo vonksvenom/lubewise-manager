@@ -1,12 +1,12 @@
 import { useState } from "react";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card } from "@/components/ui/card";
-import { X } from "lucide-react";
 import { toast } from "sonner";
 import { companyService } from "@/services/dataService";
+import { X } from "lucide-react";
 
-const CompanyManager = ({ isAdmin, loadData }) => {
+const CompanyManager = ({ isAdmin, companies, onCompaniesChange }) => {
   const [newCompany, setNewCompany] = useState({ name: "" });
 
   const handleAddCompany = () => {
@@ -21,7 +21,7 @@ const CompanyManager = ({ isAdmin, loadData }) => {
     }
 
     companyService.add(newCompany);
-    loadData();
+    onCompaniesChange();
     setNewCompany({ name: "" });
     toast.success("Empresa adicionada com sucesso!");
   };
@@ -33,11 +33,9 @@ const CompanyManager = ({ isAdmin, loadData }) => {
     }
 
     companyService.delete(companyId);
-    loadData();
+    onCompaniesChange();
     toast.success("Empresa removida com sucesso!");
   };
-
-  const companies = companyService.getAll();
 
   return (
     <Card className="p-6">

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { companyService, locationService } from "@/services/dataService";
+import { companyService } from "@/services/dataService";
 import LocationManager from "@/components/poweruser/LocationManager";
 import CompanyManager from "@/components/poweruser/CompanyManager";
 
@@ -8,15 +8,14 @@ const ConfiguracoesPowerUser = () => {
   const { isAdmin, isPowerUser } = useAuth();
   const [companies, setCompanies] = useState([]);
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = () => {
-    companyService.init();
-    locationService.init();
-    setCompanies(companyService.getAll());
+  const loadCompanies = () => {
+    const loadedCompanies = companyService.getAll();
+    setCompanies(loadedCompanies);
   };
+
+  useEffect(() => {
+    loadCompanies();
+  }, []);
 
   if (!isAdmin && !isPowerUser) {
     return (
@@ -30,10 +29,8 @@ const ConfiguracoesPowerUser = () => {
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold text-catYellow">Configurações PowerUser</h1>
-
-      <LocationManager companies={companies} loadData={loadData} />
-
-      {isAdmin && <CompanyManager isAdmin={isAdmin} loadData={loadData} />}
+      <LocationManager companies={companies} />
+      {isAdmin && <CompanyManager isAdmin={isAdmin} companies={companies} onCompaniesChange={loadCompanies} />}
     </div>
   );
 };
