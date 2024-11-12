@@ -1,44 +1,41 @@
-import { QRCodeSVG } from 'qrcode.react';
+import { QRCodeSVG } from "qrcode.react";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
-import html2canvas from 'html2canvas';
+import { toPng } from "html-to-image";
 
 const QRCodeDisplay = ({ data, showDownload = false }) => {
-  const handleDownload = async () => {
-    const qrElement = document.getElementById('qr-code');
-    if (!qrElement) return;
-
-    try {
-      const canvas = await html2canvas(qrElement);
-      const url = canvas.toDataURL('image/png');
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${data.tag}-${data.nome}-${data.area}-${data.cip || ''}.png`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (error) {
-      console.error('Error downloading QR code:', error);
+  const qrData = {
+    ...data,
+    lubrificante: {
+      descricaoComercial: data.lubrificante?.descricaoComercial || "N/A",
+      recorrenciaRelubrificacao: data.lubrificante?.recorrenciaRelubrificacao || "N/A",
+      quantidadeRelubrificacao: data.lubrificante?.quantidadeRelubrificacao || "N/A"
     }
   };
 
-  const qrData = {
-    tag: data.tag,
-    nome: data.nome,
-    modelo: data.modelo,
-    area: data.area,
-    responsavel: data.responsavel,
-    status: data.status,
-    fabricante: data.fabricante,
-    numeroSerie: data.numeroSerie,
-    dataFabricacao: data.dataFabricacao,
-    cip: data.cip
+  const handleDownload = () => {
+    const element = document.getElementById(`qr-${data.id}`);
+    if (element) {
+      toPng(element)
+        .then((dataUrl) => {
+          const link = document.createElement("a");
+          link.download = `qr-${data.nome || "code"}.png`;
+          link.href = dataUrl;
+          link.click();
+        })
+        .catch((err) => {
+          console.error("Error generating QR code image:", err);
+        });
+    }
   };
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <div id="qr-code" className="bg-white p-4 rounded-lg">
-        <QRCodeSVG 
+      <div
+        id={`qr-${data.id}`}
+        className="bg-white p-4 rounded-lg shadow-sm"
+      >
+        <QRCodeSVG
           value={JSON.stringify(qrData)}
           size={128}
           level="H"
@@ -53,7 +50,7 @@ const QRCodeDisplay = ({ data, showDownload = false }) => {
           onClick={handleDownload}
         >
           <Download className="h-4 w-4 mr-2" />
-          Download QR Code
+          Download QR
         </Button>
       )}
     </div>

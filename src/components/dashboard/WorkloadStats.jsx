@@ -6,11 +6,13 @@ import { useState } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { userService } from "@/services/dataService";
 import MaintenanceOrdersDialog from "./MaintenanceOrdersDialog";
+import TechniciansDialog from "./TechniciansDialog";
 
 const WorkloadStats = ({ ordensServico = [] }) => {
   const { t } = useTranslation();
   const [timeframe, setTimeframe] = useState("week");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [techDialogOpen, setTechDialogOpen] = useState(false);
   const [selectedOrders, setSelectedOrders] = useState([]);
   const [dialogTitle, setDialogTitle] = useState("");
   
@@ -67,8 +69,8 @@ const WorkloadStats = ({ ordensServico = [] }) => {
     setDialogOpen(true);
   };
 
-  const handleTechniciansClick = () => {
-    setDialogOpen(true);
+  const handlePlannedHoursClick = () => {
+    setTechDialogOpen(true);
   };
 
   return (
@@ -89,7 +91,10 @@ const WorkloadStats = ({ ordensServico = [] }) => {
       </DashboardCard>
 
       <DashboardCard>
-        <div className="flex items-center gap-4">
+        <div 
+          className="flex items-center gap-4 cursor-pointer hover:bg-accent/5 p-2 rounded-lg transition-colors"
+          onClick={handlePlannedHoursClick}
+        >
           <div className="p-3 bg-blue-500/10 rounded-lg">
             <Timer className="h-6 w-6 text-blue-500" />
           </div>
@@ -140,6 +145,11 @@ const WorkloadStats = ({ ordensServico = [] }) => {
         onOpenChange={setDialogOpen}
         orders={selectedOrders}
         title={dialogTitle}
+      />
+
+      <TechniciansDialog
+        open={techDialogOpen}
+        onOpenChange={setTechDialogOpen}
       />
     </div>
   );

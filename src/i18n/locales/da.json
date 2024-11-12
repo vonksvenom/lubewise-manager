@@ -3,7 +3,7 @@
   "equipment": "Udstyr",
   "workOrders": "Arbejdsordrer",
   "maintenance": "Vedligeholdelse",
-  "inventory": "Lager",
+  "inventory": "Inventar",
   "stats": {
     "equipment": "Udstyr",
     "pendingMaintenance": "Afventende Vedligeholdelse",
