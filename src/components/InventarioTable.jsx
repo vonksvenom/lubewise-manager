@@ -7,11 +7,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Eye } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { inventarioService } from "@/services/dataService";
 import { format } from "date-fns";
 import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   Select,
   SelectContent,
@@ -31,7 +32,9 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo", onViewModeChan
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const { toast } = useToast();
+  const { isAdmin, isPowerUser } = useAuth();
 
   useEffect(() => {
     setItems(inventarioService.getAll());
@@ -49,17 +52,16 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo", onViewModeChan
     }
   };
 
-  const handleView = (item, e) => {
-    if (e) {
-      e.stopPropagation();
-    }
+  const handleView = (item) => {
     setSelectedItem(item);
+    setIsEditing(false);
     setDialogOpen(true);
   };
 
   const handleEdit = (item, e) => {
     e.stopPropagation();
     setSelectedItem(item);
+    setIsEditing(true);
     setDialogOpen(true);
   };
 
@@ -73,6 +75,7 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo", onViewModeChan
       });
     }
     setDialogOpen(false);
+    setIsEditing(false);
   };
 
   const filteredItems = items.filter(
@@ -118,7 +121,7 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo", onViewModeChan
             <TableRow 
               key={item.id}
               className="cursor-pointer hover:bg-muted/50"
-              onClick={(e) => handleView(item, e)}
+              onClick={() => handleView(item)}
             >
               <TableCell>{item.name}</TableCell>
               <TableCell>{viewMode === "tipo" ? item.type : item.descricaoComercial}</TableCell>
@@ -132,20 +135,31 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo", onViewModeChan
               <TableCell>
                 <div className="flex gap-2">
                   <Button
-                    variant="outline"
+                    variant="ghost"
                     size="icon"
-                    onClick={(e) => handleEdit(item, e)}
+                    onClick={(e) => handleView(item)}
                   >
-                    <Pencil className="h-4 w-4" />
+                    <Eye className="h-4 w-4" />
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={(e) => handleDelete(item.id, e)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                  {(isAdmin || isPowerUser) && (
+                    <>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={(e) => handleEdit(item, e)}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={(e) => handleDelete(item.id, e)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </>
+                  )}
                 </div>
               </TableCell>
             </TableRow>
@@ -156,15 +170,34 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo", onViewModeChan
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Editar Item do Inventário</DialogTitle>
+            <DialogTitle>
+              {isEditing ? "Editar Item do Inventário" : "Detalhes do Item"}
+            </DialogTitle>
           </DialogHeader>
-          <InventarioForm 
-            initialData={selectedItem} 
-            onSave={(data) => {
-              handleSave(data);
-              setDialogOpen(false);
-            }} 
-          />
+          {isEditing ? (
+            <InventarioForm 
+              initialData={selectedItem} 
+              onSave={(data) => {
+                handleSave(data);
+                setDialogOpen(false);
+              }} 
+            />
+          ) : (
+            <div className="space-y-4">
+              <div><strong>Nome:</strong> {selectedItem?.name}</div>
+              <div><strong>Tipo:</strong> {selectedItem?.type}</div>
+              <div><strong>Quantidade:</strong> {selectedItem?.quantity} {selectedItem?.unit}</div>
+              <div><strong>Local:</strong> {selectedItem?.location}</div>
+              <div><strong>Área:</strong> {selectedItem?.area}</div>
+              <div><strong>Descrição Comercial:</strong> {selectedItem?.descricaoComercial}</div>
+              <div><strong>Fornecedor:</strong> {selectedItem?.fornecedor}</div>
+              <div><strong>Aplicação:</strong> {selectedItem?.aplicacao}</div>
+              <div><strong>Viscosidade:</strong> {selectedItem?.viscosidade}</div>
+              <div><strong>Ponto de Fluidez:</strong> {selectedItem?.pontoFluidez}</div>
+              <div><strong>Ponto de Fulgor:</strong> {selectedItem?.pontoFulgor}</div>
+              <div><strong>Índice de Viscosidade:</strong> {selectedItem?.indiceViscosidade}</div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>
