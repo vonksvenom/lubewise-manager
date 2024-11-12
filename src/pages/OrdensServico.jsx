@@ -1,23 +1,14 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Plus, Search, Scale } from "lucide-react";
+import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
-import OrdemServicoForm from "@/components/OrdemServicoForm";
 import OrdemServicoTable from "@/components/OrdemServicoTable";
 import OrdemServicoFilters from "@/components/ordem-servico/OrdemServicoFilters";
 import { ordemServicoService, equipamentoService } from "@/services/dataService";
-import BulkImportDialog from "@/components/common/BulkImportDialog";
-import BalanceamentoDialog from "@/components/ordem-servico/BalanceamentoDialog";
+import { filterOrdens } from "@/components/ordem-servico/filterUtils";
+import { OrdemServicoHeader } from "@/components/ordem-servico/OrdemServicoHeader";
 
 const OrdensServico = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -30,7 +21,8 @@ const OrdensServico = () => {
     tipo: "Todos",
     tecnicoId: "Todos",
     status: "Todos",
-    prioridade: "Todos"
+    prioridade: "Todos",
+    equipamentoId: "Todos"
   });
   const { t } = useTranslation();
   const { toast } = useToast();
@@ -97,86 +89,26 @@ const OrdensServico = () => {
     setDialogOpen(true);
   };
 
-  const handleImport = (data) => {
-    data.forEach(item => {
-      ordemServicoService.add(item);
-    });
-    setOrdensServico(ordemServicoService.getAll());
-  };
-
-  const templateData = [
-    {
-      titulo: "Exemplo Ordem 1",
-      descricao: "Descrição da ordem",
-      tipo: "Preventiva",
-      equipamentoId: "1",
-      status: "Pendente",
-      dataInicio: "2024-03-20",
-      dataFim: "2024-03-21",
-      prioridade: "Media"
-    }
-  ];
-
-  const filterOrdens = (ordem) => {
+  const filterOrdensWithSearch = (ordem) => {
     const matchesSearch = ordem.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          ordem.descricao.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesFilters = (filters.tipo === "Todos" || ordem.tipo === filters.tipo) &&
-                          (filters.tecnicoId === "Todos" || ordem.tecnicoId === filters.tecnicoId) &&
-                          (filters.status === "Todos" || ordem.status === filters.status) &&
-                          (filters.prioridade === "Todos" || ordem.prioridade === filters.prioridade);
-    
-    return matchesSearch && matchesFilters;
+    return matchesSearch && filterOrdens(ordem, filters);
   };
 
-  const filteredOrdensServico = ordensServico.filter(filterOrdens);
+  const filteredOrdensServico = ordensServico.filter(filterOrdensWithSearch);
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">{t("workOrders")}</h1>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={() => setBalanceamentoOpen(true)}
-            className="shadow-neo hover:shadow-neo-sm transition-shadow"
-          >
-            <Scale className="h-4 w-4 mr-2" />
-            Balanceamento Automático
-          </Button>
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger asChild>
-              <Button
-                className="bg-primary hover:bg-primary/90 shadow-neo hover:shadow-neo-sm transition-shadow"
-                onClick={() => setSelectedOrdem(null)}
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Nova Ordem de Serviço
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>
-                  {selectedOrdem
-                    ? "Editar Ordem de Serviço"
-                    : "Nova Ordem de Serviço"}
-                </DialogTitle>
-              </DialogHeader>
-              <OrdemServicoForm
-                initialData={selectedOrdem}
-                onSave={handleSave}
-                equipamentos={equipamentos}
-              />
-            </DialogContent>
-          </Dialog>
-          <BulkImportDialog
-            title="Importar Ordens de Serviço"
-            onImport={handleImport}
-            templateData={templateData}
-            templateFilename="template_ordens_servico.xlsx"
-          />
-        </div>
-      </div>
+      <OrdemServicoHeader 
+        t={t}
+        setBalanceamentoOpen={setBalanceamentoOpen}
+        dialogOpen={dialogOpen}
+        setDialogOpen={setDialogOpen}
+        selectedOrdem={selectedOrdem}
+        setSelectedOrdem={setSelectedOrdem}
+        handleSave={handleSave}
+        equipamentos={equipamentos}
+      />
 
       <Card className="p-6 shadow-neo bg-gradient-to-br from-muted to-accent/10">
         <div className="space-y-6">
@@ -193,6 +125,7 @@ const OrdensServico = () => {
           <OrdemServicoFilters 
             filters={filters}
             onFilterChange={handleFilterChange}
+            equipamentos={equipamentos}
           />
 
           <OrdemServicoTable
@@ -203,11 +136,6 @@ const OrdensServico = () => {
           />
         </div>
       </Card>
-
-      <BalanceamentoDialog 
-        open={balanceamentoOpen}
-        onOpenChange={setBalanceamentoOpen}
-      />
     </div>
   );
 };

@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/select";
 import { userService } from "@/services/dataService";
 
-const OrdemServicoFilters = ({ filters, onFilterChange }) => {
+const OrdemServicoFilters = ({ filters, onFilterChange, equipamentos = [] }) => {
   const tecnicos = userService.getAll().filter(u => u.role === "technician");
   
   const tipos = ["Todos", "Preventiva", "Corretiva", "Preditiva"];
@@ -15,7 +15,7 @@ const OrdemServicoFilters = ({ filters, onFilterChange }) => {
   const prioridades = ["Todos", "Baixa", "Media", "Alta", "Urgente"];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4 bg-gradient-to-br from-muted to-accent/10 rounded-lg shadow-neo mb-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 p-4 bg-gradient-to-br from-muted to-accent/10 rounded-lg shadow-neo mb-6">
       <div className="space-y-2">
         <label className="text-sm font-medium text-foreground/80">
           Tipo
@@ -95,6 +95,28 @@ const OrdemServicoFilters = ({ filters, onFilterChange }) => {
             {prioridades.map((prioridade) => (
               <SelectItem key={prioridade} value={prioridade}>
                 {prioridade}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-foreground/80">
+          Equipamento
+        </label>
+        <Select
+          value={filters.equipamentoId || "Todos"}
+          onValueChange={(value) => onFilterChange("equipamentoId", value)}
+        >
+          <SelectTrigger className="w-full shadow-neo-sm">
+            <SelectValue placeholder="Selecione o equipamento" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Todos">Todos</SelectItem>
+            {equipamentos.map((equip) => (
+              <SelectItem key={equip.id} value={equip.id.toString()}>
+                {equip.nome}
               </SelectItem>
             ))}
           </SelectContent>
