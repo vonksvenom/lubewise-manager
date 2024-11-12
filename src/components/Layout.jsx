@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/contexts/AuthContext";
 import { themes } from "@/config/themes";
-import { userService } from "@/services/dataService";
+import { userService, companyService, locationService } from "@/services/dataService";
 import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom";
 import { navItems } from "../nav-items";
@@ -18,11 +18,22 @@ const Layout = ({ children }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [currentTheme, setCurrentTheme] = useState('corporate');
   const [logoUrl, setLogoUrl] = useState("/sotreq-industrial-logo.png");
+  const [userCompany, setUserCompany] = useState(null);
+  const [userLocation, setUserLocation] = useState(null);
   const { t, i18n } = useTranslation();
-  const { user, isAdmin, isPowerUser, logout } = useAuth();
+  const { user, isAdmin, isPowerUser } = useAuth();
   const currentUser = userService.getCurrentUser();
   const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (currentUser && !isAdmin && !isPowerUser) {
+      const company = companyService.getById(currentUser.companyId);
+      const location = locationService.getById(currentUser.locationId);
+      setUserCompany(company);
+      setUserLocation(location);
+    }
+  }, [currentUser, isAdmin, isPowerUser]);
 
   useEffect(() => {
     const resetUserData = () => {
@@ -122,6 +133,13 @@ const Layout = ({ children }) => {
 
       <div className={`transition-all duration-200 ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'} min-h-screen`}>
         <main className="p-6">
+          {!isAdmin && !isPowerUser && userCompany && userLocation && (
+            <div className="mb-6 p-4 bg-accent/10 rounded-lg shadow-sm">
+              <p className="text-sm text-muted-foreground">
+                <span className="font-semibold">{userCompany.name}</span> - {userLocation.name}
+              </p>
+            </div>
+          )}
           {(isAdmin || isPowerUser) && (
             <div className="mb-6">
               <CompanyLocationFilter />
