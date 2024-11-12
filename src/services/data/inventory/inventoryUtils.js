@@ -1,7 +1,9 @@
 import { format } from 'date-fns';
 
 export const generateRandomDate = (start, end) => {
-  const randomDate = new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+  const now = new Date();
+  const endDate = end > now ? now : end;
+  const randomDate = new Date(start.getTime() + Math.random() * (endDate.getTime() - start.getTime()));
   return format(randomDate, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx");
 };
 
