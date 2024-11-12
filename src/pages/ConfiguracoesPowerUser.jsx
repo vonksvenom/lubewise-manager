@@ -10,7 +10,7 @@ const ConfiguracoesPowerUser = () => {
   const { isAdmin, isPowerUser } = useAuth();
   const [locations, setLocations] = useState([]);
   const [companies, setCompanies] = useState([]);
-  const [selectedCompany, setSelectedCompany] = useState("");
+  const [selectedCompany, setSelectedCompany] = useState("all");
   const [newLocation, setNewLocation] = useState({ name: "", companyId: "" });
   const [newCompany, setNewCompany] = useState({ name: "" });
 
@@ -62,7 +62,7 @@ const ConfiguracoesPowerUser = () => {
   };
 
   const filteredLocations = locations.filter(
-    location => !selectedCompany || location.companyId === selectedCompany
+    location => selectedCompany === "all" || location.companyId === selectedCompany
   );
 
   if (!isAdmin && !isPowerUser) {
@@ -116,7 +116,7 @@ const ConfiguracoesPowerUser = () => {
                 <SelectValue placeholder="Filtrar por empresa" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Todas as empresas</SelectItem>
+                <SelectItem value="all">Todas as empresas</SelectItem>
                 {companies.map((company) => (
                   <SelectItem key={company.id} value={company.id}>
                     {company.name}
