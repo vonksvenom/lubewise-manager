@@ -5,14 +5,16 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { FileDown, History } from "lucide-react";
+import { FileDown, History, Network } from "lucide-react";
 import QRCodeDisplay from "../common/QRCodeDisplay";
 import { format } from "date-fns";
 import { useState } from "react";
 import EquipamentoServiceHistory from "./EquipamentoServiceHistory";
+import EquipamentoHierarchyDialog from "./EquipamentoHierarchyDialog";
 
 const EquipamentoViewDialog = ({ equipamento, open, onOpenChange }) => {
   const [historyDialogOpen, setHistoryDialogOpen] = useState(false);
+  const [hierarchyDialogOpen, setHierarchyDialogOpen] = useState(false);
 
   if (!equipamento) return null;
 
@@ -32,17 +34,28 @@ const EquipamentoViewDialog = ({ equipamento, open, onOpenChange }) => {
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle className="flex justify-between items-center">
+            <DialogTitle className="flex justify-between items-center gap-2">
               <span>{equipamento.nome}</span>
-              <Button
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-2"
-                onClick={() => setHistoryDialogOpen(true)}
-              >
-                <History className="h-4 w-4" />
-                Histórico de Manutenções
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-2"
+                  onClick={() => setHierarchyDialogOpen(true)}
+                >
+                  <Network className="h-4 w-4" />
+                  Ver Hierarquia
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-2"
+                  onClick={() => setHistoryDialogOpen(true)}
+                >
+                  <History className="h-4 w-4" />
+                  Histórico de Manutenções
+                </Button>
+              </div>
             </DialogTitle>
           </DialogHeader>
           
@@ -137,6 +150,12 @@ const EquipamentoViewDialog = ({ equipamento, open, onOpenChange }) => {
         equipamentoId={equipamento.id}
         open={historyDialogOpen}
         onOpenChange={setHistoryDialogOpen}
+      />
+
+      <EquipamentoHierarchyDialog
+        equipamento={equipamento}
+        open={hierarchyDialogOpen}
+        onOpenChange={setHierarchyDialogOpen}
       />
     </>
   );
