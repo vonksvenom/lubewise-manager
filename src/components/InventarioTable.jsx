@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/dialog";
 import InventarioForm from "./inventario/InventarioForm";
 
-const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo" }) => {
+const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo", onViewModeChange }) => {
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -87,7 +87,7 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo" }) => {
       <div className="mb-4 flex justify-end">
         <Select
           value={viewMode}
-          onValueChange={(value) => setViewMode(value)}
+          onValueChange={onViewModeChange}
           className="w-[200px]"
         >
           <SelectTrigger>
