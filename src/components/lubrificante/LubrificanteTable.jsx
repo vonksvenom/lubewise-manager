@@ -4,6 +4,7 @@ import {
   TableCell,
   TableHeader,
   TableRow,
+  TableHead,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
