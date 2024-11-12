@@ -2,7 +2,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
@@ -13,12 +12,15 @@ import { userService } from "@/services/dataService";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import TecnicoForm from "./TecnicoForm";
+import { useSortableTable } from "@/hooks/useSortableTable";
+import SortableHeader from "@/components/common/SortableHeader";
 
 const TecnicoTable = () => {
   const [tecnicos, setTecnicos] = useState([]);
   const [selectedTecnico, setSelectedTecnico] = useState(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const { isAdmin, isPowerUser, user } = useAuth();
+  const { sortConfig, sortData, getSortedData } = useSortableTable();
 
   useEffect(() => {
     const loadTecnicos = () => {
@@ -31,6 +33,8 @@ const TecnicoTable = () => {
 
     loadTecnicos();
   }, [editDialogOpen]);
+
+  const sortedTecnicos = getSortedData(tecnicos);
 
   const handleDelete = (id, e) => {
     e.stopPropagation(); // Prevent row click when deleting
@@ -58,15 +62,35 @@ const TecnicoTable = () => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Nome</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Nível</TableHead>
-            <TableHead>Horas Disponíveis/Dia</TableHead>
+            <SortableHeader 
+              label="Nome"
+              sortKey="name"
+              sortConfig={sortConfig}
+              onSort={sortData}
+            />
+            <SortableHeader 
+              label="Email"
+              sortKey="email"
+              sortConfig={sortConfig}
+              onSort={sortData}
+            />
+            <SortableHeader 
+              label="Nível"
+              sortKey="nivel"
+              sortConfig={sortConfig}
+              onSort={sortData}
+            />
+            <SortableHeader 
+              label="Horas Disponíveis/Dia"
+              sortKey="horasDisponiveis"
+              sortConfig={sortConfig}
+              onSort={sortData}
+            />
             <TableHead className="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {tecnicos.map((tecnico) => (
+          {sortedTecnicos.map((tecnico) => (
             <TableRow 
               key={tecnico.id} 
               className="cursor-pointer hover:bg-muted/50"

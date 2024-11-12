@@ -2,7 +2,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
@@ -13,6 +12,8 @@ import { lubrificanteService } from "@/services/lubrificanteService";
 import { useState, useEffect } from "react";
 import LubrificanteEditDialog from "./LubrificanteEditDialog";
 import LubrificanteDetailsDialog from "./LubrificanteDetailsDialog";
+import { useSortableTable } from "@/hooks/useSortableTable";
+import SortableHeader from "@/components/common/SortableHeader";
 
 const LubrificanteTable = ({ searchTerm }) => {
   const [items, setItems] = useState([]);
@@ -81,6 +82,8 @@ const LubrificanteTable = ({ searchTerm }) => {
     }
   };
 
+  const { sortConfig, sortData, getSortedData } = useSortableTable();
+
   const filteredItems = items.filter(
     (item) =>
       item.nomeComercial?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -88,22 +91,49 @@ const LubrificanteTable = ({ searchTerm }) => {
       item.fornecedor?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const sortedItems = getSortedData(filteredItems);
+
   return (
     <>
       <div className="rounded-xl shadow-neo-3d bg-gradient-to-br from-muted to-accent/10 p-4">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Nome Comercial</TableHead>
-              <TableHead>Código LIS</TableHead>
-              <TableHead>Fornecedor</TableHead>
-              <TableHead>Viscosidade</TableHead>
-              <TableHead>Volume Padrão</TableHead>
+              <SortableHeader 
+                label="Nome Comercial"
+                sortKey="nomeComercial"
+                sortConfig={sortConfig}
+                onSort={sortData}
+              />
+              <SortableHeader 
+                label="Código LIS"
+                sortKey="codigoLIS"
+                sortConfig={sortConfig}
+                onSort={sortData}
+              />
+              <SortableHeader 
+                label="Fornecedor"
+                sortKey="fornecedor"
+                sortConfig={sortConfig}
+                onSort={sortData}
+              />
+              <SortableHeader 
+                label="Viscosidade"
+                sortKey="viscosidade"
+                sortConfig={sortConfig}
+                onSort={sortData}
+              />
+              <SortableHeader 
+                label="Volume Padrão"
+                sortKey="volumePadrao"
+                sortConfig={sortConfig}
+                onSort={sortData}
+              />
               <TableHead>Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredItems.map((item) => (
+            {sortedItems.map((item) => (
               <TableRow 
                 key={item.id}
                 onClick={() => handleRowClick(item)}

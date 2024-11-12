@@ -2,7 +2,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
@@ -11,6 +10,8 @@ import { Edit, Trash2, ChevronRight, ChevronDown, Eye } from "lucide-react";
 import { useState } from "react";
 import QRCodeDisplay from "./common/QRCodeDisplay";
 import EquipamentoViewDialog from "./equipamento/EquipamentoViewDialog";
+import { useSortableTable } from "@/hooks/useSortableTable";
+import SortableHeader from "@/components/common/SortableHeader";
 
 const SubequipamentoRow = ({ subequipamento, depth = 1, onView }) => (
   <TableRow className={`bg-muted/20`}>
@@ -51,6 +52,7 @@ const EquipamentoTable = ({ equipamentos, onEdit, onDelete }) => {
   const [expandedRows, setExpandedRows] = useState({});
   const [selectedEquipamento, setSelectedEquipamento] = useState(null);
   const [viewDialogOpen, setViewDialogOpen] = useState(false);
+  const { sortConfig, sortData, getSortedData } = useSortableTable();
 
   const toggleExpand = (id) => {
     setExpandedRows((prev) => ({
@@ -74,6 +76,8 @@ const EquipamentoTable = ({ equipamentos, onEdit, onDelete }) => {
     onDelete(id);
   };
 
+  const sortedEquipamentos = getSortedData(equipamentos);
+
   return (
     <>
       <div className="rounded-md border">
@@ -81,16 +85,41 @@ const EquipamentoTable = ({ equipamentos, onEdit, onDelete }) => {
           <TableHeader>
             <TableRow>
               <TableHead>Imagem</TableHead>
-              <TableHead>Nome</TableHead>
-              <TableHead>TAG</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Última Manutenção</TableHead>
-              <TableHead>Próxima Manutenção</TableHead>
+              <SortableHeader 
+                label="Nome"
+                sortKey="nome"
+                sortConfig={sortConfig}
+                onSort={sortData}
+              />
+              <SortableHeader 
+                label="TAG"
+                sortKey="tag"
+                sortConfig={sortConfig}
+                onSort={sortData}
+              />
+              <SortableHeader 
+                label="Status"
+                sortKey="status"
+                sortConfig={sortConfig}
+                onSort={sortData}
+              />
+              <SortableHeader 
+                label="Última Manutenção"
+                sortKey="ultimaManutencao"
+                sortConfig={sortConfig}
+                onSort={sortData}
+              />
+              <SortableHeader 
+                label="Próxima Manutenção"
+                sortKey="proximaManutencao"
+                sortConfig={sortConfig}
+                onSort={sortData}
+              />
               <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {equipamentos.map((equip) => (
+            {sortedEquipamentos.map((equip) => (
               <>
                 <TableRow 
                   key={equip.id}

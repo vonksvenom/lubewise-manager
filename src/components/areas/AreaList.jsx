@@ -4,11 +4,12 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { Pencil, Eye } from "lucide-react";
+import { useSortableTable } from "@/hooks/useSortableTable";
+import SortableHeader from "@/components/common/SortableHeader";
 
 const AreaList = ({ 
   areas, 
@@ -19,11 +20,15 @@ const AreaList = ({
   isAdmin, 
   isPowerUser 
 }) => {
+  const { sortConfig, sortData, getSortedData } = useSortableTable();
+
   const filteredAreas = areas.filter(
     (area) =>
       area.nome?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       area.descricao?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const sortedAreas = getSortedData(filteredAreas);
 
   return (
     <div className="space-y-4">
@@ -36,14 +41,29 @@ const AreaList = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Nome</TableHead>
-            <TableHead>Descrição</TableHead>
-            <TableHead>Responsável</TableHead>
+            <SortableHeader 
+              label="Nome"
+              sortKey="nome"
+              sortConfig={sortConfig}
+              onSort={sortData}
+            />
+            <SortableHeader 
+              label="Descrição"
+              sortKey="descricao"
+              sortConfig={sortConfig}
+              onSort={sortData}
+            />
+            <SortableHeader 
+              label="Responsável"
+              sortKey="responsavel"
+              sortConfig={sortConfig}
+              onSort={sortData}
+            />
             <TableHead>Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filteredAreas.map((area) => (
+          {sortedAreas.map((area) => (
             <TableRow key={area.id}>
               <TableCell>
                 <button

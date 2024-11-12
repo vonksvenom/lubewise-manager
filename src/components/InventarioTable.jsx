@@ -2,7 +2,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
@@ -27,6 +26,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import InventarioForm from "./inventario/InventarioForm";
+import { useSortableTable } from "@/hooks/useSortableTable";
+import SortableHeader from "@/components/common/SortableHeader";
 
 const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo", onViewModeChange }) => {
   const [items, setItems] = useState([]);
@@ -35,6 +36,7 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo", onViewModeChan
   const [isEditing, setIsEditing] = useState(false);
   const { toast } = useToast();
   const { isAdmin, isPowerUser } = useAuth();
+  const { sortConfig, sortData, getSortedData } = useSortableTable();
 
   useEffect(() => {
     setItems(inventarioService.getAll());
@@ -85,6 +87,8 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo", onViewModeChan
       item.location?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const sortedItems = getSortedData(filteredItems);
+
   return (
     <div className="rounded-xl shadow-neo-3d bg-gradient-to-br from-muted to-accent/10 p-4">
       <div className="mb-4 flex justify-end">
@@ -106,18 +110,53 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo", onViewModeChan
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Nome</TableHead>
-            <TableHead>{viewMode === "tipo" ? "Tipo" : "Descrição Comercial"}</TableHead>
-            <TableHead>Quantidade</TableHead>
-            <TableHead>Unidade</TableHead>
-            <TableHead>Local</TableHead>
-            <TableHead>Área</TableHead>
-            <TableHead>Data Registro</TableHead>
+            <SortableHeader 
+              label="Nome"
+              sortKey="name"
+              sortConfig={sortConfig}
+              onSort={sortData}
+            />
+            <SortableHeader 
+              label={viewMode === "tipo" ? "Tipo" : "Descrição Comercial"}
+              sortKey={viewMode === "tipo" ? "type" : "descricaoComercial"}
+              sortConfig={sortConfig}
+              onSort={sortData}
+            />
+            <SortableHeader 
+              label="Quantidade"
+              sortKey="quantity"
+              sortConfig={sortConfig}
+              onSort={sortData}
+            />
+            <SortableHeader 
+              label="Unidade"
+              sortKey="unit"
+              sortConfig={sortConfig}
+              onSort={sortData}
+            />
+            <SortableHeader 
+              label="Local"
+              sortKey="location"
+              sortConfig={sortConfig}
+              onSort={sortData}
+            />
+            <SortableHeader 
+              label="Área"
+              sortKey="area"
+              sortConfig={sortConfig}
+              onSort={sortData}
+            />
+            <SortableHeader 
+              label="Data Registro"
+              sortKey="dataRegistro"
+              sortConfig={sortConfig}
+              onSort={sortData}
+            />
             <TableHead>Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {filteredItems.map((item) => (
+          {sortedItems.map((item) => (
             <TableRow 
               key={item.id}
               className="cursor-pointer hover:bg-muted/50"

@@ -9,8 +9,12 @@ import {
 } from "@/components/ui/table";
 import { Edit, Trash2 } from "lucide-react";
 import { format } from "date-fns";
+import { useSortableTable } from "@/hooks/useSortableTable";
+import SortableHeader from "@/components/common/SortableHeader";
 
 const UserTable = ({ users, onEdit, onDelete, canEdit }) => {
+  const { sortConfig, sortData, getSortedData } = useSortableTable();
+
   const handleView = (user, e) => {
     if (e) {
       e.stopPropagation();
@@ -29,21 +33,53 @@ const UserTable = ({ users, onEdit, onDelete, canEdit }) => {
     onDelete(id);
   };
 
+  const sortedUsers = getSortedData(users);
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Nome</TableHead>
-          <TableHead>Email</TableHead>
-          <TableHead>Cargo</TableHead>
-          <TableHead>Departamento</TableHead>
-          <TableHead>Admin</TableHead>
-          <TableHead>Último Acesso</TableHead>
+          <SortableHeader 
+            label="Nome"
+            sortKey="name"
+            sortConfig={sortConfig}
+            onSort={sortData}
+          />
+          <SortableHeader 
+            label="Email"
+            sortKey="email"
+            sortConfig={sortConfig}
+            onSort={sortData}
+          />
+          <SortableHeader 
+            label="Cargo"
+            sortKey="role"
+            sortConfig={sortConfig}
+            onSort={sortData}
+          />
+          <SortableHeader 
+            label="Departamento"
+            sortKey="department"
+            sortConfig={sortConfig}
+            onSort={sortData}
+          />
+          <SortableHeader 
+            label="Admin"
+            sortKey="isAdmin"
+            sortConfig={sortConfig}
+            onSort={sortData}
+          />
+          <SortableHeader 
+            label="Último Acesso"
+            sortKey="lastAccess"
+            sortConfig={sortConfig}
+            onSort={sortData}
+          />
           <TableHead>Ações</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {users.map((user) => (
+        {sortedUsers.map((user) => (
           <TableRow 
             key={user.id}
             className="cursor-pointer hover:bg-muted/50"
