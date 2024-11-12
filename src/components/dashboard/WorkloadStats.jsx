@@ -8,9 +8,8 @@ import { userService } from "@/services/dataService";
 import MaintenanceOrdersDialog from "./MaintenanceOrdersDialog";
 import TechniciansDialog from "./TechniciansDialog";
 
-const WorkloadStats = ({ ordensServico = [] }) => {
+const WorkloadStats = ({ ordensServico = [], timeFrame = "day" }) => {
   const { t } = useTranslation();
-  const [timeframe, setTimeframe] = useState("week");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [techDialogOpen, setTechDialogOpen] = useState(false);
   const [selectedOrders, setSelectedOrders] = useState([]);
@@ -21,9 +20,24 @@ const WorkloadStats = ({ ordensServico = [] }) => {
   const nextMonthStart = addMonths(today, 1);
 
   const technicians = userService.getAll().filter(user => user.role === "technician");
-  const totalAvailableHours = technicians.reduce((total, tech) => 
-    total + Number(tech.horasDisponiveis || 0), 0
-  );
+  
+  // Calcula o total de horas disponíveis baseado no timeFrame
+  const calculateTotalAvailableHours = () => {
+    const totalDailyHours = technicians.reduce((total, tech) => 
+      total + Number(tech.horasDisponiveis || 0), 0
+    );
+
+    switch (timeFrame) {
+      case "week":
+        return totalDailyHours * 5; // 5 dias úteis
+      case "month":
+        return totalDailyHours * 22; // média de 22 dias úteis
+      default:
+        return totalDailyHours;
+    }
+  };
+
+  const totalAvailableHours = calculateTotalAvailableHours();
 
   const calculateWorkload = () => {
     let horasVencidas = 0;
@@ -39,17 +53,15 @@ const WorkloadStats = ({ ordensServico = [] }) => {
         horasVencidas += horasEstimadas;
       }
 
-      // Calcula horas previstas baseado no timeframe selecionado
-      if (timeframe === "week") {
-        const nextWeekEnd = addWeeks(nextWeekStart, 1);
-        if (isWithinInterval(dataInicio, { start: today, end: nextWeekEnd })) {
-          horasPrevistas += horasEstimadas;
-        }
-      } else if (timeframe === "month") {
-        const nextMonthEnd = addMonths(today, 1);
-        if (isWithinInterval(dataInicio, { start: today, end: nextMonthEnd })) {
-          horasPrevistas += horasEstimadas;
-        }
+      // Calcula horas previstas baseado no timeframe
+      const nextPeriodEnd = timeFrame === "week" 
+        ? addWeeks(today, 1) 
+        : timeFrame === "month" 
+          ? addMonths(today, 1) 
+          : new Date(today.setHours(23, 59, 59, 999));
+
+      if (isWithinInterval(dataInicio, { start: today, end: nextPeriodEnd })) {
+        horasPrevistas += horasEstimadas;
       }
     });
 
@@ -111,20 +123,9 @@ const WorkloadStats = ({ ordensServico = [] }) => {
           <div className="p-3 bg-blue-500/10 rounded-lg">
             <Timer className="h-6 w-6 text-blue-500" />
           </div>
-          <div className="flex-1">
+          <div>
             <p className="text-sm text-gray-400">Horas Previstas</p>
             <p className="text-2xl font-bold text-blue-500">{horasPrevistas}h</p>
-          </div>
-          <div className="ml-auto">
-            <Select value={timeframe} onValueChange={setTimeframe}>
-              <SelectTrigger className="w-[90px] h-8 text-xs">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="week">Semana</SelectItem>
-                <SelectItem value="month">Mês</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
         </div>
       </DashboardCard>

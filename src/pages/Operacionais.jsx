@@ -13,12 +13,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ordemServicoService } from "@/services/dataService";
 
 const Operacionais = () => {
   const [timeFrame, setTimeFrame] = useState("day");
   const { isAdmin, isPowerUser } = useAuth();
   const { t } = useTranslation();
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  const ordensServico = ordemServicoService.getAll();
 
   if (!isAdmin && !isPowerUser) {
     return (
@@ -54,7 +57,7 @@ const Operacionais = () => {
             </SelectContent>
           </Select>
         </div>
-        <WorkloadStats timeFrame={timeFrame} />
+        <WorkloadStats ordensServico={ordensServico} timeFrame={timeFrame} />
       </Card>
 
       <TecnicoTable />
