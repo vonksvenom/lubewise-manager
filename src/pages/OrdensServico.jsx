@@ -6,8 +6,8 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import OrdemServicoTable from "@/components/OrdemServicoTable";
 import OrdemServicoFilters from "@/components/ordem-servico/OrdemServicoFilters";
-import { ordemServicoService, equipamentoService } from "@/services/dataService";
-import { filterOrdens } from "@/components/ordem-servico/filterUtils";
+import { ordemServicoService, equipamentoService, userService } from "@/services/dataService";
+import { filterOrdens } from "@/components/ordem-servico/filterOrdens";
 import { OrdemServicoHeader } from "@/components/ordem-servico/OrdemServicoHeader";
 
 const OrdensServico = () => {
@@ -90,9 +90,26 @@ const OrdensServico = () => {
   };
 
   const filterOrdensWithSearch = (ordem) => {
-    const matchesSearch = ordem.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         ordem.descricao.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesSearch && filterOrdens(ordem, filters);
+    if (!searchTerm) return filterOrdens(ordem, filters);
+    
+    const searchTermLower = searchTerm.toLowerCase();
+    const equipamento = equipamentos.find(e => e.id.toString() === ordem.equipamentoId);
+    const tecnico = userService.getAll().find(u => u.id === ordem.tecnicoId);
+    
+    const searchableFields = [
+      ordem.titulo,
+      ordem.descricao,
+      ordem.tipo,
+      ordem.status,
+      ordem.prioridade,
+      equipamento?.nome,
+      tecnico?.name,
+      ordem.cip,
+      ordem.recorrencia
+    ].map(field => field?.toLowerCase() || '');
+
+    return searchableFields.some(field => field.includes(searchTermLower)) && 
+           filterOrdens(ordem, filters);
   };
 
   const filteredOrdensServico = ordensServico.filter(filterOrdensWithSearch);

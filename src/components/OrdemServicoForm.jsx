@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { addMonths, addYears, addDays, format } from "date-fns";
 import { RECURRENCE_OPTIONS } from "@/constants/recurrenceOptions";
 import { equipamentoService } from "@/services/dataService";
+import { cn } from "@/lib/utils";
 
 const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
   const [formData, setFormData] = useState(
@@ -111,7 +112,24 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
         <DatePicker
           date={formData.dataExecucao}
           onDateChange={(date) => handleChange("dataExecucao", date)}
-          className="w-full"
+          className={cn(
+            "w-full shadow-neo-sm",
+            "hover:bg-accent/50 transition-colors",
+            "[&_.rdp]:bg-background [&_.rdp]:border [&_.rdp]:rounded-md [&_.rdp]:shadow-neo",
+            "[&_.rdp-button]:hover:bg-accent/50",
+            "[&_.rdp-day_span]:text-sm",
+            "[&_.rdp-day_span]:font-medium",
+            "[&_.rdp-day_span]:text-foreground",
+            "[&_.rdp-day.rdp-day_selected]:bg-primary",
+            "[&_.rdp-day.rdp-day_selected]:text-primary-foreground",
+            "[&_.rdp-button:hover:not(.rdp-day_selected)]:bg-accent/50",
+            "[&_.rdp-nav_button]:hover:bg-accent/50",
+            "[&_.rdp-caption_label]:font-medium",
+            "[&_.rdp-dropdown_month]:bg-background",
+            "[&_.rdp-dropdown_month]:border",
+            "[&_.rdp-dropdown_month]:rounded-md",
+            "[&_.rdp-dropdown_month]:shadow-neo-sm"
+          )}
         />
       </div>
 

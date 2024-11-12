@@ -111,6 +111,10 @@ export const CalendarContent = ({ ordensServico, filters, handleEventClick, equi
       <div className="fullcalendar-custom">
         <style>
           {`
+            .fullcalendar-custom .fc {
+              max-height: calc(100vh - 300px);
+              min-height: 600px;
+            }
             .fullcalendar-custom .fc-toolbar-title {
               font-size: 1.25rem !important;
               font-weight: 600;
@@ -141,6 +145,26 @@ export const CalendarContent = ({ ordensServico, filters, handleEventClick, equi
             .fullcalendar-custom .fc-header-toolbar {
               margin-bottom: 1.5rem !important;
             }
+            .fullcalendar-custom .fc-daygrid-day {
+              min-height: 100px !important;
+            }
+            .fullcalendar-custom .fc-daygrid-day-events {
+              margin-bottom: 0 !important;
+            }
+            .fullcalendar-custom .fc-event {
+              margin: 1px 2px !important;
+              padding: 2px 4px !important;
+              font-size: 0.75rem !important;
+              border-radius: 4px !important;
+              cursor: pointer !important;
+            }
+            .fullcalendar-custom .fc-more-link {
+              font-size: 0.75rem !important;
+              padding: 2px !important;
+              margin: 0 2px !important;
+              background: hsl(var(--muted));
+              border-radius: 4px;
+            }
           `}
         </style>
         <FullCalendar
@@ -156,6 +180,7 @@ export const CalendarContent = ({ ordensServico, filters, handleEventClick, equi
           }}
           eventClick={handleEventClick}
           className="bg-background rounded-lg"
+          dayMaxEvents={3}
         />
       </div>
     </Card>
