@@ -14,7 +14,10 @@ export const useEquipamentoForm = (initialData, onSave) => {
       fabricante: "",
       numeroSerie: "",
       dataFabricacao: "",
-      subequipamentos: [],
+      sistemas: [],
+      conjuntos: [],
+      subconjuntos: [],
+      componentes: [],
       manual: null,
       critico: false,
     }
@@ -36,7 +39,10 @@ export const useEquipamentoForm = (initialData, onSave) => {
       setFormData(prev => ({
         ...prev,
         [field]: value,
-        subequipamentos: updateHierarchyProperty(prev.subequipamentos || [], field, value)
+        sistemas: updateHierarchyProperty(prev.sistemas || [], field, value),
+        conjuntos: updateHierarchyProperty(prev.conjuntos || [], field, value),
+        subconjuntos: updateHierarchyProperty(prev.subconjuntos || [], field, value),
+        componentes: updateHierarchyProperty(prev.componentes || [], field, value)
       }));
 
       toast.success(`${field === "area" ? "Área" : "Criticidade"} atualizada em toda a hierarquia do equipamento`);
@@ -61,26 +67,6 @@ export const useEquipamentoForm = (initialData, onSave) => {
     }
   };
 
-  const handleSubequipamentoAdd = (subequipamento) => {
-    const newSubequipamento = {
-      ...subequipamento,
-      area: formData.area,
-      critico: formData.critico
-    };
-    
-    setFormData((prev) => ({
-      ...prev,
-      subequipamentos: [...(prev.subequipamentos || []), newSubequipamento],
-    }));
-  };
-
-  const handleSubequipamentoRemove = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      subequipamentos: (prev.subequipamentos || []).filter((_, i) => i !== index),
-    }));
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave(formData);
@@ -90,8 +76,6 @@ export const useEquipamentoForm = (initialData, onSave) => {
     formData,
     handleChange,
     handleManualUpload,
-    handleSubequipamentoAdd,
-    handleSubequipamentoRemove,
     handleSubmit
   };
 };
