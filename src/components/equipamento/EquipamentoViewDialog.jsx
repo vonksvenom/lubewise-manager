@@ -32,7 +32,7 @@ const EquipamentoViewDialog = ({ equipamento, open, onOpenChange }) => {
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-3xl">
           <DialogHeader>
             <DialogTitle className="flex justify-between items-center gap-2">
               <span>{equipamento.nome}</span>
@@ -59,15 +59,25 @@ const EquipamentoViewDialog = ({ equipamento, open, onOpenChange }) => {
             </DialogTitle>
           </DialogHeader>
           
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-6">
             <div className="space-y-4">
               {equipamento.imagem && (
-                <img
-                  src={equipamento.imagem}
-                  alt={equipamento.nome}
-                  className="w-full h-48 object-cover rounded-lg"
-                />
+                <div className="w-full aspect-square bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+                  <img
+                    src={equipamento.imagem}
+                    alt={equipamento.nome}
+                    className="max-w-full max-h-full object-contain"
+                  />
+                </div>
               )}
+              
+              {equipamento.descricao && (
+                <div className="space-y-2 bg-gray-50 p-4 rounded-lg">
+                  <h3 className="font-semibold text-lg">Descrição</h3>
+                  <p className="text-sm text-gray-700">{equipamento.descricao}</p>
+                </div>
+              )}
+
               <div className="space-y-2">
                 <h3 className="font-semibold">Informações Básicas</h3>
                 <div className="grid grid-cols-2 gap-2 text-sm">
