@@ -21,7 +21,7 @@ const Layout = ({ children }) => {
   const [userCompany, setUserCompany] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
   const { t, i18n } = useTranslation();
-  const { user, isAdmin, isPowerUser } = useAuth();
+  const { user, isAdmin, isPowerUser, logout } = useAuth();
   const currentUser = userService.getCurrentUser();
   const location = useLocation();
   const navigate = useNavigate();
