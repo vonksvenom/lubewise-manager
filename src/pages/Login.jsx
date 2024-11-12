@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import RequestAccess from "@/components/RequestAccess";
+import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
@@ -28,6 +29,10 @@ const Login = () => {
             src="/sotreq-industrial-logo.png"
             alt="Logo"
             className="h-16 object-contain"
+            onError={(e) => {
+              e.target.src = "/placeholder.svg";
+              toast.error("Erro ao carregar o logo");
+            }}
           />
         </div>
         
