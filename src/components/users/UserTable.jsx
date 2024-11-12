@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Edit, Trash2 } from "lucide-react";
+import { format } from "date-fns";
 
 const UserTable = ({ users, onEdit, onDelete, canEdit }) => {
   return (
@@ -19,6 +20,7 @@ const UserTable = ({ users, onEdit, onDelete, canEdit }) => {
           <TableHead>Cargo</TableHead>
           <TableHead>Departamento</TableHead>
           <TableHead>Admin</TableHead>
+          <TableHead>Último Acesso</TableHead>
           <TableHead>Ações</TableHead>
         </TableRow>
       </TableHeader>
@@ -30,6 +32,11 @@ const UserTable = ({ users, onEdit, onDelete, canEdit }) => {
             <TableCell>{user.role}</TableCell>
             <TableCell>{user.department}</TableCell>
             <TableCell>{user.isAdmin ? "Sim" : "Não"}</TableCell>
+            <TableCell>
+              {user.lastAccess 
+                ? format(new Date(user.lastAccess), "dd/MM/yyyy HH:mm")
+                : "Nunca acessou"}
+            </TableCell>
             <TableCell>
               <div className="flex gap-2">
                 {canEdit && (

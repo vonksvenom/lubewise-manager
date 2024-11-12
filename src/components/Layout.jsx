@@ -101,7 +101,8 @@ const Layout = ({ children }) => {
   };
 
   const filteredNavItems = navItems.filter(item => 
-    !item.adminOnly || (item.adminOnly && isAdmin)
+    (!item.adminOnly || (item.adminOnly && isAdmin)) &&
+    (!item.adminOrPowerUserOnly || (item.adminOrPowerUserOnly && (isAdmin || isPowerUser)))
   );
 
   return (

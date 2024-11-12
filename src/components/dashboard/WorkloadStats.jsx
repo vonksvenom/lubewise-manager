@@ -91,6 +91,30 @@ const WorkloadStats = ({ ordensServico = [] }) => {
       </DashboardCard>
 
       <DashboardCard>
+        <div className="flex items-center gap-4">
+          <div className="p-3 bg-purple-500/10 rounded-lg">
+            <Users className="h-6 w-6 text-purple-500" />
+          </div>
+          <div>
+            <p className="text-sm text-gray-400">Técnicos Adicionais Necessários</p>
+            <p className="text-2xl font-bold text-purple-500">{additionalTechniciansNeeded}</p>
+          </div>
+        </div>
+      </DashboardCard>
+
+      <DashboardCard>
+        <div className="flex items-center gap-4">
+          <div className="p-3 bg-green-500/10 rounded-lg">
+            <Clock className="h-6 w-6 text-green-500" />
+          </div>
+          <div>
+            <p className="text-sm text-gray-400">Aderência ao Planejado</p>
+            <p className="text-2xl font-bold text-green-500">{adherencePercentage}%</p>
+          </div>
+        </div>
+      </DashboardCard>
+
+      <DashboardCard>
         <div 
           className="flex items-center gap-4 cursor-pointer hover:bg-accent/5 p-2 rounded-lg transition-colors"
           onClick={handlePlannedHoursClick}
@@ -112,30 +136,6 @@ const WorkloadStats = ({ ordensServico = [] }) => {
             </div>
             <p className="text-sm text-gray-400">Horas Previstas</p>
             <p className="text-2xl font-bold text-blue-500">{horasPrevistas}h</p>
-          </div>
-        </div>
-      </DashboardCard>
-
-      <DashboardCard>
-        <div className="flex items-center gap-4">
-          <div className="p-3 bg-green-500/10 rounded-lg">
-            <Clock className="h-6 w-6 text-green-500" />
-          </div>
-          <div>
-            <p className="text-sm text-gray-400">Aderência ao Planejado</p>
-            <p className="text-2xl font-bold text-green-500">{adherencePercentage}%</p>
-          </div>
-        </div>
-      </DashboardCard>
-
-      <DashboardCard>
-        <div className="flex items-center gap-4">
-          <div className="p-3 bg-purple-500/10 rounded-lg">
-            <Users className="h-6 w-6 text-purple-500" />
-          </div>
-          <div>
-            <p className="text-sm text-gray-400">Técnicos Adicionais Necessários</p>
-            <p className="text-2xl font-bold text-purple-500">{additionalTechniciansNeeded}</p>
           </div>
         </div>
       </DashboardCard>

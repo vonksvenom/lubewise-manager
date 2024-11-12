@@ -113,6 +113,33 @@ const changePassword = (userId, currentPassword, newPassword) => {
   }
 };
 
+const updateLastAccess = (userId) => {
+  const users = getAll();
+  const index = users.findIndex(u => u.id === userId);
+  
+  if (index !== -1) {
+    users[index] = { 
+      ...users[index], 
+      lastAccess: new Date().toISOString() 
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+    return users[index];
+  }
+  return null;
+};
+
+// Update the existing login function to track last access
+const login = (email, password) => {
+  const users = getAll();
+  const user = users.find(u => u.email === email && u.password === password);
+  
+  if (user) {
+    updateLastAccess(user.id);
+    return user;
+  }
+  return null;
+};
+
 export const userService = {
   init,
   getAll,
@@ -122,5 +149,7 @@ export const userService = {
   delete: remove,
   getCurrentUser,
   setCurrentUser,
-  changePassword
+  changePassword,
+  updateLastAccess,
+  login,
 };

@@ -66,6 +66,7 @@ export const navItems = [
     to: "/usuarios",
     icon: <Users className="h-4 w-4" />,
     page: <Usuarios />,
+    adminOrPowerUserOnly: true,
   },
   {
     title: "Configurações Admin",
