@@ -5,11 +5,7 @@ const EquipamentoBasicInfo = ({ formData, handleChange }) => {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        handleChange("imagem", reader.result);
-      };
-      reader.readAsDataURL(file);
+      handleChange("imagem", file);
     }
   };
 
@@ -61,7 +57,7 @@ const EquipamentoBasicInfo = ({ formData, handleChange }) => {
         />
         {formData.imagem && (
           <img 
-            src={formData.imagem} 
+            src={formData.imagem.content} 
             alt={formData.nome}
             className="mt-2 w-full max-w-[200px] h-auto rounded-md border"
           />

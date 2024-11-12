@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
+import { fileStorageService } from "@/services/fileStorageService";
 
 export const useEquipamentoForm = (initialData, onSave) => {
   const [formData, setFormData] = useState(
@@ -19,6 +20,9 @@ export const useEquipamentoForm = (initialData, onSave) => {
       subconjuntos: [],
       componentes: [],
       manual: null,
+      manualKey: null,
+      imagem: null,
+      imagemKey: null,
       critico: false,
     }
   );
@@ -34,7 +38,7 @@ export const useEquipamentoForm = (initialData, onSave) => {
     }));
   };
 
-  const handleChange = (field, value) => {
+  const handleChange = async (field, value) => {
     if (field === "area" || field === "critico") {
       setFormData(prev => ({
         ...prev,
@@ -51,19 +55,32 @@ export const useEquipamentoForm = (initialData, onSave) => {
     }
   };
 
-  const handleManualUpload = (e) => {
+  const handleManualUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        handleChange("manual", {
-          name: file.name,
-          content: reader.result,
-          type: file.type,
-        });
+      try {
+        const savedFile = await fileStorageService.saveFile(file, 'manual');
+        handleChange("manual", savedFile);
+        handleChange("manualKey", savedFile.key);
         toast.success("Manual anexado com sucesso!");
-      };
-      reader.readAsDataURL(file);
+      } catch (error) {
+        console.error('Error saving manual:', error);
+        toast.error("Erro ao salvar o manual");
+      }
+    }
+  };
+
+  const handleImageUpload = async (file) => {
+    if (file) {
+      try {
+        const savedFile = await fileStorageService.saveFile(file, 'image');
+        handleChange("imagem", savedFile);
+        handleChange("imagemKey", savedFile.key);
+        toast.success("Imagem salva com sucesso!");
+      } catch (error) {
+        console.error('Error saving image:', error);
+        toast.error("Erro ao salvar a imagem");
+      }
     }
   };
 
@@ -76,6 +93,7 @@ export const useEquipamentoForm = (initialData, onSave) => {
     formData,
     handleChange,
     handleManualUpload,
+    handleImageUpload,
     handleSubmit
   };
 };
