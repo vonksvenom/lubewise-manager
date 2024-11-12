@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2 } from "lucide-react";
-import { format, isBefore } from "date-fns";
+import { format } from "date-fns";
 import { useState } from "react";
 import OrdemServicoViewDialog from "./ordem-servico/OrdemServicoViewDialog";
 import { userService } from "@/services/dataService";
@@ -33,22 +33,16 @@ const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) =>
 
   const getStatusDisplay = (ordem) => {
     const now = new Date();
-    const dataFim = new Date(ordem.dataFim);
+    const dataExecucao = new Date(ordem.dataExecucao);
     
     if (ordem.status === "Concluída") {
-      if (isBefore(dataFim, ordem.dataConclusao)) {
-        return {
-          label: "Concluída com Atraso",
-          className: "bg-orange-100 text-orange-800"
-        };
-      }
       return {
         label: "Concluída",
         className: "bg-green-100 text-green-800"
       };
     }
     
-    if (ordem.status !== "Concluída" && isBefore(dataFim, now)) {
+    if (ordem.status !== "Concluída" && dataExecucao < now) {
       return {
         label: "Atrasada",
         className: "bg-red-100 text-red-800"
@@ -82,8 +76,8 @@ const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) =>
               <TableHead>Técnico</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Prioridade</TableHead>
-              <TableHead>Data Início</TableHead>
-              <TableHead>Data Fim</TableHead>
+              <TableHead>Data de Execução</TableHead>
+              <TableHead>Recorrência</TableHead>
               <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
@@ -95,7 +89,6 @@ const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) =>
                   key={ordem.id}
                   className="cursor-pointer hover:bg-gray-50"
                   onClick={(e) => {
-                    // Previne o clique na linha quando clicar nos botões de ação
                     if (!e.target.closest('button')) {
                       handleRowClick(ordem);
                     }
@@ -138,10 +131,11 @@ const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) =>
                     </span>
                   </TableCell>
                   <TableCell>
-                    {format(new Date(ordem.dataInicio), "dd/MM/yyyy")}
+                    {format(new Date(ordem.dataExecucao), "dd/MM/yyyy")}
                   </TableCell>
                   <TableCell>
-                    {format(new Date(ordem.dataFim), "dd/MM/yyyy")}
+                    {ordem.recorrencia === "none" ? "Sem recorrência" : 
+                      RECURRENCE_OPTIONS.find(opt => opt.value === ordem.recorrencia)?.label}
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex gap-2 justify-end">

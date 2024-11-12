@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DialogClose } from "@/components/ui/dialog";
@@ -6,6 +6,27 @@ import { DatePicker } from "@/components/ui/date-picker";
 import OrdemServicoBasicInfo from "./ordem-servico/OrdemServicoBasicInfo";
 import OrdemServicoSelects from "./ordem-servico/OrdemServicoSelects";
 import { userService } from "@/services/dataService";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { addMonths, addYears, addDays, format } from "date-fns";
+
+const RECURRENCE_OPTIONS = [
+  { value: "none", label: "Sem recorrência" },
+  { value: "daily", label: "Diária" },
+  { value: "weekly", label: "Semanal" },
+  { value: "biweekly", label: "Quinzenal" },
+  { value: "monthly", label: "A cada 1 mês" },
+  { value: "bimonthly", label: "A cada 2 meses" },
+  { value: "quarterly", label: "A cada 3 meses" },
+  { value: "fourmonths", label: "A cada 4 meses" },
+  { value: "fivemonths", label: "A cada 5 meses" },
+  { value: "sixmonths", label: "A cada 6 meses" },
+  { value: "sevenmonths", label: "A cada 7 meses" },
+  { value: "eightmonths", label: "A cada 8 meses" },
+  { value: "ninemonths", label: "A cada 9 meses" },
+  { value: "tenmonths", label: "A cada 10 meses" },
+  { value: "elevenmonths", label: "A cada 11 meses" },
+  { value: "yearly", label: "Anual" }
+];
 
 const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
   const [formData, setFormData] = useState(
@@ -15,8 +36,8 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
       equipamentoId: "",
       tecnicoId: "",
       status: "Pendente",
-      dataInicio: null,
-      dataFim: null,
+      dataExecucao: null,
+      recorrencia: "none",
       prioridade: "Media",
       tipo: "Preventiva",
       cip: "",
@@ -51,6 +72,47 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
     }));
   };
 
+  const getNextDate = useMemo(() => {
+    if (!formData.dataExecucao || formData.recorrencia === "none") return null;
+
+    const date = new Date(formData.dataExecucao);
+    
+    switch (formData.recorrencia) {
+      case "daily":
+        return addDays(date, 1);
+      case "weekly":
+        return addDays(date, 7);
+      case "biweekly":
+        return addDays(date, 14);
+      case "monthly":
+        return addMonths(date, 1);
+      case "bimonthly":
+        return addMonths(date, 2);
+      case "quarterly":
+        return addMonths(date, 3);
+      case "fourmonths":
+        return addMonths(date, 4);
+      case "fivemonths":
+        return addMonths(date, 5);
+      case "sixmonths":
+        return addMonths(date, 6);
+      case "sevenmonths":
+        return addMonths(date, 7);
+      case "eightmonths":
+        return addMonths(date, 8);
+      case "ninemonths":
+        return addMonths(date, 9);
+      case "tenmonths":
+        return addMonths(date, 10);
+      case "elevenmonths":
+        return addMonths(date, 11);
+      case "yearly":
+        return addYears(date, 1);
+      default:
+        return null;
+    }
+  }, [formData.dataExecucao, formData.recorrencia]);
+
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <OrdemServicoBasicInfo formData={formData} handleChange={handleChange} />
@@ -63,22 +125,41 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
       />
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">Data de Início</label>
+        <label className="text-sm font-medium">Data de Execução</label>
         <DatePicker
-          date={formData.dataInicio}
-          onDateChange={(date) => handleChange("dataInicio", date)}
+          date={formData.dataExecucao}
+          onDateChange={(date) => handleChange("dataExecucao", date)}
           className="w-full"
         />
       </div>
 
       <div className="space-y-2">
-        <label className="text-sm font-medium">Data de Fim</label>
-        <DatePicker
-          date={formData.dataFim}
-          onDateChange={(date) => handleChange("dataFim", date)}
-          className="w-full"
-        />
+        <label className="text-sm font-medium">Recorrência</label>
+        <Select
+          value={formData.recorrencia}
+          onValueChange={(value) => handleChange("recorrencia", value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Selecione a recorrência" />
+          </SelectTrigger>
+          <SelectContent>
+            {RECURRENCE_OPTIONS.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
+
+      {getNextDate && (
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Próxima data:</label>
+          <p className="text-muted-foreground">
+            {format(getNextDate, "dd/MM/yyyy")}
+          </p>
+        </div>
+      )}
 
       <div className="space-y-4">
         <h3 className="text-sm font-medium">Consumíveis</h3>
