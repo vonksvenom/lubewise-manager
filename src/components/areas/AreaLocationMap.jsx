@@ -1,11 +1,10 @@
 import { useState, useCallback, useRef } from "react";
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
-import { Document, Page } from 'react-pdf';
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import html2canvas from "html2canvas";
 import "leaflet/dist/leaflet.css";
 import L from 'leaflet';
+import MapView from "./map/MapView";
+import FileView from "./map/FileView";
 
 // Fix for default marker icon in react-leaflet
 delete L.Icon.Default.prototype._getIconUrl;
@@ -14,23 +13,6 @@ L.Icon.Default.mergeOptions({
   iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
-
-const defaultCenter = {
-  lat: -14.235004,
-  lng: -51.92528
-};
-
-const LocationMarker = ({ position, setPosition, readOnly }) => {
-  useMapEvents({
-    click(e) {
-      if (!readOnly) {
-        setPosition(e.latlng);
-      }
-    },
-  });
-
-  return position ? <Marker position={position} /> : null;
-};
 
 const AreaLocationMap = ({ 
   location, 
@@ -62,25 +44,13 @@ const AreaLocationMap = ({
     }
   }, [onMapImageChange]);
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setFile(URL.createObjectURL(file));
-      setMarkerPosition(null);
-    }
-  };
-
   const handleImageClick = (e) => {
     if (!readOnly && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / rect.width) * 100;
       const y = ((e.clientY - rect.top) / rect.height) * 100;
       setMarkerPosition({ x, y });
-      
-      // Save location data
       onLocationChange({ type: 'image', x, y, imageUrl: file });
-      
-      // Capture the marked image
       captureMap({ x, y });
     }
   };
@@ -118,89 +88,44 @@ const AreaLocationMap = ({
         </div>
       )}
 
-      {locationType === "map" ? (
-        <div 
-          ref={containerRef}
-          className="border rounded-lg overflow-hidden h-[400px]"
-        >
-          <MapContainer
-            center={position || defaultCenter}
-            zoom={position ? 15 : 4}
-            style={{ height: "100%", width: "100%" }}
-          >
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            />
-            <LocationMarker 
-              position={position} 
-              setPosition={handlePositionChange}
-              readOnly={readOnly}
-            />
-          </MapContainer>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          <Input
-            type="file"
-            accept=".pdf,.png,.jpg,.jpeg"
-            onChange={handleFileChange}
-            disabled={readOnly}
+      <div ref={containerRef} className="border rounded-lg overflow-hidden h-[400px]">
+        {locationType === "map" ? (
+          <MapView
+            position={position}
+            setPosition={handlePositionChange}
+            readOnly={readOnly}
           />
-          
-          {file && (
-            <div 
-              ref={containerRef}
-              className="relative border rounded-lg overflow-hidden"
-              style={{ minHeight: "400px" }}
-              onClick={handleImageClick}
-            >
-              {file.endsWith('.pdf') ? (
-                <Document
-                  file={file}
-                  onLoadSuccess={onDocumentLoadSuccess}
-                >
-                  <Page pageNumber={pageNumber} />
-                </Document>
-              ) : (
-                <img 
-                  src={file} 
-                  alt="Local selecionado"
-                  className="w-full h-full object-contain"
-                />
-              )}
-              
-              {markerPosition && (
-                <div
-                  className="absolute w-4 h-4 bg-red-500 rounded-full transform -translate-x-1/2 -translate-y-1/2"
-                  style={{
-                    left: `${markerPosition.x}%`,
-                    top: `${markerPosition.y}%`,
-                  }}
-                />
-              )}
-            </div>
-          )}
-          
-          {file?.endsWith('.pdf') && numPages > 1 && (
-            <div className="flex justify-center gap-2">
-              <Button
-                onClick={() => setPageNumber(prev => Math.max(1, prev - 1))}
-                disabled={pageNumber <= 1}
-              >
-                Anterior
-              </Button>
-              <span>
-                Página {pageNumber} de {numPages}
-              </span>
-              <Button
-                onClick={() => setPageNumber(prev => Math.min(numPages, prev + 1))}
-                disabled={pageNumber >= numPages}
-              >
-                Próxima
-              </Button>
-            </div>
-          )}
+        ) : (
+          <FileView
+            file={file}
+            setFile={setFile}
+            markerPosition={markerPosition}
+            setMarkerPosition={setMarkerPosition}
+            containerRef={containerRef}
+            readOnly={readOnly}
+            numPages={numPages}
+            pageNumber={pageNumber}
+            setPageNumber={setPageNumber}
+            onDocumentLoadSuccess={onDocumentLoadSuccess}
+            handleImageClick={handleImageClick}
+          />
+        )}
+      </div>
+
+      {/* Display coordinates */}
+      {position && locationType === "map" && (
+        <div className="mt-2 p-2 bg-muted rounded-md">
+          <p className="text-sm font-medium">Coordenadas do local:</p>
+          <p className="text-sm">Latitude: {position.lat.toFixed(6)}</p>
+          <p className="text-sm">Longitude: {position.lng.toFixed(6)}</p>
+        </div>
+      )}
+
+      {markerPosition && locationType === "file" && (
+        <div className="mt-2 p-2 bg-muted rounded-md">
+          <p className="text-sm font-medium">Posição no documento:</p>
+          <p className="text-sm">X: {markerPosition.x.toFixed(2)}%</p>
+          <p className="text-sm">Y: {markerPosition.y.toFixed(2)}%</p>
         </div>
       )}
 
