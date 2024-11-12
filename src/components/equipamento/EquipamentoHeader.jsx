@@ -12,7 +12,6 @@ import BulkImportDialog from "@/components/common/BulkImportDialog";
 
 const EquipamentoHeader = ({ 
   title, 
-  onExport, 
   dialogOpen, 
   setDialogOpen, 
   selectedEquipamento, 
@@ -41,7 +40,6 @@ const EquipamentoHeader = ({
           onImport={() => {}}
           templateData={templateData}
           templateFilename="template_equipamentos.xlsx"
-          onExport={onExport}
         />
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>

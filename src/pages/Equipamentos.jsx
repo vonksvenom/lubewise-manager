@@ -1,24 +1,12 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Plus, Search, FileDown } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { useToast } from "@/components/ui/use-toast";
-import EquipamentoForm from "@/components/EquipamentoForm";
-import EquipamentoTable from "@/components/EquipamentoTable";
 import { equipamentoService } from "@/services/dataService";
-import BulkImportDialog from "@/components/common/BulkImportDialog";
-import * as XLSX from 'xlsx';
+import { useToast } from "@/components/ui/use-toast";
+import EquipamentoTable from "@/components/EquipamentoTable";
 import EquipamentoHeader from "@/components/equipamento/EquipamentoHeader";
 import EquipamentoSearch from "@/components/equipamento/EquipamentoSearch";
+import * as XLSX from 'xlsx';
 
 const Equipamentos = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -110,22 +98,10 @@ const Equipamentos = () => {
       eq.modelo?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleExport = () => {
-    const ws = XLSX.utils.json_to_sheet(equipamentos);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Equipamentos");
-    XLSX.writeFile(wb, "equipamentos.xlsx");
-    toast({
-      title: "Exportação concluída",
-      description: "Os dados foram exportados com sucesso.",
-    });
-  };
-
   return (
     <div className="space-y-6">
       <EquipamentoHeader 
         title={t("equipment")}
-        onExport={handleExport}
         dialogOpen={dialogOpen}
         setDialogOpen={setDialogOpen}
         selectedEquipamento={selectedEquipamento}
