@@ -1,29 +1,16 @@
 import { initialUsers } from './initialData';
 
-const STORAGE_KEY = 'users';
-const CURRENT_USER_KEY = 'user';
-
-const init = () => {
-  const existingUsers = localStorage.getItem(STORAGE_KEY);
-  if (!existingUsers) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialUsers));
-  }
-};
+let users = [...initialUsers];
 
 const getAll = () => {
-  init();
-  const data = localStorage.getItem(STORAGE_KEY);
-  return JSON.parse(data);
+  return users;
 };
 
 const getById = (id) => {
-  const users = getAll();
   return users.find(user => user.id === id);
 };
 
 const add = (user) => {
-  const users = getAll();
-  
   if (user.email) {
     const existingUser = users.find(u => u.email?.toLowerCase() === user.email.toLowerCase());
     if (existingUser) {
@@ -36,12 +23,10 @@ const add = (user) => {
     id: Date.now().toString(),
   };
   users.push(newUser);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
   return newUser;
 };
 
 const update = (id, user) => {
-  const users = getAll();
   const index = users.findIndex(u => u.id === id);
   
   if (user.email) {
@@ -55,11 +40,10 @@ const update = (id, user) => {
 
   if (index !== -1) {
     users[index] = { ...users[index], ...user };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
     
     const currentUser = getCurrentUser();
     if (currentUser && currentUser.id === id) {
-      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(users[index]));
+      setCurrentUser(users[index]);
     }
     
     return users[index];
@@ -68,31 +52,28 @@ const update = (id, user) => {
 };
 
 const remove = (id) => {
-  const users = getAll();
-  const filtered = users.filter(user => user.id !== id);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+  users = users.filter(user => user.id !== id);
   
   const currentUser = getCurrentUser();
   if (currentUser && currentUser.id === id) {
-    localStorage.removeItem(CURRENT_USER_KEY);
+    setCurrentUser(null);
   }
 };
 
 const getCurrentUser = () => {
-  const data = localStorage.getItem(CURRENT_USER_KEY);
+  const data = localStorage.getItem('user');
   return data ? JSON.parse(data) : null;
 };
 
 const setCurrentUser = (user) => {
   if (user) {
-    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+    localStorage.setItem('user', JSON.stringify(user));
   } else {
-    localStorage.removeItem(CURRENT_USER_KEY);
+    localStorage.removeItem('user');
   }
 };
 
 const changePassword = (userId, currentPassword, newPassword) => {
-  const users = getAll();
   const user = users.find(u => u.id === userId);
   
   if (!user) {
@@ -104,9 +85,7 @@ const changePassword = (userId, currentPassword, newPassword) => {
   }
 
   user.password = newPassword;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
 
-  // Atualiza o usuário atual se necessário
   const currentUser = getCurrentUser();
   if (currentUser && currentUser.id === userId) {
     setCurrentUser(user);
@@ -114,7 +93,6 @@ const changePassword = (userId, currentPassword, newPassword) => {
 };
 
 const updateLastAccess = (userId) => {
-  const users = getAll();
   const index = users.findIndex(u => u.id === userId);
   
   if (index !== -1) {
@@ -122,26 +100,23 @@ const updateLastAccess = (userId) => {
       ...users[index], 
       lastAccess: new Date().toISOString() 
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
     return users[index];
   }
   return null;
 };
 
-// Update the existing login function to track last access
 const login = (email, password) => {
-  const users = getAll();
   const user = users.find(u => u.email === email && u.password === password);
   
   if (user) {
-    updateLastAccess(user.id);
-    return user;
+    const updatedUser = updateLastAccess(user.id);
+    setCurrentUser(updatedUser);
+    return updatedUser;
   }
   return null;
 };
 
 export const userService = {
-  init,
   getAll,
   getById,
   add,
