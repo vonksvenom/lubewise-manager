@@ -21,6 +21,18 @@ const OrdemServicoViewDialog = ({ ordem, open, onOpenChange }) => {
     setEquipamentoDialogOpen(true);
   };
 
+  const formatDateSafely = (dateString) => {
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return "Data inválida";
+      }
+      return format(date, "dd/MM/yyyy");
+    } catch (error) {
+      return "Data inválida";
+    }
+  };
+
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
@@ -96,14 +108,14 @@ const OrdemServicoViewDialog = ({ ordem, open, onOpenChange }) => {
               <div>
                 <h3 className="font-semibold mb-1">Data Início</h3>
                 <p className="text-muted-foreground">
-                  {format(new Date(ordem.dataInicio), "dd/MM/yyyy")}
+                  {formatDateSafely(ordem.dataInicio)}
                 </p>
               </div>
               
               <div>
                 <h3 className="font-semibold mb-1">Data Fim</h3>
                 <p className="text-muted-foreground">
-                  {format(new Date(ordem.dataFim), "dd/MM/yyyy")}
+                  {formatDateSafely(ordem.dataFim)}
                 </p>
               </div>
             </div>
