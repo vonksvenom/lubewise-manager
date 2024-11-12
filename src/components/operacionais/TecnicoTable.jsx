@@ -32,15 +32,19 @@ const TecnicoTable = () => {
     loadTecnicos();
   }, [editDialogOpen]);
 
-  const handleDelete = (id) => {
-    if (window.confirm("Tem certeza que deseja excluir este técnico?")) {
+  const handleDelete = (id, e) => {
+    e.stopPropagation(); // Prevent row click when deleting
+    if (window.confirm("Tem certeza que deseja excluir este operacional?")) {
       userService.delete(id);
       setTecnicos(tecnicos.filter((t) => t.id !== id));
       toast.success("Operacional excluído com sucesso!");
     }
   };
 
-  const handleEdit = (tecnico) => {
+  const handleEdit = (tecnico, e) => {
+    if (e) {
+      e.stopPropagation(); // Prevent row click when clicking edit button
+    }
     if (!isAdmin && (!isPowerUser || tecnico.companyId !== user.companyId)) {
       toast.error("Você não tem permissão para editar este operacional");
       return;
@@ -63,7 +67,11 @@ const TecnicoTable = () => {
         </TableHeader>
         <TableBody>
           {tecnicos.map((tecnico) => (
-            <TableRow key={tecnico.id}>
+            <TableRow 
+              key={tecnico.id} 
+              className="cursor-pointer hover:bg-muted/50"
+              onClick={() => handleEdit(tecnico)}
+            >
               <TableCell>{tecnico.name}</TableCell>
               <TableCell>{tecnico.email}</TableCell>
               <TableCell>{tecnico.nivel}</TableCell>
@@ -73,7 +81,7 @@ const TecnicoTable = () => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => handleEdit(tecnico)}
+                    onClick={(e) => handleEdit(tecnico, e)}
                   >
                     <Edit className="h-4 w-4" />
                   </Button>
@@ -81,7 +89,7 @@ const TecnicoTable = () => {
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => handleDelete(tecnico.id)}
+                      onClick={(e) => handleDelete(tecnico.id, e)}
                     >
                       <Trash2 className="h-4 w-4 text-red-500" />
                     </Button>
