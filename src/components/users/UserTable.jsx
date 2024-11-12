@@ -11,6 +11,18 @@ import { Edit, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 
 const UserTable = ({ users, onEdit, onDelete, canEdit }) => {
+  const handleEdit = (user, e) => {
+    if (e) {
+      e.stopPropagation(); // Prevent row click when clicking edit button
+    }
+    onEdit(user);
+  };
+
+  const handleDelete = (id, e) => {
+    e.stopPropagation(); // Prevent row click when deleting
+    onDelete(id);
+  };
+
   return (
     <Table>
       <TableHeader>
@@ -26,7 +38,11 @@ const UserTable = ({ users, onEdit, onDelete, canEdit }) => {
       </TableHeader>
       <TableBody>
         {users.map((user) => (
-          <TableRow key={user.id}>
+          <TableRow 
+            key={user.id}
+            className="cursor-pointer hover:bg-muted/50"
+            onClick={() => handleEdit(user)}
+          >
             <TableCell>{user.name}</TableCell>
             <TableCell>{user.email}</TableCell>
             <TableCell>{user.role}</TableCell>
@@ -43,7 +59,7 @@ const UserTable = ({ users, onEdit, onDelete, canEdit }) => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() => onEdit(user)}
+                    onClick={(e) => handleEdit(user, e)}
                   >
                     <Edit className="h-4 w-4" />
                   </Button>
@@ -51,7 +67,7 @@ const UserTable = ({ users, onEdit, onDelete, canEdit }) => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={() => onDelete(user.id)}
+                  onClick={(e) => handleDelete(user.id, e)}
                   className="text-red-500 hover:text-red-700"
                 >
                   <Trash2 className="h-4 w-4" />
