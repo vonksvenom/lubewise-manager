@@ -36,13 +36,13 @@ const TecnicoTable = () => {
     if (window.confirm("Tem certeza que deseja excluir este técnico?")) {
       userService.delete(id);
       setTecnicos(tecnicos.filter((t) => t.id !== id));
-      toast.success("Técnico excluído com sucesso!");
+      toast.success("Operacional excluído com sucesso!");
     }
   };
 
   const handleEdit = (tecnico) => {
     if (!isAdmin && (!isPowerUser || tecnico.companyId !== user.companyId)) {
-      toast.error("Você não tem permissão para editar este técnico");
+      toast.error("Você não tem permissão para editar este operacional");
       return;
     }
     setSelectedTecnico(tecnico);

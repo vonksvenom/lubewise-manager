@@ -73,7 +73,7 @@ const TecnicoForm = ({ open, onOpenChange, initialData }) => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {initialData ? "Editar Técnico" : "Novo Técnico"}
+            {initialData ? "Editar Operacional" : "Novo Operacional"}
           </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">

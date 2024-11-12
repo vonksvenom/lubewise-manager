@@ -36,7 +36,7 @@ const Operacionais = () => {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold text-catYellow">Operacionais</h1>
         <Button onClick={() => setDialogOpen(true)}>
-          Adicionar Técnico
+          Adicionar Operacional
         </Button>
       </div>
 

@@ -21,7 +21,7 @@ const TechniciansDialog = ({ open, onOpenChange }) => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-4xl">
         <DialogHeader>
-          <DialogTitle>Técnicos Alocados</DialogTitle>
+          <DialogTitle>Operacionais Alocados</DialogTitle>
         </DialogHeader>
         <Table>
           <TableHeader>
