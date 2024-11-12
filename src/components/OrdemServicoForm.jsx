@@ -15,8 +15,8 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
       equipamentoId: "",
       tecnicoId: "",
       status: "Pendente",
-      dataInicio: new Date(),
-      dataFim: new Date(),
+      dataInicio: null,
+      dataFim: null,
       prioridade: "Media",
       tipo: "Preventiva",
       cip: "",
@@ -67,6 +67,7 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
         <DatePicker
           date={formData.dataInicio}
           onDateChange={(date) => handleChange("dataInicio", date)}
+          className="w-full"
         />
       </div>
 
@@ -75,6 +76,7 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
         <DatePicker
           date={formData.dataFim}
           onDateChange={(date) => handleChange("dataFim", date)}
+          className="w-full"
         />
       </div>
 

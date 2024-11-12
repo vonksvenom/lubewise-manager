@@ -22,20 +22,30 @@ import { inventarioService, areaService } from "@/services/dataService";
 import { format } from "date-fns";
 import * as XLSX from 'xlsx';
 import { useToast } from "@/components/ui/use-toast";
+import { DatePicker } from "@/components/ui/date-picker";
 
 const InventarioHistory = () => {
   const [selectedArea, setSelectedArea] = useState("todas");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [history, setHistory] = useState([]);
   const areas = areaService.getAll();
   const { toast } = useToast();
 
   const handleSearch = () => {
+    if (!startDate || !endDate) {
+      toast({
+        title: "Datas inválidas",
+        description: "Por favor, selecione as datas inicial e final.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const area = selectedArea === "todas" ? null : selectedArea;
     const historico = inventarioService.getHistoricoByPeriod(
-      new Date(startDate),
-      new Date(endDate),
+      startDate,
+      endDate,
       area
     );
     setHistory(historico);
@@ -54,7 +64,7 @@ const InventarioHistory = () => {
     const ws = XLSX.utils.json_to_sheet(history);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Histórico");
-    XLSX.writeFile(wb, `historico_${startDate}_${endDate}.xlsx`);
+    XLSX.writeFile(wb, `historico_${format(startDate, 'yyyy-MM-dd')}_${format(endDate, 'yyyy-MM-dd')}.xlsx`);
     
     toast({
       title: "Exportação concluída",
@@ -87,18 +97,18 @@ const InventarioHistory = () => {
         </div>
         <div>
           <label className="text-sm font-medium">Data Inicial</label>
-          <Input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
+          <DatePicker
+            date={startDate}
+            onDateChange={setStartDate}
+            className="w-full"
           />
         </div>
         <div>
           <label className="text-sm font-medium">Data Final</label>
-          <Input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
+          <DatePicker
+            date={endDate}
+            onDateChange={setEndDate}
+            className="w-full"
           />
         </div>
         <div className="flex items-end gap-2">
