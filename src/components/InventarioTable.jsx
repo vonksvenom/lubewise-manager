@@ -1,15 +1,9 @@
 import {
   Table,
   TableBody,
-  TableCell,
-  TableHeader,
-  TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Pencil, Trash2, Eye } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { inventarioService } from "@/services/dataService";
-import { format } from "date-fns";
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -27,7 +21,9 @@ import {
 } from "@/components/ui/dialog";
 import InventarioForm from "./inventario/InventarioForm";
 import { useSortableTable } from "@/hooks/useSortableTable";
-import SortableHeader from "@/components/common/SortableHeader";
+import InventarioTableHeader from "./inventario/InventarioTableHeader";
+import InventarioTableRow from "./inventario/InventarioTableRow";
+import InventarioDetails from "./inventario/InventarioDetails";
 
 const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo", onViewModeChange }) => {
   const [items, setItems] = useState([]);
@@ -108,100 +104,23 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo", onViewModeChan
       </div>
 
       <Table>
-        <TableHeader>
-          <TableRow>
-            <SortableHeader 
-              label="Nome"
-              sortKey="name"
-              sortConfig={sortConfig}
-              onSort={sortData}
-            />
-            <SortableHeader 
-              label={viewMode === "tipo" ? "Tipo" : "Descrição Comercial"}
-              sortKey={viewMode === "tipo" ? "type" : "descricaoComercial"}
-              sortConfig={sortConfig}
-              onSort={sortData}
-            />
-            <SortableHeader 
-              label="Quantidade"
-              sortKey="quantity"
-              sortConfig={sortConfig}
-              onSort={sortData}
-            />
-            <SortableHeader 
-              label="Unidade"
-              sortKey="unit"
-              sortConfig={sortConfig}
-              onSort={sortData}
-            />
-            <SortableHeader 
-              label="Local"
-              sortKey="location"
-              sortConfig={sortConfig}
-              onSort={sortData}
-            />
-            <SortableHeader 
-              label="Área"
-              sortKey="area"
-              sortConfig={sortConfig}
-              onSort={sortData}
-            />
-            <SortableHeader 
-              label="Data Registro"
-              sortKey="dataRegistro"
-              sortConfig={sortConfig}
-              onSort={sortData}
-            />
-            <TableHead>Ações</TableHead>
-          </TableRow>
-        </TableHeader>
+        <InventarioTableHeader 
+          viewMode={viewMode}
+          sortConfig={sortConfig}
+          sortData={sortData}
+        />
         <TableBody>
           {sortedItems.map((item) => (
-            <TableRow 
+            <InventarioTableRow
               key={item.id}
-              className="cursor-pointer hover:bg-muted/50"
-              onClick={() => handleView(item)}
-            >
-              <TableCell>{item.name}</TableCell>
-              <TableCell>{viewMode === "tipo" ? item.type : item.descricaoComercial}</TableCell>
-              <TableCell>{item.quantity}</TableCell>
-              <TableCell>{item.unit}</TableCell>
-              <TableCell>{item.location}</TableCell>
-              <TableCell>{item.area}</TableCell>
-              <TableCell>
-                {format(new Date(item.dataRegistro), "dd/MM/yyyy HH:mm")}
-              </TableCell>
-              <TableCell>
-                <div className="flex gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={(e) => handleView(item)}
-                  >
-                    <Eye className="h-4 w-4" />
-                  </Button>
-                  {(isAdmin || isPowerUser) && (
-                    <>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={(e) => handleEdit(item, e)}
-                      >
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={(e) => handleDelete(item.id, e)}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </>
-                  )}
-                </div>
-              </TableCell>
-            </TableRow>
+              item={item}
+              viewMode={viewMode}
+              isAdmin={isAdmin}
+              isPowerUser={isPowerUser}
+              onView={handleView}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
           ))}
         </TableBody>
       </Table>
@@ -222,20 +141,7 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo", onViewModeChan
               }} 
             />
           ) : (
-            <div className="space-y-4">
-              <div><strong>Nome:</strong> {selectedItem?.name}</div>
-              <div><strong>Tipo:</strong> {selectedItem?.type}</div>
-              <div><strong>Quantidade:</strong> {selectedItem?.quantity} {selectedItem?.unit}</div>
-              <div><strong>Local:</strong> {selectedItem?.location}</div>
-              <div><strong>Área:</strong> {selectedItem?.area}</div>
-              <div><strong>Descrição Comercial:</strong> {selectedItem?.descricaoComercial}</div>
-              <div><strong>Fornecedor:</strong> {selectedItem?.fornecedor}</div>
-              <div><strong>Aplicação:</strong> {selectedItem?.aplicacao}</div>
-              <div><strong>Viscosidade:</strong> {selectedItem?.viscosidade}</div>
-              <div><strong>Ponto de Fluidez:</strong> {selectedItem?.pontoFluidez}</div>
-              <div><strong>Ponto de Fulgor:</strong> {selectedItem?.pontoFulgor}</div>
-              <div><strong>Índice de Viscosidade:</strong> {selectedItem?.indiceViscosidade}</div>
-            </div>
+            <InventarioDetails item={selectedItem} />
           )}
         </DialogContent>
       </Dialog>
