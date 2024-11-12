@@ -64,98 +64,152 @@ export const initialLocations = [
     companyId: "1",
     active: true
   },
-  // CSN
   {
     id: "4",
+    name: "Mina Brucutu",
+    companyId: "1",
+    active: true
+  },
+  {
+    id: "5",
+    name: "Complexo Vargem Grande",
+    companyId: "1",
+    active: true
+  },
+  // CSN
+  {
+    id: "6",
     name: "Volta Redonda",
     companyId: "2",
     active: true
   },
   {
-    id: "5",
+    id: "7",
     name: "Porto de Itaguaí",
     companyId: "2",
     active: true
   },
   {
-    id: "6",
+    id: "8",
     name: "Arcos",
+    companyId: "2",
+    active: true
+  },
+  {
+    id: "9",
+    name: "Congonhas",
     companyId: "2",
     active: true
   },
   // Petrobras
   {
-    id: "7",
+    id: "10",
     name: "REDUC",
     companyId: "3",
     active: true
   },
   {
-    id: "8",
+    id: "11",
     name: "REPLAN",
     companyId: "3",
     active: true
   },
   {
-    id: "9",
+    id: "12",
     name: "REVAP",
+    companyId: "3",
+    active: true
+  },
+  {
+    id: "13",
+    name: "RNEST",
+    companyId: "3",
+    active: true
+  },
+  {
+    id: "14",
+    name: "REGAP",
     companyId: "3",
     active: true
   },
   // ArcelorMittal
   {
-    id: "10",
+    id: "15",
     name: "Tubarão",
     companyId: "4",
     active: true
   },
   {
-    id: "11",
+    id: "16",
     name: "João Monlevade",
     companyId: "4",
     active: true
   },
   {
-    id: "12",
+    id: "17",
     name: "Piracicaba",
+    companyId: "4",
+    active: true
+  },
+  {
+    id: "18",
+    name: "Juiz de Fora",
     companyId: "4",
     active: true
   },
   // Gerdau
   {
-    id: "13",
+    id: "19",
     name: "Ouro Branco",
     companyId: "5",
     active: true
   },
   {
-    id: "14",
+    id: "20",
     name: "Açonorte",
     companyId: "5",
     active: true
   },
   {
-    id: "15",
+    id: "21",
     name: "Cosigua",
+    companyId: "5",
+    active: true
+  },
+  {
+    id: "22",
+    name: "Divinópolis",
+    companyId: "5",
+    active: true
+  },
+  {
+    id: "23",
+    name: "Barão de Cocais",
     companyId: "5",
     active: true
   },
   // Usiminas
   {
-    id: "16",
+    id: "24",
     name: "Ipatinga",
     companyId: "6",
     active: true
   },
   {
-    id: "17",
+    id: "25",
     name: "Cubatão",
     companyId: "6",
     active: true
   },
   {
-    id: "18",
+    id: "26",
     name: "Porto de Praia Mole",
+    companyId: "6",
+    active: true
+  },
+  {
+    id: "27",
+    name: "Mineração Usiminas",
     companyId: "6",
     active: true
   }

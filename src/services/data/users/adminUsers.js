@@ -8,6 +8,8 @@ export const initialAdminUsers = [
     department: "Diretoria",
     isAdmin: true,
     systemOwner: true,
+    companyId: "1",
+    locationId: "1",
     permissions: {
       createUsers: true,
       editUsers: true,
