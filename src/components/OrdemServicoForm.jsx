@@ -1,14 +1,15 @@
 import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { DialogClose } from "@/components/ui/dialog";
 import { DatePicker } from "@/components/ui/date-picker";
 import OrdemServicoBasicInfo from "./ordem-servico/OrdemServicoBasicInfo";
 import OrdemServicoSelects from "./ordem-servico/OrdemServicoSelects";
-import { userService } from "@/services/dataService";
+import ConsumablesSection from "./ordem-servico/ConsumablesSection";
+import EquipmentLubricationInfo from "./ordem-servico/EquipmentLubricationInfo";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { addMonths, addYears, addDays, format } from "date-fns";
 import { RECURRENCE_OPTIONS } from "@/constants/recurrenceOptions";
+import { equipamentoService } from "@/services/dataService";
 
 const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
   const [formData, setFormData] = useState(
@@ -30,7 +31,7 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
     }
   );
 
-  const tecnicos = userService.getAll().filter(user => user.role === "technician");
+  const selectedEquipment = equipamentoService.getById(formData.equipamentoId);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -103,7 +104,6 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
         formData={formData}
         handleChange={handleChange}
         equipamentos={equipamentos}
-        tecnicos={tecnicos}
       />
 
       <div className="space-y-2">
@@ -143,25 +143,14 @@ const OrdemServicoForm = ({ initialData, onSave, equipamentos = [] }) => {
         </div>
       )}
 
-      <div className="space-y-4">
-        <h3 className="text-sm font-medium">Consumíveis</h3>
-        {formData.consumables.map((consumable) => (
-          <div key={consumable.type} className="space-y-2">
-            <label className="text-sm font-medium">
-              {consumable.type} ({consumable.type === "Óleo" ? "L" : "g"})
-            </label>
-            <Input
-              type="number"
-              min="0"
-              value={consumable.quantity}
-              onChange={(e) =>
-                handleConsumableChange(consumable.type, e.target.value)
-              }
-              placeholder={`Quantidade de ${consumable.type} em ${consumable.type === "Óleo" ? "litros" : "gramas"}`}
-            />
-          </div>
-        ))}
-      </div>
+      {selectedEquipment && (
+        <EquipmentLubricationInfo selectedEquipment={selectedEquipment} />
+      )}
+
+      <ConsumablesSection
+        formData={formData}
+        handleConsumableChange={handleConsumableChange}
+      />
 
       <div className="flex justify-end gap-2">
         <DialogClose asChild>
