@@ -11,10 +11,12 @@ import OrdemServicoViewDialog from "./ordem-servico/OrdemServicoViewDialog";
 import { userService } from "@/services/dataService";
 import StatusBadge from "./ordem-servico/StatusBadge";
 import { ActionButtons, RecurrenceCell, formatDate, getStatusDisplay } from "./ordem-servico/TableCells";
+import { ArrowUpDown } from "lucide-react";
 
 const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) => {
   const [selectedOrdem, setSelectedOrdem] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
   const getEquipamentoNome = (equipamentoId) => {
     const equipamento = equipamentos.find(
@@ -35,25 +37,68 @@ const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) =>
     setDialogOpen(true);
   };
 
+  const sortData = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getSortedData = () => {
+    if (!sortConfig.key) return ordensServico;
+
+    return [...ordensServico].sort((a, b) => {
+      let aValue = a[sortConfig.key];
+      let bValue = b[sortConfig.key];
+
+      if (sortConfig.key === 'equipamentoId') {
+        aValue = getEquipamentoNome(a.equipamentoId);
+        bValue = getEquipamentoNome(b.equipamentoId);
+      } else if (sortConfig.key === 'tecnicoId') {
+        aValue = getTecnicoNome(a.tecnicoId);
+        bValue = getTecnicoNome(b.tecnicoId);
+      }
+
+      if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+  };
+
+  const sortedData = getSortedData();
+
+  const renderSortableHeader = (label, key) => (
+    <TableHead 
+      className="cursor-pointer hover:bg-accent/50 transition-colors"
+      onClick={() => sortData(key)}
+    >
+      <div className="flex items-center gap-2">
+        {label}
+        <ArrowUpDown className="h-4 w-4" />
+      </div>
+    </TableHead>
+  );
+
   return (
     <>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Título</TableHead>
-              <TableHead>Tipo</TableHead>
-              <TableHead>Equipamento</TableHead>
-              <TableHead>Técnico</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Prioridade</TableHead>
-              <TableHead>Data de Execução</TableHead>
-              <TableHead>Recorrência</TableHead>
+              {renderSortableHeader('Título', 'titulo')}
+              {renderSortableHeader('Tipo', 'tipo')}
+              {renderSortableHeader('Equipamento', 'equipamentoId')}
+              {renderSortableHeader('Técnico', 'tecnicoId')}
+              {renderSortableHeader('Status', 'status')}
+              {renderSortableHeader('Prioridade', 'prioridade')}
+              {renderSortableHeader('Data de Execução', 'dataExecucao')}
+              {renderSortableHeader('Recorrência', 'recorrencia')}
               <TableHead className="text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {ordensServico.map((ordem) => {
+            {sortedData.map((ordem) => {
               const statusDisplay = getStatusDisplay(ordem);
               return (
                 <TableRow 

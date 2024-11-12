@@ -8,23 +8,20 @@ import {
   titulosPreditiva 
 } from './workOrders/workOrderTypes';
 import { baseWorkOrders } from './workOrders/baseWorkOrders';
+import { RECURRENCE_OPTIONS } from '@/constants/recurrenceOptions';
 
 const generateOrdensServico = () => {
   const ordens = [...baseWorkOrders];
   const prioridades = ["Baixa", "Media", "Alta", "Urgente"];
   const tecnicos = ["3", "5", "6", "7", "8", "9", "10", "11", "12"];
   const status = ["Pendente", "Em Andamento", "Concluída", "Cancelada"];
-  const recorrencias = ["none", "daily", "weekly", "biweekly", "monthly", "quarterly", "yearly"];
+  const recorrencias = RECURRENCE_OPTIONS.map(opt => opt.value);
 
-  const startDate = new Date('2024-01-01');
-  const endDate = new Date('2025-12-31');
-  const timeSpan = endDate.getTime() - startDate.getTime();
+  // Define date range from 2023 to 2026
+  const startDate = new Date('2023-01-01');
+  const endDate = new Date('2026-12-31');
 
   for (let i = 1; i <= 1000; i++) {
-    const percentComplete = (i - 1) / 999;
-    const baseDate = new Date(startDate.getTime() + (timeSpan * percentComplete));
-    const dataExecucao = new Date(baseDate.getTime() + (Math.random() * 30 * 24 * 60 * 60 * 1000));
-    
     const tipo = tipos[Math.floor(Math.random() * tipos.length)];
     let titulo;
     
@@ -44,6 +41,9 @@ const generateOrdensServico = () => {
     const currentStatus = status[Math.floor(Math.random() * status.length)];
     const recorrencia = recorrencias[Math.floor(Math.random() * recorrencias.length)];
     
+    // Generate random date between 2023 and 2026
+    const dataExecucao = generateRandomDate(startDate, endDate);
+    
     ordens.push({
       id: i.toString(),
       titulo: `${titulo} - ${equipamento.tag}`,
@@ -57,7 +57,7 @@ const generateOrdensServico = () => {
       cip: `CIP-${i.toString().padStart(4, '0')}`,
       tecnicoId: tecnicos[Math.floor(Math.random() * tecnicos.length)],
       recorrencia: recorrencia,
-      dataLocked: Math.random() > 0.8, // 20% chance of being locked
+      dataLocked: Math.random() > 0.8,
       procedimentos: [
         "1. Realizar análise de risco da atividade",
         "2. Bloquear equipamento se necessário",

@@ -2,6 +2,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { addMonths, addYears, addDays } from "date-fns";
 import { filterOrdens } from "./filterUtils";
+import { Card } from "@/components/ui/card";
 
 export const CalendarContent = ({ ordensServico, filters, handleEventClick, equipamentos }) => {
   const getEquipamentoNome = (equipamentoId) => {
@@ -106,21 +107,57 @@ export const CalendarContent = ({ ordensServico, filters, handleEventClick, equi
   const events = filteredOrdens.flatMap(generateRecurringEvents);
 
   return (
-    <div className="mt-6">
-      <FullCalendar
-        plugins={[dayGridPlugin]}
-        initialView="dayGridMonth"
-        events={events}
-        height="auto"
-        locale="pt-br"
-        headerToolbar={{
-          left: "prev,next today",
-          center: "title",
-          right: "dayGridMonth,dayGridWeek",
-        }}
-        eventClick={handleEventClick}
-        className="bg-background rounded-lg p-4 shadow-neo-sm"
-      />
-    </div>
+    <Card className="mt-6 p-6 shadow-neo bg-gradient-to-br from-background to-muted/50">
+      <div className="fullcalendar-custom">
+        <style>
+          {`
+            .fullcalendar-custom .fc-toolbar-title {
+              font-size: 1.25rem !important;
+              font-weight: 600;
+            }
+            .fullcalendar-custom .fc-button {
+              background-color: hsl(var(--primary)) !important;
+              border-color: hsl(var(--primary)) !important;
+              box-shadow: var(--shadow-neo-sm);
+              transition: all 0.2s;
+            }
+            .fullcalendar-custom .fc-button:hover {
+              opacity: 0.9;
+              box-shadow: var(--shadow-neo);
+            }
+            .fullcalendar-custom .fc-button-active {
+              background-color: hsl(var(--primary)/0.8) !important;
+            }
+            .fullcalendar-custom .fc-toolbar {
+              flex-wrap: wrap;
+              gap: 1rem;
+            }
+            .fullcalendar-custom .fc-view {
+              background: white;
+              border-radius: 0.5rem;
+              overflow: hidden;
+              box-shadow: var(--shadow-neo-sm);
+            }
+            .fullcalendar-custom .fc-header-toolbar {
+              margin-bottom: 1.5rem !important;
+            }
+          `}
+        </style>
+        <FullCalendar
+          plugins={[dayGridPlugin]}
+          initialView="dayGridMonth"
+          events={events}
+          height="auto"
+          locale="pt-br"
+          headerToolbar={{
+            left: "prev,next today",
+            center: "title",
+            right: "dayGridMonth,dayGridWeek",
+          }}
+          eventClick={handleEventClick}
+          className="bg-background rounded-lg"
+        />
+      </div>
+    </Card>
   );
 };
