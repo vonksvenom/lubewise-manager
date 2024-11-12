@@ -16,23 +16,20 @@ const QRCodeDisplay = ({ data, showDownload = false }) => {
   const handleDownload = () => {
     const element = document.getElementById(`qr-${data.id}`);
     if (element) {
-      const scale = 4;
-      const baseSize = 256; // Tamanho base do QR code
-      const padding = 32; // Padding para garantir que não haja corte
-      const totalSize = baseSize + (padding * 2);
-
+      const scale = 2;
+      const baseSize = 256;
+      const padding = 16;
+      
       toPng(element, {
         quality: 1.0,
         pixelRatio: scale,
-        width: totalSize,
-        height: totalSize,
+        width: baseSize,
+        height: baseSize,
         style: {
-          transform: `scale(${scale})`,
-          transformOrigin: 'top left',
-          padding: `${padding}px`
-        },
-        canvasWidth: totalSize * scale,
-        canvasHeight: totalSize * scale
+          transform: 'none',
+          margin: `${padding}px`,
+          backgroundColor: 'white'
+        }
       })
         .then((dataUrl) => {
           const link = document.createElement("a");
@@ -50,7 +47,8 @@ const QRCodeDisplay = ({ data, showDownload = false }) => {
     <div className="flex flex-col items-center gap-2">
       <div
         id={`qr-${data.id}`}
-        className="bg-white p-8 rounded-lg shadow-sm"
+        className="bg-white p-4 rounded-lg shadow-sm"
+        style={{ width: 'fit-content' }}
       >
         <QRCodeSVG
           value={JSON.stringify(qrData)}
