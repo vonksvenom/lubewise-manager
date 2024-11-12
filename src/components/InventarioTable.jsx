@@ -24,7 +24,7 @@ import { useSortableTable } from "@/hooks/useSortableTable";
 import InventarioTableHeader from "./inventario/InventarioTableHeader";
 import InventarioTableRow from "./inventario/InventarioTableRow";
 import InventarioDetails from "./inventario/InventarioDetails";
-import ResizableTable from "../common/ResizableTable";
+import ResizableTable from "./common/ResizableTable";
 
 const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo", onViewModeChange }) => {
   const [items, setItems] = useState([]);
@@ -153,3 +153,4 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo", onViewModeChan
 };
 
 export default InventarioTable;
+
