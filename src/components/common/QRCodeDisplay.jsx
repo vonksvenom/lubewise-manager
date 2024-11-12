@@ -1,7 +1,7 @@
 import { QRCodeSVG } from "qrcode.react";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
-import { toPng } from "html-to-image";
+import html2canvas from "html2canvas";
 
 const QRCodeDisplay = ({ data, showDownload = false }) => {
   const qrData = {
@@ -13,33 +13,29 @@ const QRCodeDisplay = ({ data, showDownload = false }) => {
     }
   };
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     const element = document.getElementById(`qr-${data.id}`);
     if (element) {
-      const scale = 2;
-      const baseSize = 256;
-      const padding = 16;
-      
-      toPng(element, {
-        quality: 1.0,
-        pixelRatio: scale,
-        width: baseSize,
-        height: baseSize,
-        style: {
-          transform: 'none',
-          margin: `${padding}px`,
-          backgroundColor: 'white'
-        }
-      })
-        .then((dataUrl) => {
-          const link = document.createElement("a");
-          link.download = `qr-${data.nome || "code"}.png`;
-          link.href = dataUrl;
-          link.click();
-        })
-        .catch((err) => {
-          console.error("Erro ao gerar imagem do QR code:", err);
+      try {
+        const canvas = await html2canvas(element, {
+          backgroundColor: '#FFFFFF',
+          scale: 3,
+          logging: false,
+          useCORS: true,
+          allowTaint: true,
+          width: element.offsetWidth,
+          height: element.offsetHeight,
+          x: 0,
+          y: 0
         });
+
+        const link = document.createElement("a");
+        link.download = `qr-${data.nome || "code"}.png`;
+        link.href = canvas.toDataURL('image/png', 1.0);
+        link.click();
+      } catch (error) {
+        console.error("Erro ao gerar imagem do QR code:", error);
+      }
     }
   };
 
@@ -47,8 +43,15 @@ const QRCodeDisplay = ({ data, showDownload = false }) => {
     <div className="flex flex-col items-center gap-2">
       <div
         id={`qr-${data.id}`}
-        className="bg-white p-4 rounded-lg shadow-sm"
-        style={{ width: 'fit-content' }}
+        className="bg-white p-8 rounded-lg"
+        style={{ 
+          width: 'fit-content',
+          minWidth: '300px',
+          minHeight: '300px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
       >
         <QRCodeSVG
           value={JSON.stringify(qrData)}
