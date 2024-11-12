@@ -33,43 +33,62 @@ const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) =>
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
-    const date = parseISO(dateString);
-    return isValid(date) ? format(date, "dd/MM/yyyy") : "Data inválida";
+    try {
+      const date = parseISO(dateString);
+      return isValid(date) ? format(date, "dd/MM/yyyy") : "Data inválida";
+    } catch {
+      return "Data inválida";
+    }
   };
 
   const getStatusDisplay = (ordem) => {
     const now = new Date();
-    const dataExecucao = parseISO(ordem.dataExecucao);
     
-    if (!isValid(dataExecucao)) {
+    if (!ordem.dataExecucao) {
       return {
-        label: ordem.status,
+        label: ordem.status || "Pendente",
         className: "bg-yellow-100 text-yellow-800"
       };
     }
-    
-    if (ordem.status === "Concluída") {
-      return {
-        label: "Concluída",
-        className: "bg-green-100 text-green-800"
-      };
-    }
-    
-    if (ordem.status !== "Concluída" && dataExecucao < now) {
-      return {
-        label: "Atrasada",
-        className: "bg-red-100 text-red-800"
-      };
-    }
 
-    return {
-      label: ordem.status,
-      className: ordem.status === "Em Andamento"
-        ? "bg-blue-100 text-blue-800"
-        : ordem.status === "Cancelada"
-        ? "bg-red-100 text-red-800"
-        : "bg-yellow-100 text-yellow-800"
-    };
+    try {
+      const dataExecucao = parseISO(ordem.dataExecucao);
+      
+      if (!isValid(dataExecucao)) {
+        return {
+          label: ordem.status || "Pendente",
+          className: "bg-yellow-100 text-yellow-800"
+        };
+      }
+      
+      if (ordem.status === "Concluída") {
+        return {
+          label: "Concluída",
+          className: "bg-green-100 text-green-800"
+        };
+      }
+      
+      if (ordem.status !== "Concluída" && dataExecucao < now) {
+        return {
+          label: "Atrasada",
+          className: "bg-red-100 text-red-800"
+        };
+      }
+
+      return {
+        label: ordem.status || "Pendente",
+        className: ordem.status === "Em Andamento"
+          ? "bg-blue-100 text-blue-800"
+          : ordem.status === "Cancelada"
+          ? "bg-red-100 text-red-800"
+          : "bg-yellow-100 text-yellow-800"
+      };
+    } catch {
+      return {
+        label: ordem.status || "Pendente",
+        className: "bg-yellow-100 text-yellow-800"
+      };
+    }
   };
 
   const handleRowClick = (ordem) => {
