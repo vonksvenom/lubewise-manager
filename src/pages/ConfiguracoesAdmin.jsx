@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
+import { CompanyManagement } from "@/components/admin/CompanyManagement";
 import { ThemeSettings } from "@/components/admin/ThemeSettings";
 import { SystemSettings } from "@/components/admin/SystemSettings";
-import { CompanyManagement } from "@/components/admin/CompanyManagement";
 import { themes } from "@/config/themes";
 
 const ConfiguracoesAdmin = () => {
@@ -33,9 +33,9 @@ const ConfiguracoesAdmin = () => {
     <div className="space-y-6">
       <h1 className="text-3xl font-bold text-catYellow">Configurações Administrativas</h1>
       <div className="grid grid-cols-1 gap-6">
+        <CompanyManagement />
         <ThemeSettings currentTheme={currentTheme} onThemeChange={handleThemeChange} />
         <SystemSettings />
-        <CompanyManagement />
       </div>
     </div>
   );
