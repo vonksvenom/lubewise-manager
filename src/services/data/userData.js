@@ -9,12 +9,14 @@ import { initialManagerUsers } from './users/managerUsers';
 import { initialTechnicianUsers } from './users/technicianUsers';
 import { initialOperatorUsers } from './users/operatorUsers';
 
+// Combine all companies
 export const initialCompanies = [
   ...miningCompanies,
   ...steelCompanies,
   ...oilCompanies
 ];
 
+// Combine all locations and ensure they're properly linked to companies
 export const initialLocations = [
   ...miningLocations,
   ...steelLocations,

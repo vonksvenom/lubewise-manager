@@ -1,10 +1,12 @@
+import { initialLocations } from './data/userData';
+
 const STORAGE_KEY = 'locations';
 
 const init = () => {
   const existingLocations = localStorage.getItem(STORAGE_KEY);
   if (!existingLocations) {
-    // Initialize with empty array if no locations exist
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+    // Initialize with initial locations if no locations exist
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialLocations));
   }
 };
 
