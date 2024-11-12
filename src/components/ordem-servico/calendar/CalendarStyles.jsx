@@ -6,47 +6,40 @@ export const CalendarStyles = () => (
         min-height: 550px;
       }
       .fullcalendar-custom .fc-toolbar-title {
-        font-size: 1.5rem !important;
+        font-size: 1.75rem !important;
         font-weight: 700;
-        background: linear-gradient(to right, var(--primary), var(--accent));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        color: var(--foreground);
+        letter-spacing: -0.025em;
       }
       .fullcalendar-custom .fc-button {
-        background: var(--primary) !important;
+        background: var(--accent) !important;
         border: none !important;
         box-shadow: var(--shadow-neo-sm);
         transition: all 0.2s;
         text-transform: capitalize;
-        padding: 0.75rem 1.25rem;
-        font-weight: 600;
-        letter-spacing: 0.025em;
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        border-radius: 0.5rem !important;
       }
       .fullcalendar-custom .fc-button:hover {
         opacity: 0.9;
         transform: translateY(-1px);
-        box-shadow: var(--shadow-neo);
       }
       .fullcalendar-custom .fc-button-active {
-        background: var(--accent) !important;
-        opacity: 0.9;
+        background: var(--primary) !important;
       }
       .fullcalendar-custom .fc-toolbar {
         flex-wrap: wrap;
-        gap: 1.5rem;
-        margin-bottom: 2rem !important;
+        gap: 1rem;
+        margin-bottom: 1.5rem !important;
         padding: 1rem;
-        background: var(--background);
-        border-radius: 1rem;
-        box-shadow: var(--shadow-neo-sm);
+        background: transparent;
       }
       .fullcalendar-custom .fc-view {
         background: var(--background);
         border-radius: 1rem;
         overflow: hidden;
-        box-shadow: var(--shadow-neo);
-        backdrop-filter: blur(8px);
+        border: 1px solid var(--border);
       }
       .fullcalendar-custom .fc-scrollgrid {
         border: none !important;
@@ -56,28 +49,26 @@ export const CalendarStyles = () => (
       }
       .fullcalendar-custom .fc-col-header-cell {
         background: var(--accent);
-        padding: 1.25rem 0.75rem;
-        font-weight: 700;
+        padding: 1rem;
+        font-weight: 600;
         color: var(--foreground);
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        font-size: 0.875rem;
+        font-size: 0.75rem;
       }
       .fullcalendar-custom .fc-daygrid-day {
-        min-height: 100px !important;
-        max-height: 140px !important;
-        transition: all 0.2s;
+        min-height: 120px !important;
+        transition: background-color 0.2s;
       }
       .fullcalendar-custom .fc-daygrid-day:hover {
         background: var(--accent);
-        transform: scale(1.02);
-        z-index: 1;
       }
       .fullcalendar-custom .fc-daygrid-day-number {
-        font-size: 1rem;
-        padding: 0.75rem;
+        font-size: 0.875rem;
+        padding: 0.5rem;
         color: var(--foreground);
-        font-weight: 600;
+        font-weight: 500;
+        opacity: 0.8;
       }
       .fullcalendar-custom .fc-daygrid-day-events {
         margin: 0 !important;
@@ -85,52 +76,52 @@ export const CalendarStyles = () => (
       }
       .fullcalendar-custom .fc-event {
         margin: 2px 0 !important;
-        padding: 4px 8px !important;
-        font-size: 0.875rem !important;
-        border-radius: 6px !important;
+        padding: 0.375rem 0.75rem !important;
+        font-size: 0.8125rem !important;
+        border-radius: 0.375rem !important;
         cursor: pointer !important;
         border: none !important;
         transition: all 0.2s;
         font-weight: 500;
-        box-shadow: var(--shadow-neo-sm);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
       }
       .fullcalendar-custom .fc-event:hover {
-        transform: translateX(4px);
-        box-shadow: var(--shadow-neo);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
       }
       .fullcalendar-custom .fc-more-link {
-        font-size: 0.875rem !important;
-        padding: 4px 8px !important;
-        margin: 4px 0 !important;
+        font-size: 0.75rem !important;
+        padding: 0.25rem 0.5rem !important;
+        margin: 0.25rem 0 !important;
         background: var(--accent);
         color: var(--foreground);
-        border-radius: 6px;
+        border-radius: 0.375rem;
         transition: all 0.2s;
         font-weight: 500;
       }
       .fullcalendar-custom .fc-more-link:hover {
-        background: var(--muted);
+        background: var(--primary);
         text-decoration: none;
-        transform: translateX(2px);
       }
       .fullcalendar-custom .fc-day-today {
         background: var(--accent) !important;
       }
       .fullcalendar-custom .fc-popover {
         background: var(--background);
-        border: none;
-        box-shadow: var(--shadow-neo-xl);
-        border-radius: 1rem;
-        backdrop-filter: blur(16px);
+        border: 1px solid var(--border);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem;
+        backdrop-filter: blur(8px);
         padding: 0.5rem;
       }
       .fullcalendar-custom .fc-popover-header {
         background: var(--accent);
-        padding: 0.75rem;
+        padding: 0.5rem;
         color: var(--foreground);
         font-weight: 600;
-        border-radius: 0.5rem;
+        border-radius: 0.25rem;
         margin-bottom: 0.5rem;
+        font-size: 0.875rem;
       }
     `}
   </style>

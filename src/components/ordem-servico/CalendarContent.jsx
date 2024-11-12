@@ -20,7 +20,7 @@ export const CalendarContent = ({ ordensServico, filters, handleEventClick, equi
   );
 
   return (
-    <Card className="mt-4 p-6 shadow-neo bg-gradient-to-br from-background/80 to-muted/30 backdrop-blur-sm">
+    <Card className="mt-4 p-4 shadow-neo bg-gradient-to-br from-background/90 to-muted/20 backdrop-blur-sm border border-border/50">
       <div className="fullcalendar-custom">
         <CalendarStyles />
         <FullCalendar
@@ -35,8 +35,8 @@ export const CalendarContent = ({ ordensServico, filters, handleEventClick, equi
             right: "dayGridMonth,dayGridWeek",
           }}
           eventClick={handleEventClick}
-          dayMaxEvents={4}
-          className="bg-background rounded-xl"
+          dayMaxEvents={3}
+          className="bg-transparent rounded-xl"
         />
       </div>
     </Card>
