@@ -13,6 +13,13 @@ import { useState, useEffect } from "react";
 const BalanceamentoDialog = ({ open, onOpenChange }) => {
   const [ordensOtimizadas, setOrdensOtimizadas] = useState([]);
 
+  const getTecnicoNome = (tecnicoId) => {
+    const tecnico = userService.getAll().find(
+      (u) => u.id === tecnicoId && u.role === "technician"
+    );
+    return tecnico ? tecnico.name : "N/A";
+  };
+
   useEffect(() => {
     if (open) {
       const ordens = ordemServicoService.getAll();
@@ -69,13 +76,6 @@ const BalanceamentoDialog = ({ open, onOpenChange }) => {
     end: ordem.dataFim,
     backgroundColor: ordem.backgroundColor,
   }));
-
-  const getTecnicoNome = (tecnicoId) => {
-    const tecnico = userService.getAll().find(
-      (u) => u.id === tecnicoId && u.role === "technician"
-    );
-    return tecnico ? tecnico.name : "N/A";
-  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
