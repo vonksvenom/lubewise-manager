@@ -65,7 +65,7 @@ const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) =>
     };
   };
 
-  const handleTitleClick = (ordem) => {
+  const handleRowClick = (ordem) => {
     setSelectedOrdem(ordem);
     setDialogOpen(true);
   };
@@ -91,15 +91,17 @@ const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) =>
             {ordensServico.map((ordem) => {
               const statusDisplay = getStatusDisplay(ordem);
               return (
-                <TableRow key={ordem.id}>
-                  <TableCell>
-                    <button
-                      onClick={() => handleTitleClick(ordem)}
-                      className="font-medium text-left hover:underline focus:outline-none"
-                    >
-                      {ordem.titulo}
-                    </button>
-                  </TableCell>
+                <TableRow 
+                  key={ordem.id}
+                  className="cursor-pointer hover:bg-gray-50"
+                  onClick={(e) => {
+                    // Previne o clique na linha quando clicar nos botões de ação
+                    if (!e.target.closest('button')) {
+                      handleRowClick(ordem);
+                    }
+                  }}
+                >
+                  <TableCell>{ordem.titulo}</TableCell>
                   <TableCell>
                     <span
                       className={`px-2 py-1 rounded-full text-sm ${
@@ -146,14 +148,20 @@ const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) =>
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => onEdit(ordem)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onEdit(ordem);
+                        }}
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => onDelete(ordem.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDelete(ordem.id);
+                        }}
                       >
                         <Trash2 className="h-4 w-4 text-red-500" />
                       </Button>
