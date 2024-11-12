@@ -1,6 +1,7 @@
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import CIPField from "./CIPField";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 const OrdemServicoBasicInfo = ({ formData, handleChange }) => {
   return (
@@ -13,7 +14,7 @@ const OrdemServicoBasicInfo = ({ formData, handleChange }) => {
           id="titulo"
           value={formData.titulo}
           onChange={(e) => handleChange("titulo", e.target.value)}
-          required
+          placeholder="Digite o título da ordem de serviço"
         />
       </div>
 
@@ -25,14 +26,20 @@ const OrdemServicoBasicInfo = ({ formData, handleChange }) => {
           id="descricao"
           value={formData.descricao}
           onChange={(e) => handleChange("descricao", e.target.value)}
-          required
+          placeholder="Digite a descrição da ordem de serviço"
         />
       </div>
 
-      <CIPField
-        value={formData.cip}
-        onChange={(e) => handleChange("cip", e.target.value)}
-      />
+      <div className="flex items-center space-x-2">
+        <Checkbox
+          id="dataLocked"
+          checked={formData.dataLocked}
+          onCheckedChange={(checked) => handleChange("dataLocked", checked)}
+        />
+        <Label htmlFor="dataLocked">
+          Bloquear alteração de data no balanceamento automático
+        </Label>
+      </div>
     </div>
   );
 };

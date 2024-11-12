@@ -8,14 +8,16 @@ import {
 import { Button } from "@/components/ui/button";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin, { Draggable } from "@fullcalendar/interaction";
 import { Card } from "@/components/ui/card";
 import { userService, ordemServicoService } from "@/services/dataService";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 
 const BalanceamentoDialog = ({ open, onOpenChange }) => {
   const [ordensOtimizadas, setOrdensOtimizadas] = useState([]);
   const [isOptimized, setIsOptimized] = useState(false);
+  const calendarRef = useRef(null);
 
   const getTecnicoNome = (tecnicoId) => {
     const tecnico = userService.getAll().find(
@@ -32,10 +34,34 @@ const BalanceamentoDialog = ({ open, onOpenChange }) => {
     }
   }, [open]);
 
+  const handleEventDrop = (info) => {
+    const { event } = info;
+    const ordem = ordensOtimizadas.find(o => o.id === event.id);
+    
+    if (ordem?.dataLocked) {
+      toast.error("Esta ordem tem a data bloqueada e não pode ser movida");
+      info.revert();
+      return;
+    }
+
+    const updatedOrdens = ordensOtimizadas.map(ordem => {
+      if (ordem.id === event.id) {
+        return {
+          ...ordem,
+          dataInicio: event.start.toISOString(),
+          dataFim: event.end.toISOString()
+        };
+      }
+      return ordem;
+    });
+
+    setOrdensOtimizadas(updatedOrdens);
+  };
+
   const balancearOrdens = (ordens, tecnicos) => {
-    // Filtrar apenas ordens pendentes ou em andamento
+    // Filtrar apenas ordens pendentes ou em andamento e não bloqueadas
     const ordensAtivas = ordens.filter(o => 
-      o.status === "Pendente" || o.status === "Em Andamento"
+      (o.status === "Pendente" || o.status === "Em Andamento") && !o.dataLocked
     );
 
     // Ordenar por prioridade e data
@@ -80,7 +106,6 @@ const BalanceamentoDialog = ({ open, onOpenChange }) => {
 
   const handleConfirm = () => {
     try {
-      // Atualizar cada ordem de serviço no banco de dados
       ordensOtimizadas.forEach(ordem => {
         ordemServicoService.update(ordem.id, ordem);
       });
@@ -99,6 +124,7 @@ const BalanceamentoDialog = ({ open, onOpenChange }) => {
     start: ordem.dataInicio,
     end: ordem.dataFim,
     backgroundColor: ordem.backgroundColor,
+    editable: !ordem.dataLocked,
   }));
 
   return (
@@ -109,11 +135,15 @@ const BalanceamentoDialog = ({ open, onOpenChange }) => {
         </DialogHeader>
         <Card className="p-6">
           <FullCalendar
-            plugins={[dayGridPlugin]}
+            ref={calendarRef}
+            plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
             events={events}
             height="auto"
             locale="pt-br"
+            editable={true}
+            droppable={true}
+            eventDrop={handleEventDrop}
             headerToolbar={{
               left: "prev,next today",
               center: "title",
