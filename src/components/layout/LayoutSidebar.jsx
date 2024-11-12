@@ -19,7 +19,7 @@ const LayoutSidebar = ({
     <div className="flex flex-col h-full">
       <div className="p-3 flex justify-center items-center">
         <img
-          src={logoUrl}
+          src="/sotreq-industrial-logo.png"
           alt="Company Logo"
           className={`${sidebarCollapsed ? 'h-12 w-12 object-contain' : 'h-14'} transition-all duration-200`}
           onError={(e) => {
