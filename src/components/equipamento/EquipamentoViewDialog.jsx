@@ -94,13 +94,6 @@ const EquipamentoViewDialog = ({ equipamento, open, onOpenChange }) => {
                 </div>
               </div>
 
-              {equipamento.descricao && (
-                <div className="space-y-2">
-                  <h3 className="font-semibold">Descrição</h3>
-                  <p className="text-sm text-gray-600">{equipamento.descricao}</p>
-                </div>
-              )}
-
               <div className="space-y-2">
                 <h3 className="font-semibold">Manutenção</h3>
                 <div className="grid grid-cols-2 gap-2 text-sm">
