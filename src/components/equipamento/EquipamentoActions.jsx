@@ -7,21 +7,30 @@ const EquipamentoActions = ({ equipamento, onView, onEdit, onDelete }) => (
     <Button
       variant="ghost"
       size="icon"
-      onClick={(e) => onView(equipamento)}
+      onClick={(e) => {
+        e.stopPropagation();
+        onView(equipamento);
+      }}
     >
       <Eye className="h-4 w-4" />
     </Button>
     <Button
       variant="ghost"
       size="icon"
-      onClick={(e) => onEdit(equipamento, e)}
+      onClick={(e) => {
+        e.stopPropagation();
+        onEdit(equipamento, e);
+      }}
     >
       <Edit className="h-4 w-4" />
     </Button>
     <Button
       variant="ghost"
       size="icon"
-      onClick={(e) => onDelete(equipamento.id, e)}
+      onClick={(e) => {
+        e.stopPropagation();
+        onDelete(equipamento.id, e);
+      }}
     >
       <Trash2 className="h-4 w-4 text-red-500" />
     </Button>
