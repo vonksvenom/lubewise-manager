@@ -31,14 +31,14 @@ const LayoutControls = ({
           <Globe className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="rounded-xl shadow-neo-xl backdrop-blur-sm bg-background/95">
-        <DropdownMenuItem onClick={() => i18n.changeLanguage('pt')}>
+      <DropdownMenuContent className="rounded-xl shadow-neo-xl backdrop-blur-sm bg-background/95 border border-border">
+        <DropdownMenuItem onClick={() => i18n.changeLanguage('pt')} className="hover:bg-accent/80">
           Português
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => i18n.changeLanguage('en')}>
+        <DropdownMenuItem onClick={() => i18n.changeLanguage('en')} className="hover:bg-accent/80">
           English
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => i18n.changeLanguage('es')}>
+        <DropdownMenuItem onClick={() => i18n.changeLanguage('es')} className="hover:bg-accent/80">
           Español
         </DropdownMenuItem>
       </DropdownMenuContent>

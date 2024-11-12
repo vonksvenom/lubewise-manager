@@ -24,17 +24,17 @@ const ThemeSelector = ({ isAdmin, isPowerUser, onThemeChange, currentTheme }) =>
         <Button
           variant="outline"
           size="icon"
-          className="rounded-xl shadow-lg transform transition hover:scale-105 hover:shadow-xl bg-gradient-to-br from-muted to-accent/10"
+          className="rounded-xl shadow-neo-xl transform transition hover:scale-105 hover:shadow-neo-3d bg-gradient-to-br from-muted to-accent/10"
         >
           <Palette className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="rounded-xl shadow-lg backdrop-blur-sm bg-background/95">
+      <DropdownMenuContent className="rounded-xl shadow-neo-xl backdrop-blur-sm bg-background/95 border border-border">
         {Object.entries(themes).map(([key, theme]) => (
           <DropdownMenuItem 
             key={key} 
             onClick={() => handleThemeChange(key)}
-            className={currentTheme === key ? "bg-accent" : ""}
+            className={`hover:bg-accent/80 ${currentTheme === key ? "bg-accent" : ""}`}
           >
             <div className="flex items-center gap-2">
               <div 
