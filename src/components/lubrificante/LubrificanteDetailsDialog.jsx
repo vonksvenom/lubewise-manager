@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { FileDown } from "lucide-react";
+import LubrificanteCompatibility from "./LubrificanteCompatibility";
 
 const LubrificanteDetailsDialog = ({ isOpen, onOpenChange, lubrificante }) => {
   const handleDownloadFISPQ = () => {
@@ -70,6 +71,10 @@ const LubrificanteDetailsDialog = ({ isOpen, onOpenChange, lubrificante }) => {
                 Baixar FISPQ
               </Button>
             </div>
+          )}
+
+          {lubrificante && (
+            <LubrificanteCompatibility codigoLIS={lubrificante.codigoLIS} />
           )}
         </div>
       </DialogContent>
