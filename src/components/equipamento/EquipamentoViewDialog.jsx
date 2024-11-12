@@ -5,6 +5,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import QRCodeDisplay from "../common/QRCodeDisplay";
+import { format } from "date-fns";
 
 const EquipamentoViewDialog = ({ equipamento, open, onOpenChange }) => {
   if (!equipamento) return null;
@@ -30,20 +31,25 @@ const EquipamentoViewDialog = ({ equipamento, open, onOpenChange }) => {
               <p><span className="font-medium">TAG:</span> {equipamento.tag}</p>
               <p><span className="font-medium">Status:</span> {equipamento.status}</p>
               <p><span className="font-medium">Área:</span> {equipamento.area}</p>
+              <p><span className="font-medium">Responsável:</span> {equipamento.responsavel}</p>
               <p><span className="font-medium">Modelo:</span> {equipamento.modelo}</p>
               <p><span className="font-medium">Fabricante:</span> {equipamento.fabricante}</p>
+              <p><span className="font-medium">Número de Série:</span> {equipamento.numeroSerie}</p>
+              {equipamento.dataFabricacao && (
+                <p><span className="font-medium">Data de Fabricação:</span> {format(new Date(equipamento.dataFabricacao), 'dd/MM/yyyy')}</p>
+              )}
             </div>
           </div>
           
           <div className="space-y-4">
             <div className="flex justify-center">
-              <QRCodeDisplay data={equipamento} />
+              <QRCodeDisplay data={equipamento} showDownload={true} />
             </div>
             
             <div className="space-y-2">
               <h3 className="font-semibold">Manutenção</h3>
-              <p><span className="font-medium">Última Manutenção:</span> {equipamento.ultimaManutencao}</p>
-              <p><span className="font-medium">Próxima Manutenção:</span> {equipamento.proximaManutencao}</p>
+              <p><span className="font-medium">Última Manutenção:</span> {equipamento.ultimaManutencao || 'Não registrada'}</p>
+              <p><span className="font-medium">Próxima Manutenção:</span> {equipamento.proximaManutencao || 'Não agendada'}</p>
             </div>
 
             {equipamento.descricao && (
@@ -68,7 +74,7 @@ const EquipamentoViewDialog = ({ equipamento, open, onOpenChange }) => {
                       {sub.tipo && <p className="text-sm text-gray-600">Tipo: {sub.tipo}</p>}
                     </div>
                     <div className="flex justify-end">
-                      <QRCodeDisplay data={sub} />
+                      <QRCodeDisplay data={sub} showDownload={true} />
                     </div>
                   </div>
                 </div>
