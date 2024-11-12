@@ -29,8 +29,8 @@ const EquipamentoForm = ({ initialData, onSave }) => {
       fabricante: "",
       numeroSerie: "",
       dataFabricacao: "",
-      subequipamentos: [],
-      manual: null, // New field for manual
+      subequipamentos: [], // Ensure this is always initialized as an empty array
+      manual: null,
     }
   );
 
@@ -67,14 +67,14 @@ const EquipamentoForm = ({ initialData, onSave }) => {
   const handleSubequipamentoAdd = (subequipamento) => {
     setFormData((prev) => ({
       ...prev,
-      subequipamentos: [...prev.subequipamentos, subequipamento],
+      subequipamentos: [...(prev.subequipamentos || []), subequipamento],
     }));
   };
 
   const handleSubequipamentoRemove = (index) => {
     setFormData((prev) => ({
       ...prev,
-      subequipamentos: prev.subequipamentos.filter((_, i) => i !== index),
+      subequipamentos: (prev.subequipamentos || []).filter((_, i) => i !== index),
     }));
   };
 
@@ -166,7 +166,7 @@ const EquipamentoForm = ({ initialData, onSave }) => {
       </div>
 
       <EquipamentoSubequipamentos
-        subequipamentos={formData.subequipamentos}
+        subequipamentos={formData.subequipamentos || []}
         onAdd={handleSubequipamentoAdd}
         onRemove={handleSubequipamentoRemove}
       />
