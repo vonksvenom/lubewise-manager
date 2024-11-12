@@ -38,7 +38,7 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo" }) => {
   }, []);
 
   const handleDelete = (id, e) => {
-    e.stopPropagation(); // Prevent row click when deleting
+    e.stopPropagation();
     if (window.confirm("Tem certeza que deseja excluir este item?")) {
       inventarioService.delete(id);
       setItems(inventarioService.getAll());
@@ -49,10 +49,16 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo" }) => {
     }
   };
 
-  const handleEdit = (item, e) => {
+  const handleView = (item, e) => {
     if (e) {
-      e.stopPropagation(); // Prevent row click when clicking edit button
+      e.stopPropagation();
     }
+    setSelectedItem(item);
+    setDialogOpen(true);
+  };
+
+  const handleEdit = (item, e) => {
+    e.stopPropagation();
     setSelectedItem(item);
     setDialogOpen(true);
   };
@@ -112,7 +118,7 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo" }) => {
             <TableRow 
               key={item.id}
               className="cursor-pointer hover:bg-muted/50"
-              onClick={() => handleEdit(item)}
+              onClick={(e) => handleView(item, e)}
             >
               <TableCell>{item.name}</TableCell>
               <TableCell>{viewMode === "tipo" ? item.type : item.descricaoComercial}</TableCell>

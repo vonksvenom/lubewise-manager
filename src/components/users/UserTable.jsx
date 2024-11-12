@@ -11,15 +11,21 @@ import { Edit, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 
 const UserTable = ({ users, onEdit, onDelete, canEdit }) => {
-  const handleEdit = (user, e) => {
+  const handleView = (user, e) => {
     if (e) {
-      e.stopPropagation(); // Prevent row click when clicking edit button
+      e.stopPropagation();
     }
+    // Aqui apenas visualizamos o usuário
+    onEdit(user); // Reusando o mesmo dialog mas em modo visualização
+  };
+
+  const handleEdit = (user, e) => {
+    e.stopPropagation();
     onEdit(user);
   };
 
   const handleDelete = (id, e) => {
-    e.stopPropagation(); // Prevent row click when deleting
+    e.stopPropagation();
     onDelete(id);
   };
 
@@ -41,7 +47,7 @@ const UserTable = ({ users, onEdit, onDelete, canEdit }) => {
           <TableRow 
             key={user.id}
             className="cursor-pointer hover:bg-muted/50"
-            onClick={() => handleEdit(user)}
+            onClick={(e) => handleView(user, e)}
           >
             <TableCell>{user.name}</TableCell>
             <TableCell>{user.email}</TableCell>

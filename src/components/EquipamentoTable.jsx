@@ -64,6 +64,16 @@ const EquipamentoTable = ({ equipamentos, onEdit, onDelete }) => {
     setViewDialogOpen(true);
   };
 
+  const handleEdit = (equipamento, e) => {
+    e.stopPropagation();
+    onEdit(equipamento);
+  };
+
+  const handleDelete = (id, e) => {
+    e.stopPropagation();
+    onDelete(id);
+  };
+
   return (
     <>
       <div className="rounded-md border">
@@ -85,13 +95,7 @@ const EquipamentoTable = ({ equipamentos, onEdit, onDelete }) => {
                 <TableRow 
                   key={equip.id}
                   className="cursor-pointer hover:bg-muted/50"
-                  onClick={(e) => {
-                    // Prevent row click when clicking expand button
-                    if (e.target.closest('button')?.classList.contains('expand-button')) {
-                      return;
-                    }
-                    handleView(equip);
-                  }}
+                  onClick={() => handleView(equip)}
                 >
                   <TableCell>
                     {equip.imagem && (
@@ -147,30 +151,21 @@ const EquipamentoTable = ({ equipamentos, onEdit, onDelete }) => {
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleView(equip);
-                      }}
+                      onClick={(e) => handleView(equip)}
                     >
                       <Eye className="h-4 w-4" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onEdit(equip);
-                      }}
+                      onClick={(e) => handleEdit(equip, e)}
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onDelete(equip.id);
-                      }}
+                      onClick={(e) => handleDelete(equip.id, e)}
                     >
                       <Trash2 className="h-4 w-4 text-red-500" />
                     </Button>
