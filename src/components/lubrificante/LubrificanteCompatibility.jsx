@@ -1,8 +1,13 @@
 import { Card } from "@/components/ui/card";
 import { lubrificanteService } from "@/services/lubrificanteService";
+import { useQuery } from "@tanstack/react-query";
 
 const LubrificanteCompatibility = ({ codigoLIS }) => {
-  const lubrificantes = lubrificanteService.getAll();
+  const { data: lubrificantes = [] } = useQuery({
+    queryKey: ['lubrificantes'],
+    queryFn: lubrificanteService.getAll,
+  });
+
   const compatibleLubricants = lubrificantes.filter(
     lub => lub.codigoLIS === codigoLIS
   );
