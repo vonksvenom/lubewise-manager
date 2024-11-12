@@ -14,6 +14,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import OrdemServicoForm from "@/components/OrdemServicoForm";
 import OrdemServicoTable from "@/components/OrdemServicoTable";
+import OrdemServicoFilters from "@/components/ordem-servico/OrdemServicoFilters";
 import { ordemServicoService, equipamentoService } from "@/services/dataService";
 import BulkImportDialog from "@/components/common/BulkImportDialog";
 import BalanceamentoDialog from "@/components/ordem-servico/BalanceamentoDialog";
@@ -25,6 +26,12 @@ const OrdensServico = () => {
   const [equipamentos, setEquipamentos] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [balanceamentoOpen, setBalanceamentoOpen] = useState(false);
+  const [filters, setFilters] = useState({
+    tipo: "Todos",
+    tecnicoId: "Todos",
+    status: "Todos",
+    prioridade: "Todos"
+  });
   const { t } = useTranslation();
   const { toast } = useToast();
 
@@ -49,6 +56,13 @@ const OrdensServico = () => {
     
     loadData();
   }, [toast]);
+
+  const handleFilterChange = (filterName, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterName]: value
+    }));
+  };
 
   const handleDelete = (id) => {
     ordemServicoService.delete(id);
@@ -103,11 +117,19 @@ const OrdensServico = () => {
     }
   ];
 
-  const filteredOrdensServico = ordensServico.filter(
-    (ordem) =>
-      ordem.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      ordem.descricao.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filterOrdens = (ordem) => {
+    const matchesSearch = ordem.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         ordem.descricao.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesFilters = (filters.tipo === "Todos" || ordem.tipo === filters.tipo) &&
+                          (filters.tecnicoId === "Todos" || ordem.tecnicoId === filters.tecnicoId) &&
+                          (filters.status === "Todos" || ordem.status === filters.status) &&
+                          (filters.prioridade === "Todos" || ordem.prioridade === filters.prioridade);
+    
+    return matchesSearch && matchesFilters;
+  };
+
+  const filteredOrdensServico = ordensServico.filter(filterOrdens);
 
   return (
     <div className="space-y-6">
@@ -156,16 +178,23 @@ const OrdensServico = () => {
       </div>
 
       <Card className="p-6">
-        <div className="flex gap-4 mb-6">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <Input
-              placeholder="Buscar ordens de serviço..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
-            />
+        <div className="space-y-4">
+          <div className="flex gap-4">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Buscar ordens de serviço..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+            </div>
           </div>
+
+          <OrdemServicoFilters 
+            filters={filters}
+            onFilterChange={handleFilterChange}
+          />
         </div>
 
         <OrdemServicoTable

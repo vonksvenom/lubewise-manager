@@ -7,6 +7,7 @@ import { ordemServicoService, equipamentoService } from "@/services/dataService"
 import { initialEquipamentos } from "@/services/data/equipmentData";
 import OrdemServicoViewDialog from "@/components/ordem-servico/OrdemServicoViewDialog";
 import BalanceamentoDialog from "@/components/ordem-servico/BalanceamentoDialog";
+import OrdemServicoFilters from "@/components/ordem-servico/OrdemServicoFilters";
 import { Scale } from "lucide-react";
 import { addMonths, addYears, addDays } from "date-fns";
 
@@ -16,6 +17,12 @@ const Calendario = () => {
   const [selectedOrdem, setSelectedOrdem] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [balanceamentoOpen, setBalanceamentoOpen] = useState(false);
+  const [filters, setFilters] = useState({
+    tipo: "Todos",
+    tecnicoId: "Todos",
+    status: "Todos",
+    prioridade: "Todos"
+  });
 
   useEffect(() => {
     const loadData = async () => {
@@ -32,6 +39,13 @@ const Calendario = () => {
     loadData();
   }, []);
 
+  const handleFilterChange = (filterName, value) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterName]: value
+    }));
+  };
+
   const getEquipamentoNome = (equipamentoId) => {
     if (!Array.isArray(equipamentos)) return "N/A";
     const equipamento = equipamentos.find(
@@ -44,6 +58,14 @@ const Calendario = () => {
     const ordem = ordensServico.find(os => os.id === info.event.id);
     setSelectedOrdem(ordem);
     setDialogOpen(true);
+  };
+
+  const filterOrdens = (ordem) => {
+    if (filters.tipo !== "Todos" && ordem.tipo !== filters.tipo) return false;
+    if (filters.tecnicoId !== "Todos" && ordem.tecnicoId !== filters.tecnicoId) return false;
+    if (filters.status !== "Todos" && ordem.status !== filters.status) return false;
+    if (filters.prioridade !== "Todos" && ordem.prioridade !== filters.prioridade) return false;
+    return true;
   };
 
   const generateRecurringEvents = (ordem) => {
@@ -138,7 +160,8 @@ const Calendario = () => {
     return events;
   };
 
-  const events = ordensServico.flatMap(generateRecurringEvents);
+  const filteredOrdens = ordensServico.filter(filterOrdens);
+  const events = filteredOrdens.flatMap(generateRecurringEvents);
 
   return (
     <div className="space-y-6">
@@ -153,7 +176,13 @@ const Calendario = () => {
           Balanceamento Automático
         </Button>
       </div>
+
       <Card className="p-6">
+        <OrdemServicoFilters 
+          filters={filters}
+          onFilterChange={handleFilterChange}
+        />
+        
         <FullCalendar
           plugins={[dayGridPlugin]}
           initialView="dayGridMonth"
@@ -168,6 +197,7 @@ const Calendario = () => {
           eventClick={handleEventClick}
         />
       </Card>
+
       <OrdemServicoViewDialog
         ordem={selectedOrdem}
         open={dialogOpen}
