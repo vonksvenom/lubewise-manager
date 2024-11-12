@@ -1,16 +1,12 @@
 import { initialLubrificantes } from './lubrificanteData';
 
-const STORAGE_KEY = 'lubrificantes';
+let lubrificantes = [...initialLubrificantes];
 
 export const getLubrificantes = () => {
-  const data = localStorage.getItem(STORAGE_KEY);
-  if (!data) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(initialLubrificantes));
-    return initialLubrificantes;
-  }
-  return JSON.parse(data);
+  return lubrificantes;
 };
 
-export const saveLubrificantes = (lubrificantes) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(lubrificantes));
+export const saveLubrificantes = (newLubrificantes) => {
+  lubrificantes = [...newLubrificantes];
+  return lubrificantes;
 };
