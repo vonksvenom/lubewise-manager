@@ -16,7 +16,17 @@ const QRCodeDisplay = ({ data, showDownload = false }) => {
   const handleDownload = () => {
     const element = document.getElementById(`qr-${data.id}`);
     if (element) {
-      toPng(element)
+      const scale = 4; // Aumenta a escala para melhor qualidade
+      toPng(element, {
+        quality: 1.0, // Máxima qualidade
+        pixelRatio: scale,
+        width: 512, // Tamanho base multiplicado pela escala
+        height: 512,
+        style: {
+          transform: `scale(${scale})`,
+          transformOrigin: 'top left'
+        }
+      })
         .then((dataUrl) => {
           const link = document.createElement("a");
           link.download = `qr-${data.nome || "code"}.png`;
@@ -24,7 +34,7 @@ const QRCodeDisplay = ({ data, showDownload = false }) => {
           link.click();
         })
         .catch((err) => {
-          console.error("Error generating QR code image:", err);
+          console.error("Erro ao gerar imagem do QR code:", err);
         });
     }
   };
@@ -37,8 +47,8 @@ const QRCodeDisplay = ({ data, showDownload = false }) => {
       >
         <QRCodeSVG
           value={JSON.stringify(qrData)}
-          size={128}
-          level="H"
+          size={256} // Aumentado o tamanho base do QR code
+          level="H" // Maior nível de correção de erros
           includeMargin={true}
         />
       </div>
