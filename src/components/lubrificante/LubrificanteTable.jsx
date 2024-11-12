@@ -12,11 +12,13 @@ import { useToast } from "@/components/ui/use-toast";
 import { lubrificanteService } from "@/services/lubrificanteService";
 import { useState, useEffect } from "react";
 import LubrificanteEditDialog from "./LubrificanteEditDialog";
+import LubrificanteDetailsDialog from "./LubrificanteDetailsDialog";
 
 const LubrificanteTable = ({ searchTerm }) => {
   const [items, setItems] = useState([]);
   const [selectedLubrificante, setSelectedLubrificante] = useState(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -27,7 +29,8 @@ const LubrificanteTable = ({ searchTerm }) => {
     loadData();
   }, []);
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id, e) => {
+    e.stopPropagation();
     if (window.confirm("Tem certeza que deseja excluir este lubrificante?")) {
       try {
         await lubrificanteService.delete(id);
@@ -47,9 +50,15 @@ const LubrificanteTable = ({ searchTerm }) => {
     }
   };
 
-  const handleEdit = (lubrificante) => {
+  const handleEdit = (lubrificante, e) => {
+    e.stopPropagation();
     setSelectedLubrificante(lubrificante);
     setEditDialogOpen(true);
+  };
+
+  const handleRowClick = (lubrificante) => {
+    setSelectedLubrificante(lubrificante);
+    setDetailsDialogOpen(true);
   };
 
   const handleSave = async (data) => {
@@ -95,7 +104,11 @@ const LubrificanteTable = ({ searchTerm }) => {
           </TableHeader>
           <TableBody>
             {filteredItems.map((item) => (
-              <TableRow key={item.id}>
+              <TableRow 
+                key={item.id}
+                onClick={() => handleRowClick(item)}
+                className="cursor-pointer hover:bg-accent/20"
+              >
                 <TableCell>{item.nomeComercial}</TableCell>
                 <TableCell>{item.codigoLIS}</TableCell>
                 <TableCell>{item.fornecedor}</TableCell>
@@ -106,14 +119,14 @@ const LubrificanteTable = ({ searchTerm }) => {
                     <Button
                       variant="outline"
                       size="icon"
-                      onClick={() => handleEdit(item)}
+                      onClick={(e) => handleEdit(item, e)}
                     >
                       <Pencil className="h-4 w-4" />
                     </Button>
                     <Button
                       variant="outline"
                       size="icon"
-                      onClick={() => handleDelete(item.id)}
+                      onClick={(e) => handleDelete(item.id, e)}
                       className="text-red-500 hover:text-red-700"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -131,6 +144,12 @@ const LubrificanteTable = ({ searchTerm }) => {
         onOpenChange={setEditDialogOpen}
         lubrificante={selectedLubrificante}
         onSave={handleSave}
+      />
+
+      <LubrificanteDetailsDialog
+        isOpen={detailsDialogOpen}
+        onOpenChange={setDetailsDialogOpen}
+        lubrificante={selectedLubrificante}
       />
     </>
   );
