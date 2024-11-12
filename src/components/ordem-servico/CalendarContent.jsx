@@ -15,12 +15,30 @@ export const CalendarContent = ({ ordensServico, filters, handleEventClick, equi
   };
 
   const filteredOrdensServico = ordensServico.filter(ordem => filterOrdens(ordem, filters));
-  const events = filteredOrdensServico.flatMap(ordem => 
-    generateRecurringEvents(ordem, getEquipamentoNome)
-  );
+  
+  const events = filteredOrdensServico.map(ordem => ({
+    id: ordem.id,
+    title: `${ordem.tipo} - ${getEquipamentoNome(ordem.equipamentoId)}`,
+    start: ordem.dataExecucao || ordem.dataInicio,
+    end: ordem.dataFim,
+    backgroundColor: ordem.status === "Concluída" 
+      ? "#22c55e"
+      : ordem.status === "Em Andamento"
+      ? "#3b82f6"
+      : ordem.status === "Cancelada"
+      ? "#ef4444"
+      : "#eab308",
+    borderColor: "transparent",
+    textColor: "#fff",
+    extendedProps: {
+      status: ordem.status,
+      tipo: ordem.tipo,
+      equipamento: getEquipamentoNome(ordem.equipamentoId)
+    }
+  }));
 
   return (
-    <Card className="mt-4 p-4 shadow-neo bg-gradient-to-br from-background/90 to-muted/20 backdrop-blur-sm border border-border/50">
+    <Card className="mt-4 overflow-hidden border-border/50">
       <div className="fullcalendar-custom">
         <CalendarStyles />
         <FullCalendar
@@ -36,9 +54,34 @@ export const CalendarContent = ({ ordensServico, filters, handleEventClick, equi
           }}
           eventClick={handleEventClick}
           dayMaxEvents={3}
-          className="bg-transparent rounded-xl"
+          eventContent={renderEventContent}
+          views={{
+            dayGridMonth: {
+              dayMaxEvents: 3,
+              moreLinkText: info => `+${info.num} mais`,
+              moreLinkClick: "popover"
+            },
+            dayGridWeek: {
+              dayMaxEvents: false
+            }
+          }}
         />
       </div>
     </Card>
+  );
+};
+
+const renderEventContent = (eventInfo) => {
+  const { tipo, status } = eventInfo.event.extendedProps;
+  
+  return (
+    <div className="flex flex-col gap-0.5 w-full">
+      <div className="font-medium truncate">
+        {eventInfo.event.title}
+      </div>
+      <div className="flex items-center gap-1 text-[10px] opacity-90">
+        <span className="font-medium">{status}</span>
+      </div>
+    </div>
   );
 };
