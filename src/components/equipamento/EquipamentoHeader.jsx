@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Plus, FileDown } from "lucide-react";
+import { Plus } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -36,19 +36,12 @@ const EquipamentoHeader = ({
     <div className="flex justify-between items-center">
       <h1 className="text-3xl font-bold">{title}</h1>
       <div className="flex gap-2">
-        <Button
-          variant="outline"
-          className="gap-2"
-          onClick={onExport}
-        >
-          <FileDown className="h-4 w-4" />
-          Exportar
-        </Button>
         <BulkImportDialog
           title="Importar Equipamentos"
           onImport={() => {}}
           templateData={templateData}
           templateFilename="template_equipamentos.xlsx"
+          onExport={onExport}
         />
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
