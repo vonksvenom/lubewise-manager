@@ -37,27 +37,23 @@ const LayoutSidebar = ({
     }
   };
 
-  return (
-    <div
-      className={`fixed inset-y-0 left-0 z-40 ${
-        sidebarCollapsed ? 'w-16' : 'w-64'
-      } bg-gradient-to-br from-muted to-accent/10 backdrop-blur-sm shadow-neo-xl transform transition-all duration-200 ease-in-out lg:translate-x-0 ${
-        sidebarOpen ? "translate-x-0" : "-translate-x-full"
-      } rounded-r-2xl`}
-    >
-      <div className="flex flex-col h-full">
+  const LogoComponent = () => {
+    const imgProps = {
+      src: logoUrl,
+      alt: "Company Logo",
+      className: `${sidebarCollapsed ? 'h-12 w-12 object-contain' : 'h-14'} transition-all duration-200`,
+      onError: (e) => {
+        e.target.src = "/placeholder.svg";
+        toast.error("Erro ao carregar o logo");
+      }
+    };
+
+    if (isAdmin || isPowerUser) {
+      return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <div className="p-3 flex justify-center items-center cursor-pointer hover:opacity-80 transition-opacity">
-              <img
-                src={logoUrl}
-                alt="Company Logo"
-                className={`${sidebarCollapsed ? 'h-12 w-12 object-contain' : 'h-14'} transition-all duration-200`}
-                onError={(e) => {
-                  e.target.src = "/placeholder.svg";
-                  toast.error("Erro ao carregar o logo");
-                }}
-              />
+              <img {...imgProps} />
             </div>
           </DialogTrigger>
           <DialogContent>
@@ -77,6 +73,26 @@ const LayoutSidebar = ({
             </DialogFooter>
           </DialogContent>
         </Dialog>
+      );
+    }
+
+    return (
+      <div className="p-3 flex justify-center items-center">
+        <img {...imgProps} />
+      </div>
+    );
+  };
+
+  return (
+    <div
+      className={`fixed inset-y-0 left-0 z-40 ${
+        sidebarCollapsed ? 'w-16' : 'w-64'
+      } bg-gradient-to-br from-muted to-accent/10 backdrop-blur-sm shadow-neo-xl transform transition-all duration-200 ease-in-out lg:translate-x-0 ${
+        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      } rounded-r-2xl`}
+    >
+      <div className="flex flex-col h-full">
+        <LogoComponent />
         
         <SidebarNav 
           navItems={navItems} 
