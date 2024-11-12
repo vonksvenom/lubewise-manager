@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import SidebarNav from "./SidebarNav";
+import { toast } from "sonner";
 
 const LayoutSidebar = ({ 
   sidebarOpen, 
