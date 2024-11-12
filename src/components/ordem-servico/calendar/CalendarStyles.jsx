@@ -42,7 +42,7 @@ export const CalendarStyles = () => (
         border: none !important;
       }
       .fullcalendar-custom .fc-scrollgrid td {
-        border: 1px solid var(--border) !important;
+        border: 1px solid rgba(var(--border-rgb), 0.15) !important;
       }
       .fullcalendar-custom .fc-col-header-cell {
         background: var(--accent);
@@ -51,9 +51,14 @@ export const CalendarStyles = () => (
         font-size: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+        border-bottom: 1px solid rgba(var(--border-rgb), 0.2) !important;
       }
       .fullcalendar-custom .fc-daygrid-day {
         min-height: 100px !important;
+      }
+      .fullcalendar-custom .fc-daygrid-day-frame {
+        border: 1px solid rgba(var(--border-rgb), 0.1) !important;
+        background: transparent;
       }
       .fullcalendar-custom .fc-daygrid-day-number {
         font-size: 0.875rem;
