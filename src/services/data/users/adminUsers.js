@@ -1,15 +1,18 @@
 export const initialAdminUsers = [
   {
     id: "1",
-    name: "Administrador",
+    name: "Carlos Eduardo Silva",
     email: "admin@admin.com",
     password: "admin123",
     role: "admin",
-    department: "Diretoria",
+    department: "TI",
     isAdmin: true,
     systemOwner: true,
     companyId: "1",
     locationId: "1",
+    phone: "+55 11 98765-4321",
+    registrationNumber: "A001",
+    startDate: "2020-01-15",
     permissions: {
       createUsers: true,
       editUsers: true,
