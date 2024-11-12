@@ -16,6 +16,8 @@ const HierarchyItem = ({ item, depth = 0, onUpdate, onDelete }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState(item);
+  const [isAddingNew, setIsAddingNew] = useState(false);
+  const [newItemType, setNewItemType] = useState(null);
 
   const handleSave = () => {
     if (!editData.nome || !editData.tag) {
@@ -27,27 +29,128 @@ const HierarchyItem = ({ item, depth = 0, onUpdate, onDelete }) => {
     toast.success("Item atualizado com sucesso!");
   };
 
-  if (isEditing) {
+  const getNewItemTemplate = (type) => ({
+    id: Date.now().toString(),
+    nome: "",
+    tag: "",
+    descricao: "",
+    area: item.area,
+    critico: item.critico
+  });
+
+  const handleAddNew = (type) => {
+    setNewItemType(type);
+    setIsAddingNew(true);
+    setIsExpanded(true);
+  };
+
+  const handleSaveNew = (type, newData) => {
+    if (!newData.nome || !newData.tag) {
+      toast.error("Nome e TAG são obrigatórios");
+      return;
+    }
+
+    const updatedItem = { ...item };
+    switch (type) {
+      case "sistema":
+        updatedItem.sistemas = [...(updatedItem.sistemas || []), newData];
+        break;
+      case "conjunto":
+        updatedItem.conjuntos = [...(updatedItem.conjuntos || []), newData];
+        break;
+      case "subconjunto":
+        updatedItem.subconjuntos = [...(updatedItem.subconjuntos || []), newData];
+        break;
+      case "componente":
+        updatedItem.componentes = [...(updatedItem.componentes || []), newData];
+        break;
+    }
+
+    onUpdate(updatedItem);
+    setIsAddingNew(false);
+    setNewItemType(null);
+    toast.success(`Novo ${type} adicionado com sucesso!`);
+  };
+
+  const renderAddButtons = () => (
+    <div className="flex gap-2 mt-2">
+      {depth === 0 && (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handleAddNew("sistema")}
+        >
+          <Plus className="h-4 w-4 mr-1" /> Sistema
+        </Button>
+      )}
+      {depth <= 1 && (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handleAddNew("conjunto")}
+        >
+          <Plus className="h-4 w-4 mr-1" /> Conjunto
+        </Button>
+      )}
+      {depth <= 2 && (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handleAddNew("subconjunto")}
+        >
+          <Plus className="h-4 w-4 mr-1" /> Subconjunto
+        </Button>
+      )}
+      {depth <= 3 && (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handleAddNew("componente")}
+        >
+          <Plus className="h-4 w-4 mr-1" /> Componente
+        </Button>
+      )}
+    </div>
+  );
+
+  if (isEditing || isAddingNew) {
+    const currentData = isAddingNew ? getNewItemTemplate(newItemType) : editData;
+    const handleCurrentSave = isAddingNew 
+      ? () => handleSaveNew(newItemType, currentData)
+      : handleSave;
+
     return (
       <div className="space-y-2 border p-4 rounded-lg" style={{ marginLeft: `${depth * 24}px` }}>
         <Input
           placeholder="Nome"
-          value={editData.nome}
+          value={currentData.nome}
           onChange={(e) => setEditData(prev => ({ ...prev, nome: e.target.value }))}
         />
         <Input
           placeholder="TAG"
-          value={editData.tag}
+          value={currentData.tag}
           onChange={(e) => setEditData(prev => ({ ...prev, tag: e.target.value }))}
         />
         <Textarea
           placeholder="Descrição detalhada"
-          value={editData.descricao || ""}
+          value={currentData.descricao || ""}
           onChange={(e) => setEditData(prev => ({ ...prev, descricao: e.target.value }))}
         />
         <div className="flex gap-2">
-          <Button onClick={handleSave}>Salvar</Button>
-          <Button variant="outline" onClick={() => setIsEditing(false)}>Cancelar</Button>
+          <Button onClick={handleCurrentSave}>Salvar</Button>
+          <Button 
+            variant="outline" 
+            onClick={() => {
+              if (isAddingNew) {
+                setIsAddingNew(false);
+                setNewItemType(null);
+              } else {
+                setIsEditing(false);
+              }
+            }}
+          >
+            Cancelar
+          </Button>
         </div>
       </div>
     );
@@ -88,15 +191,20 @@ const HierarchyItem = ({ item, depth = 0, onUpdate, onDelete }) => {
           >
             <Plus className="h-4 w-4" />
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => onDelete(item)}
-          >
-            <Trash2 className="h-4 w-4 text-red-500" />
-          </Button>
+          {depth > 0 && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => onDelete(item)}
+            >
+              <Trash2 className="h-4 w-4 text-red-500" />
+            </Button>
+          )}
         </div>
       </div>
+
+      {renderAddButtons()}
+
       {isExpanded && (
         <>
           {item.sistemas?.map((sistema, index) => (
