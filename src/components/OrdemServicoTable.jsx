@@ -6,13 +6,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Edit, Trash2 } from "lucide-react";
-import { format, isValid, parseISO } from "date-fns";
 import { useState } from "react";
 import OrdemServicoViewDialog from "./ordem-servico/OrdemServicoViewDialog";
 import { userService } from "@/services/dataService";
-import { RECURRENCE_OPTIONS } from "@/constants/recurrenceOptions";
+import StatusBadge from "./ordem-servico/StatusBadge";
+import { ActionButtons, RecurrenceCell, formatDate, getStatusDisplay } from "./ordem-servico/TableCells";
 
 const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) => {
   const [selectedOrdem, setSelectedOrdem] = useState(null);
@@ -30,66 +28,6 @@ const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) =>
       (u) => u.id === tecnicoId && u.role === "technician"
     );
     return tecnico ? tecnico.name : "N/A";
-  };
-
-  const formatDate = (dateString) => {
-    if (!dateString) return "N/A";
-    try {
-      const date = parseISO(dateString);
-      return isValid(date) ? format(date, "dd/MM/yyyy") : "Data inválida";
-    } catch {
-      return "Data inválida";
-    }
-  };
-
-  const getStatusDisplay = (ordem) => {
-    const now = new Date();
-    
-    if (!ordem.dataExecucao) {
-      return {
-        label: ordem.status || "Pendente",
-        className: "bg-yellow-100 text-yellow-800"
-      };
-    }
-
-    try {
-      const dataExecucao = parseISO(ordem.dataExecucao);
-      
-      if (!isValid(dataExecucao)) {
-        return {
-          label: ordem.status || "Pendente",
-          className: "bg-yellow-100 text-yellow-800"
-        };
-      }
-      
-      if (ordem.status === "Concluída") {
-        return {
-          label: "Concluída",
-          className: "bg-green-100 text-green-800"
-        };
-      }
-      
-      if (ordem.status !== "Concluída" && dataExecucao < now) {
-        return {
-          label: "Atrasada",
-          className: "bg-red-100 text-red-800"
-        };
-      }
-
-      return {
-        label: ordem.status || "Pendente",
-        className: ordem.status === "Em Andamento"
-          ? "bg-blue-100 text-blue-800"
-          : ordem.status === "Cancelada"
-          ? "bg-red-100 text-red-800"
-          : "bg-yellow-100 text-yellow-800"
-      };
-    } catch {
-      return {
-        label: ordem.status || "Pendente",
-        className: "bg-yellow-100 text-yellow-800"
-      };
-    }
   };
 
   const handleRowClick = (ordem) => {
@@ -129,70 +67,41 @@ const OrdemServicoTable = ({ ordensServico, onEdit, onDelete, equipamentos }) =>
                 >
                   <TableCell>{ordem.titulo}</TableCell>
                   <TableCell>
-                    <span
-                      className={`px-2 py-1 rounded-full text-sm ${
+                    <StatusBadge
+                      status={ordem.tipo}
+                      className={
                         ordem.tipo === "Preventiva"
                           ? "bg-blue-100 text-blue-800"
                           : ordem.tipo === "Corretiva"
                           ? "bg-orange-100 text-orange-800"
                           : "bg-purple-100 text-purple-800"
-                      }`}
-                    >
-                      {ordem.tipo}
-                    </span>
+                      }
+                    />
                   </TableCell>
                   <TableCell>{getEquipamentoNome(ordem.equipamentoId)}</TableCell>
                   <TableCell>{getTecnicoNome(ordem.tecnicoId)}</TableCell>
                   <TableCell>
-                    <span
-                      className={`px-2 py-1 rounded-full text-sm ${statusDisplay.className}`}
-                    >
-                      {statusDisplay.label}
-                    </span>
+                    <StatusBadge
+                      status={statusDisplay.label}
+                      className={statusDisplay.className}
+                    />
                   </TableCell>
                   <TableCell>
-                    <span
-                      className={`px-2 py-1 rounded-full text-sm ${
+                    <StatusBadge
+                      status={ordem.prioridade}
+                      className={
                         ordem.prioridade === "Alta" || ordem.prioridade === "Urgente"
                           ? "bg-red-100 text-red-800"
                           : ordem.prioridade === "Media"
                           ? "bg-yellow-100 text-yellow-800"
                           : "bg-green-100 text-green-800"
-                      }`}
-                    >
-                      {ordem.prioridade}
-                    </span>
+                      }
+                    />
                   </TableCell>
-                  <TableCell>
-                    {formatDate(ordem.dataExecucao)}
-                  </TableCell>
-                  <TableCell>
-                    {ordem.recorrencia === "none" ? "Sem recorrência" : 
-                      RECURRENCE_OPTIONS.find(opt => opt.value === ordem.recorrencia)?.label}
-                  </TableCell>
+                  <TableCell>{formatDate(ordem.dataExecucao)}</TableCell>
+                  <RecurrenceCell recorrencia={ordem.recorrencia} />
                   <TableCell className="text-right">
-                    <div className="flex gap-2 justify-end">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onEdit(ordem);
-                        }}
-                      >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onDelete(ordem.id);
-                        }}
-                      >
-                        <Trash2 className="h-4 w-4 text-red-500" />
-                      </Button>
-                    </div>
+                    <ActionButtons ordem={ordem} onEdit={onEdit} onDelete={onDelete} />
                   </TableCell>
                 </TableRow>
               );
