@@ -6,6 +6,7 @@ import {
   TableCell,
   TableHeader,
   TableRow,
+  TableHead,
 } from "@/components/ui/table";
 import { Pencil, Eye } from "lucide-react";
 import { useSortableTable } from "@/hooks/useSortableTable";
