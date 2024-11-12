@@ -4,13 +4,17 @@ import { Download } from "lucide-react";
 import html2canvas from "html2canvas";
 
 const QRCodeDisplay = ({ data, showDownload = false }) => {
+  // Create a minimal version of the data for QR code
   const qrData = {
-    ...data,
-    lubrificante: {
-      descricaoComercial: data.lubrificante?.descricaoComercial || "N/A",
-      recorrenciaRelubrificacao: data.lubrificante?.recorrenciaRelubrificacao || "N/A",
-      quantidadeRelubrificacao: data.lubrificante?.quantidadeRelubrificacao || "N/A"
-    }
+    id: data.id,
+    tag: data.tag,
+    nome: data.nome,
+    status: data.status,
+    lubrificante: data.lubrificante ? {
+      descricaoComercial: data.lubrificante.descricaoComercial || "N/A",
+      recorrenciaRelubrificacao: data.lubrificante.recorrenciaRelubrificacao || "N/A",
+      quantidadeRelubrificacao: data.lubrificante.quantidadeRelubrificacao || "N/A"
+    } : null
   };
 
   const handleDownload = async () => {
@@ -19,7 +23,7 @@ const QRCodeDisplay = ({ data, showDownload = false }) => {
       try {
         const canvas = await html2canvas(element, {
           backgroundColor: '#FFFFFF',
-          scale: 8, // Increased from 5 to 8 for even better quality
+          scale: 8,
           logging: false,
           useCORS: true,
           allowTaint: true,
@@ -28,7 +32,7 @@ const QRCodeDisplay = ({ data, showDownload = false }) => {
           x: 0,
           y: 0,
           imageTimeout: 0,
-          pixelRatio: 5, // Increased from 3 to 5 for better resolution
+          pixelRatio: 5,
           windowWidth: element.offsetWidth,
           windowHeight: element.offsetHeight
         });
@@ -50,8 +54,8 @@ const QRCodeDisplay = ({ data, showDownload = false }) => {
         className="bg-white p-4 rounded-lg"
         style={{ 
           width: 'fit-content',
-          minWidth: '200px', // Reduced from 300px
-          minHeight: '200px', // Reduced from 300px
+          minWidth: '200px',
+          minHeight: '200px',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center'
@@ -59,8 +63,8 @@ const QRCodeDisplay = ({ data, showDownload = false }) => {
       >
         <QRCodeSVG
           value={JSON.stringify(qrData)}
-          size={180} // Reduced from 300 to 180 for display
-          level="H"
+          size={180}
+          level="M"
           includeMargin={true}
           style={{
             shapeRendering: 'crispEdges',
