@@ -14,16 +14,15 @@ const OrdemServicoSelects = ({ formData, handleChange, equipamentos = [], tecnic
           Tipo de Ordem
         </label>
         <Select
-          value={formData.tipo}
+          value="Corretiva"
           onValueChange={(value) => handleChange("tipo", value)}
+          disabled={true}
         >
           <SelectTrigger>
             <SelectValue placeholder="Selecione o tipo" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="Preventiva">Preventiva</SelectItem>
             <SelectItem value="Corretiva">Corretiva</SelectItem>
-            <SelectItem value="Preditiva">Preditiva</SelectItem>
           </SelectContent>
         </Select>
       </div>

@@ -5,6 +5,7 @@ import EquipamentoBasicInfo from "./equipamento/EquipamentoBasicInfo";
 import EquipamentoStatusSelect from "./equipamento/EquipamentoStatusSelect";
 import EquipamentoDetails from "./equipamento/EquipamentoDetails";
 import HierarchyEditDialog from "./equipamento/HierarchyEditDialog";
+import MaintenancePlanForm from "./equipamento/MaintenancePlanForm";
 import { useEquipamentoForm } from "./equipamento/EquipamentoFormLogic";
 import { Network } from "lucide-react";
 import { useState } from "react";
@@ -24,7 +25,7 @@ const EquipamentoForm = ({ initialData, onSave }) => {
   );
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-6">
       <EquipamentoBasicInfo formData={formData} handleChange={handleChange} />
       
       <EquipamentoDetails 
@@ -37,6 +38,11 @@ const EquipamentoForm = ({ initialData, onSave }) => {
       <EquipamentoStatusSelect 
         value={formData.status}
         onValueChange={(value) => handleChange("status", value)}
+      />
+
+      <MaintenancePlanForm
+        plans={formData.maintenancePlans || []}
+        onPlanChange={(plans) => handleChange("maintenancePlans", plans)}
       />
 
       <div className="space-y-2">
