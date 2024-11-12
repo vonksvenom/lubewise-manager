@@ -56,6 +56,7 @@ const ConfiguracoesPowerUser = () => {
     toast.success("Empresa adicionada com sucesso!");
   };
 
+  // Filtra os locais baseado na empresa selecionada
   const filteredLocations = locations.filter(
     location => selectedCompany === "all" || location.companyId === selectedCompany
   );
