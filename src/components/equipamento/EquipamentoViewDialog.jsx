@@ -5,11 +5,15 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { FileDown } from "lucide-react";
+import { FileDown, History } from "lucide-react";
 import QRCodeDisplay from "../common/QRCodeDisplay";
 import { format } from "date-fns";
+import { useState } from "react";
+import EquipamentoServiceHistory from "./EquipamentoServiceHistory";
 
 const EquipamentoViewDialog = ({ equipamento, open, onOpenChange }) => {
+  const [historyDialogOpen, setHistoryDialogOpen] = useState(false);
+
   if (!equipamento) return null;
 
   const handleDownloadManual = () => {
@@ -24,14 +28,25 @@ const EquipamentoViewDialog = ({ equipamento, open, onOpenChange }) => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl">
-        <DialogHeader>
-          <DialogTitle>{equipamento.nome}</DialogTitle>
-        </DialogHeader>
-        
-        <div className="grid grid-cols-2 gap-6">
-          <div className="space-y-4">
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle className="flex justify-between items-center">
+              <span>{equipamento.nome}</span>
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2"
+                onClick={() => setHistoryDialogOpen(true)}
+              >
+                <History className="h-4 w-4" />
+                Histórico de Manutenções
+              </Button>
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="grid grid-cols-2 gap-6">
             {equipamento.imagem && (
               <img
                 src={equipamento.imagem}
@@ -86,31 +101,37 @@ const EquipamentoViewDialog = ({ equipamento, open, onOpenChange }) => {
               </div>
             )}
           </div>
-        </div>
-
-        {equipamento.subequipamentos?.length > 0 && (
-          <div className="mt-6">
-            <h3 className="font-semibold mb-3">Subequipamentos</h3>
-            <div className="space-y-3">
-              {equipamento.subequipamentos.map((sub, index) => (
-                <div key={index} className="border rounded-lg p-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="font-medium">{sub.nome}</p>
-                      <p className="text-sm text-gray-600">TAG: {sub.tag}</p>
-                      {sub.tipo && <p className="text-sm text-gray-600">Tipo: {sub.tipo}</p>}
-                    </div>
-                    <div className="flex justify-end">
-                      <QRCodeDisplay data={sub} showDownload={true} />
+          
+          {equipamento.subequipamentos?.length > 0 && (
+            <div className="mt-6">
+              <h3 className="font-semibold mb-3">Subequipamentos</h3>
+              <div className="space-y-3">
+                {equipamento.subequipamentos.map((sub, index) => (
+                  <div key={index} className="border rounded-lg p-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="font-medium">{sub.nome}</p>
+                        <p className="text-sm text-gray-600">TAG: {sub.tag}</p>
+                        {sub.tipo && <p className="text-sm text-gray-600">Tipo: {sub.tipo}</p>}
+                      </div>
+                      <div className="flex justify-end">
+                        <QRCodeDisplay data={sub} showDownload={true} />
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-      </DialogContent>
-    </Dialog>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <EquipamentoServiceHistory
+        equipamentoId={equipamento.id}
+        open={historyDialogOpen}
+        onOpenChange={setHistoryDialogOpen}
+      />
+    </>
   );
 };
 
