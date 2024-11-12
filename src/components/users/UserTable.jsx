@@ -1,3 +1,4 @@
+import ResizableTable from "../common/ResizableTable";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -36,7 +37,8 @@ const UserTable = ({ users, onEdit, onDelete, canEdit }) => {
   const sortedUsers = getSortedData(users);
 
   return (
-    <Table>
+    <ResizableTable>
+      <Table>
       <TableHeader>
         <TableRow>
           <SortableHeader 
@@ -119,7 +121,8 @@ const UserTable = ({ users, onEdit, onDelete, canEdit }) => {
           </TableRow>
         ))}
       </TableBody>
-    </Table>
+      </Table>
+    </ResizableTable>
   );
 };
 

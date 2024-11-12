@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import TecnicoForm from "./TecnicoForm";
 import { useSortableTable } from "@/hooks/useSortableTable";
 import SortableHeader from "@/components/common/SortableHeader";
+import ResizableTable from "../common/ResizableTable";
 
 const TecnicoTable = () => {
   const [tecnicos, setTecnicos] = useState([]);
@@ -60,71 +61,73 @@ const TecnicoTable = () => {
 
   return (
     <>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <SortableHeader 
-              label="Nome"
-              sortKey="name"
-              sortConfig={sortConfig}
-              onSort={sortData}
-            />
-            <SortableHeader 
-              label="Email"
-              sortKey="email"
-              sortConfig={sortConfig}
-              onSort={sortData}
-            />
-            <SortableHeader 
-              label="Nível"
-              sortKey="nivel"
-              sortConfig={sortConfig}
-              onSort={sortData}
-            />
-            <SortableHeader 
-              label="Horas Disponíveis/Dia"
-              sortKey="horasDisponiveis"
-              sortConfig={sortConfig}
-              onSort={sortData}
-            />
-            <TableHead className="text-right">Ações</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {sortedTecnicos.map((tecnico) => (
-            <TableRow 
-              key={tecnico.id} 
-              className="cursor-pointer hover:bg-muted/50"
-              onClick={() => handleEdit(tecnico)}
-            >
-              <TableCell>{tecnico.name}</TableCell>
-              <TableCell>{tecnico.email}</TableCell>
-              <TableCell>{tecnico.nivel}</TableCell>
-              <TableCell>{tecnico.horasDisponiveis}h</TableCell>
-              <TableCell className="text-right">
-                <div className="flex justify-end gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={(e) => handleEdit(tecnico, e)}
-                  >
-                    <Edit className="h-4 w-4" />
-                  </Button>
-                  {isAdmin && (
+      <ResizableTable>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <SortableHeader 
+                label="Nome"
+                sortKey="name"
+                sortConfig={sortConfig}
+                onSort={sortData}
+              />
+              <SortableHeader 
+                label="Email"
+                sortKey="email"
+                sortConfig={sortConfig}
+                onSort={sortData}
+              />
+              <SortableHeader 
+                label="Nível"
+                sortKey="nivel"
+                sortConfig={sortConfig}
+                onSort={sortData}
+              />
+              <SortableHeader 
+                label="Horas Disponíveis/Dia"
+                sortKey="horasDisponiveis"
+                sortConfig={sortConfig}
+                onSort={sortData}
+              />
+              <TableHead className="text-right">Ações</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {sortedTecnicos.map((tecnico) => (
+              <TableRow 
+                key={tecnico.id} 
+                className="cursor-pointer hover:bg-muted/50"
+                onClick={() => handleEdit(tecnico)}
+              >
+                <TableCell>{tecnico.name}</TableCell>
+                <TableCell>{tecnico.email}</TableCell>
+                <TableCell>{tecnico.nivel}</TableCell>
+                <TableCell>{tecnico.horasDisponiveis}h</TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-2">
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={(e) => handleDelete(tecnico.id, e)}
+                      onClick={(e) => handleEdit(tecnico, e)}
                     >
-                      <Trash2 className="h-4 w-4 text-red-500" />
+                      <Edit className="h-4 w-4" />
                     </Button>
-                  )}
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                    {isAdmin && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={(e) => handleDelete(tecnico.id, e)}
+                      >
+                        <Trash2 className="h-4 w-4 text-red-500" />
+                      </Button>
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </ResizableTable>
       <TecnicoForm
         open={editDialogOpen}
         onOpenChange={setEditDialogOpen}

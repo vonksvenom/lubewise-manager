@@ -15,6 +15,7 @@ import LubrificanteEditDialog from "./LubrificanteEditDialog";
 import LubrificanteDetailsDialog from "./LubrificanteDetailsDialog";
 import { useSortableTable } from "@/hooks/useSortableTable";
 import SortableHeader from "@/components/common/SortableHeader";
+import ResizableTable from "../common/ResizableTable";
 
 const LubrificanteTable = ({ searchTerm }) => {
   const [items, setItems] = useState([]);
@@ -96,79 +97,81 @@ const LubrificanteTable = ({ searchTerm }) => {
 
   return (
     <>
-      <div className="rounded-xl shadow-neo-3d bg-gradient-to-br from-muted to-accent/10 p-4">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <SortableHeader 
-                label="Nome Comercial"
-                sortKey="nomeComercial"
-                sortConfig={sortConfig}
-                onSort={sortData}
-              />
-              <SortableHeader 
-                label="Código LIS"
-                sortKey="codigoLIS"
-                sortConfig={sortConfig}
-                onSort={sortData}
-              />
-              <SortableHeader 
-                label="Fornecedor"
-                sortKey="fornecedor"
-                sortConfig={sortConfig}
-                onSort={sortData}
-              />
-              <SortableHeader 
-                label="Viscosidade"
-                sortKey="viscosidade"
-                sortConfig={sortConfig}
-                onSort={sortData}
-              />
-              <SortableHeader 
-                label="Volume Padrão"
-                sortKey="volumePadrao"
-                sortConfig={sortConfig}
-                onSort={sortData}
-              />
-              <TableHead>Ações</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {sortedItems.map((item) => (
-              <TableRow 
-                key={item.id}
-                onClick={() => handleRowClick(item)}
-                className="cursor-pointer hover:bg-accent/20"
-              >
-                <TableCell>{item.nomeComercial}</TableCell>
-                <TableCell>{item.codigoLIS}</TableCell>
-                <TableCell>{item.fornecedor}</TableCell>
-                <TableCell>{item.viscosidade}</TableCell>
-                <TableCell>{item.volumePadrao}</TableCell>
-                <TableCell>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={(e) => handleEdit(item, e)}
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={(e) => handleDelete(item.id, e)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </TableCell>
+      <ResizableTable>
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <SortableHeader 
+                  label="Nome Comercial"
+                  sortKey="nomeComercial"
+                  sortConfig={sortConfig}
+                  onSort={sortData}
+                />
+                <SortableHeader 
+                  label="Código LIS"
+                  sortKey="codigoLIS"
+                  sortConfig={sortConfig}
+                  onSort={sortData}
+                />
+                <SortableHeader 
+                  label="Fornecedor"
+                  sortKey="fornecedor"
+                  sortConfig={sortConfig}
+                  onSort={sortData}
+                />
+                <SortableHeader 
+                  label="Viscosidade"
+                  sortKey="viscosidade"
+                  sortConfig={sortConfig}
+                  onSort={sortData}
+                />
+                <SortableHeader 
+                  label="Volume Padrão"
+                  sortKey="volumePadrao"
+                  sortConfig={sortConfig}
+                  onSort={sortData}
+                />
+                <TableHead>Ações</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+            </TableHeader>
+            <TableBody>
+              {sortedItems.map((item) => (
+                <TableRow 
+                  key={item.id}
+                  onClick={() => handleRowClick(item)}
+                  className="cursor-pointer hover:bg-accent/20"
+                >
+                  <TableCell>{item.nomeComercial}</TableCell>
+                  <TableCell>{item.codigoLIS}</TableCell>
+                  <TableCell>{item.fornecedor}</TableCell>
+                  <TableCell>{item.viscosidade}</TableCell>
+                  <TableCell>{item.volumePadrao}</TableCell>
+                  <TableCell>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={(e) => handleEdit(item, e)}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={(e) => handleDelete(item.id, e)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </ResizableTable>
 
       <LubrificanteEditDialog
         isOpen={editDialogOpen}

@@ -11,6 +11,7 @@ import {
 import { Pencil, Eye } from "lucide-react";
 import { useSortableTable } from "@/hooks/useSortableTable";
 import SortableHeader from "@/components/common/SortableHeader";
+import ResizableTable from "@/components/common/ResizableTable";
 
 const AreaList = ({ 
   areas, 
@@ -39,67 +40,69 @@ const AreaList = ({
         onChange={(e) => onSearchChange(e.target.value)}
       />
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <SortableHeader 
-              label="Nome"
-              sortKey="nome"
-              sortConfig={sortConfig}
-              onSort={sortData}
-            />
-            <SortableHeader 
-              label="Descrição"
-              sortKey="descricao"
-              sortConfig={sortConfig}
-              onSort={sortData}
-            />
-            <SortableHeader 
-              label="Responsável"
-              sortKey="responsavel"
-              sortConfig={sortConfig}
-              onSort={sortData}
-            />
-            <TableHead>Ações</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {sortedAreas.map((area) => (
-            <TableRow key={area.id}>
-              <TableCell>
-                <button
-                  onClick={() => onView(area)}
-                  className="hover:underline text-left"
-                >
-                  {area.nome}
-                </button>
-              </TableCell>
-              <TableCell>{area.descricao}</TableCell>
-              <TableCell>{area.responsavel}</TableCell>
-              <TableCell>
-                <div className="flex gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
+      <ResizableTable>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <SortableHeader 
+                label="Nome"
+                sortKey="nome"
+                sortConfig={sortConfig}
+                onSort={sortData}
+              />
+              <SortableHeader 
+                label="Descrição"
+                sortKey="descricao"
+                sortConfig={sortConfig}
+                onSort={sortData}
+              />
+              <SortableHeader 
+                label="Responsável"
+                sortKey="responsavel"
+                sortConfig={sortConfig}
+                onSort={sortData}
+              />
+              <TableHead>Ações</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {sortedAreas.map((area) => (
+              <TableRow key={area.id}>
+                <TableCell>
+                  <button
                     onClick={() => onView(area)}
+                    className="hover:underline text-left"
                   >
-                    <Eye className="h-4 w-4" />
-                  </Button>
-                  {(isAdmin || isPowerUser) && (
+                    {area.nome}
+                  </button>
+                </TableCell>
+                <TableCell>{area.descricao}</TableCell>
+                <TableCell>{area.responsavel}</TableCell>
+                <TableCell>
+                  <div className="flex gap-2">
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => onEdit(area)}
+                      onClick={() => onView(area)}
                     >
-                      <Pencil className="h-4 w-4" />
+                      <Eye className="h-4 w-4" />
                     </Button>
-                  )}
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                    {(isAdmin || isPowerUser) && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => onEdit(area)}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </ResizableTable>
     </div>
   );
 };

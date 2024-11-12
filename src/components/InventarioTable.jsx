@@ -24,6 +24,7 @@ import { useSortableTable } from "@/hooks/useSortableTable";
 import InventarioTableHeader from "./inventario/InventarioTableHeader";
 import InventarioTableRow from "./inventario/InventarioTableRow";
 import InventarioDetails from "./inventario/InventarioDetails";
+import ResizableTable from "../common/ResizableTable";
 
 const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo", onViewModeChange }) => {
   const [items, setItems] = useState([]);
@@ -103,27 +104,29 @@ const InventarioTable = ({ searchTerm, onEdit, viewMode = "tipo", onViewModeChan
         </Select>
       </div>
 
-      <Table>
-        <InventarioTableHeader 
-          viewMode={viewMode}
-          sortConfig={sortConfig}
-          sortData={sortData}
-        />
-        <TableBody>
-          {sortedItems.map((item) => (
-            <InventarioTableRow
-              key={item.id}
-              item={item}
-              viewMode={viewMode}
-              isAdmin={isAdmin}
-              isPowerUser={isPowerUser}
-              onView={handleView}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
-          ))}
-        </TableBody>
-      </Table>
+      <ResizableTable>
+        <Table>
+          <InventarioTableHeader 
+            viewMode={viewMode}
+            sortConfig={sortConfig}
+            sortData={sortData}
+          />
+          <TableBody>
+            {sortedItems.map((item) => (
+              <InventarioTableRow
+                key={item.id}
+                item={item}
+                viewMode={viewMode}
+                isAdmin={isAdmin}
+                isPowerUser={isPowerUser}
+                onView={handleView}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </ResizableTable>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
