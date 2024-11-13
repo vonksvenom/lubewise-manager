@@ -141,7 +141,7 @@ const Layout = ({ children }) => {
         onLogoChange={handleLogoChange}
       />
 
-      <div className={`transition-all duration-200 ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'} min-h-screen pt-16`}>
+      <div className={`transition-all duration-200 ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'} min-h-screen pt-20`}>
         <main className="p-6">
           {!isAdmin && !isPowerUser && userCompany && userLocation && (
             <div className="mb-6 p-4 bg-accent/10 rounded-lg shadow-sm">
