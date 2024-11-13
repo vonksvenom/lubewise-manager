@@ -11,6 +11,18 @@ export const themes = {
       muted: "#9ca3af"
     }
   },
+  "corporate-grey": {
+    name: "Corporate Grey",
+    category: "Corporativo",
+    colors: {
+      background: "#f8f9fa",
+      foreground: "#1a1c1e",
+      primary: "#374151",
+      secondary: "#4b5563",
+      accent: "#6b7280",
+      muted: "#9ca3af"
+    }
+  },
   "corporate-blue": {
     name: "Corporate Blue",
     category: "Corporativo",

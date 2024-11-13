@@ -12,7 +12,7 @@ import LayoutControls from "./layout/LayoutControls";
 import CompanyLocationFilter from "./layout/CompanyLocationFilter";
 
 const CURRENT_USER_KEY = "user";
-const DEFAULT_THEME = "corporate";
+const DEFAULT_THEME = "corporate-grey";
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -141,7 +141,7 @@ const Layout = ({ children }) => {
         onLogoChange={handleLogoChange}
       />
 
-      <div className={`transition-all duration-200 ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'} min-h-screen`}>
+      <div className={`transition-all duration-200 ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'} min-h-screen pt-16`}>
         <main className="p-6">
           {!isAdmin && !isPowerUser && userCompany && userLocation && (
             <div className="mb-6 p-4 bg-accent/10 rounded-lg shadow-sm">
