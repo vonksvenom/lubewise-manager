@@ -16,11 +16,13 @@ const LayoutHeader = () => {
           <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
             LubriTRacker
           </h1>
-          {location.pathname !== "/login" && <CompanyLocationFilter />}
+          {location.pathname !== "/login" && location.pathname !== "/initial-setup" && (
+            <CompanyLocationFilter />
+          )}
         </div>
         
         <div className="flex items-center gap-4">
-          {location.pathname !== "/login" && (
+          {location.pathname !== "/login" && location.pathname !== "/initial-setup" && (
             <>
               <LayoutControls />
               <ThemeSelector />
