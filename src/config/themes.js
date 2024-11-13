@@ -1,137 +1,137 @@
-export const themeCategories = [
-  {
-    name: "Corporativo",
-    themes: [
-      { name: "Corporate Grey", value: "corporate-grey" },
-      { name: "Corporate Blue", value: "corporate-blue" },
-      { name: "Corporate Green", value: "corporate-green" },
-      { name: "Corporate Purple", value: "corporate-purple" }
-    ]
+export const themes = {
+  // Categoria: Corporativo
+  corporate: {
+    category: "Corporativo",
+    name: "Corporate Gray",
+    colors: {
+      background: "#1f2937",
+      foreground: "#9ca3af",
+      primary: "#9ca3af",
+      "primary-rgb": "156, 163, 175",
+      secondary: "#374151",
+      accent: "#374151",
+      muted: "#374151"
+    }
   },
-  {
-    name: "Claro",
-    themes: [
-      { name: "Light Modern", value: "light-modern" },
-      { name: "Light Warm", value: "light-warm" },
-      { name: "Light Cool", value: "light-cool" },
-      { name: "Light Natural", value: "light-natural" }
-    ]
+  modernBlue: {
+    category: "Corporativo",
+    name: "Modern Blue",
+    colors: {
+      background: "#0f172a",
+      foreground: "#38bdf8",
+      primary: "#38bdf8",
+      "primary-rgb": "56, 189, 248",
+      secondary: "#334155",
+      accent: "#1e293b",
+      muted: "#1e293b"
+    }
   },
-  {
-    name: "Escuro",
-    themes: [
-      { name: "Dark Professional", value: "dark-professional" },
-      { name: "Dark Ocean", value: "dark-ocean" },
-      { name: "Dark Forest", value: "dark-forest" },
-      { name: "Dark Tech", value: "dark-tech" }
-    ]
+  // Categoria: Escuro
+  darkPurple: {
+    category: "Escuro",
+    name: "Dark Purple",
+    colors: {
+      background: "#1a1625",
+      foreground: "#a78bfa",
+      primary: "#a78bfa",
+      "primary-rgb": "167, 139, 250",
+      secondary: "#2d2439",
+      accent: "#231c2d",
+      muted: "#1f1829"
+    }
   },
-  {
-    name: "Vibrante",
-    themes: [
-      { name: "Vibrant Blue", value: "vibrant-blue" },
-      { name: "Vibrant Green", value: "vibrant-green" },
-      { name: "Vibrant Purple", value: "vibrant-purple" },
-      { name: "Vibrant Orange", value: "vibrant-orange" }
-    ]
-  }
-];
-
-export const themeConfig = {
-  "corporate-grey": {
-    primary: "bg-zinc-900",
-    secondary: "bg-zinc-800",
-    accent: "bg-zinc-700",
-    text: "text-zinc-100"
+  darkTeal: {
+    category: "Escuro",
+    name: "Dark Teal",
+    colors: {
+      background: "#0f2231",
+      foreground: "#5eead4",
+      primary: "#5eead4",
+      "primary-rgb": "94, 234, 212",
+      secondary: "#1e3a4f",
+      accent: "#162f42",
+      muted: "#132736"
+    }
   },
-  "corporate-blue": {
-    primary: "bg-blue-900",
-    secondary: "bg-blue-800",
-    accent: "bg-blue-700",
-    text: "text-blue-100"
+  // Categoria: Claro
+  lightAiry: {
+    category: "Claro",
+    name: "Light Airy",
+    colors: {
+      background: "#ffffff",
+      foreground: "#4b5563",
+      primary: "#60a5fa",
+      "primary-rgb": "96, 165, 250",
+      secondary: "#f3f4f6",
+      accent: "#e5e7eb",
+      muted: "#f3f4f6"
+    }
   },
-  "corporate-green": {
-    primary: "bg-green-900",
-    secondary: "bg-green-800",
-    accent: "bg-green-700",
-    text: "text-green-100"
+  warmBeige: {
+    category: "Claro",
+    name: "Warm Beige",
+    colors: {
+      background: "#fef6e4",
+      foreground: "#27241d",
+      primary: "#f582ae",
+      "primary-rgb": "245, 130, 174",
+      secondary: "#faecd6",
+      accent: "#e3d7bf",
+      muted: "#faecd6"
+    }
   },
-  "corporate-purple": {
-    primary: "bg-purple-900",
-    secondary: "bg-purple-800",
-    accent: "bg-purple-700",
-    text: "text-purple-100"
+  // Categoria: Natureza
+  forestGreen: {
+    category: "Natureza",
+    name: "Forest Green",
+    colors: {
+      background: "#1a2416",
+      foreground: "#4caf50",
+      primary: "#4caf50",
+      "primary-rgb": "76, 175, 80",
+      secondary: "#2c3a28",
+      accent: "#243020",
+      muted: "#1e2a1a"
+    }
   },
-  "light-modern": {
-    primary: "bg-slate-50",
-    secondary: "bg-slate-100",
-    accent: "bg-slate-200",
-    text: "text-slate-900"
+  oceanBlue: {
+    category: "Natureza",
+    name: "Ocean Blue",
+    colors: {
+      background: "#0a192f",
+      foreground: "#64ffda",
+      primary: "#64ffda",
+      "primary-rgb": "100, 255, 218",
+      secondary: "#172a45",
+      accent: "#1d3a5c",
+      muted: "#15243b"
+    }
   },
-  "light-warm": {
-    primary: "bg-orange-50",
-    secondary: "bg-orange-100",
-    accent: "bg-orange-200",
-    text: "text-orange-900"
+  // Categoria: Vibrante
+  neonFuture: {
+    category: "Vibrante",
+    name: "Neon Future",
+    colors: {
+      background: "#13111C",
+      foreground: "#f0abfc",
+      primary: "#f0abfc",
+      "primary-rgb": "240, 171, 252",
+      secondary: "#251C35",
+      accent: "#1C1428",
+      muted: "#15131F"
+    }
   },
-  "light-cool": {
-    primary: "bg-cyan-50",
-    secondary: "bg-cyan-100",
-    accent: "bg-cyan-200",
-    text: "text-cyan-900"
-  },
-  "light-natural": {
-    primary: "bg-stone-50",
-    secondary: "bg-stone-100",
-    accent: "bg-stone-200",
-    text: "text-stone-900"
-  },
-  "dark-professional": {
-    primary: "bg-gray-900",
-    secondary: "bg-gray-800",
-    accent: "bg-gray-700",
-    text: "text-gray-100"
-  },
-  "dark-ocean": {
-    primary: "bg-slate-900",
-    secondary: "bg-slate-800",
-    accent: "bg-slate-700",
-    text: "text-slate-100"
-  },
-  "dark-forest": {
-    primary: "bg-emerald-900",
-    secondary: "bg-emerald-800",
-    accent: "bg-emerald-700",
-    text: "text-emerald-100"
-  },
-  "dark-tech": {
-    primary: "bg-zinc-900",
-    secondary: "bg-zinc-800",
-    accent: "bg-zinc-700",
-    text: "text-zinc-100"
-  },
-  "vibrant-blue": {
-    primary: "bg-blue-600",
-    secondary: "bg-blue-500",
-    accent: "bg-blue-400",
-    text: "text-white"
-  },
-  "vibrant-green": {
-    primary: "bg-green-600",
-    secondary: "bg-green-500",
-    accent: "bg-green-400",
-    text: "text-white"
-  },
-  "vibrant-purple": {
-    primary: "bg-purple-600",
-    secondary: "bg-purple-500",
-    accent: "bg-purple-400",
-    text: "text-white"
-  },
-  "vibrant-orange": {
-    primary: "bg-orange-600",
-    secondary: "bg-orange-500",
-    accent: "bg-orange-400",
-    text: "text-white"
+  cyberpunkNight: {
+    category: "Vibrante",
+    name: "Cyberpunk Night",
+    colors: {
+      background: "#0D0C22",
+      foreground: "#00ff9d",
+      primary: "#00ff9d",
+      "primary-rgb": "0, 255, 157",
+      secondary: "#1A1935",
+      accent: "#130F28",
+      muted: "#0F0E24"
+    }
   }
 };

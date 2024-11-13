@@ -1,38 +1,12 @@
-import { Button } from "@/components/ui/button";
-import { useAuth } from "@/contexts/AuthContext";
-import { useLocation } from "react-router-dom";
-import ThemeSelector from "./ThemeSelector";
-import CompanyLocationFilter from "./CompanyLocationFilter";
-import LayoutControls from "./LayoutControls";
+import { Menu, X } from "lucide-react";
 
-const LayoutHeader = () => {
-  const { user, logout } = useAuth();
-  const location = useLocation();
-
-  return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center justify-between">
-        <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-            LubriTRacker
-          </h1>
-          {location.pathname !== "/login" && <CompanyLocationFilter />}
-        </div>
-        
-        <div className="flex items-center gap-4">
-          {location.pathname !== "/login" && (
-            <>
-              <LayoutControls />
-              <ThemeSelector />
-              <Button variant="outline" onClick={logout}>
-                Sair
-              </Button>
-            </>
-          )}
-        </div>
-      </div>
-    </header>
-  );
-};
+const LayoutHeader = ({ sidebarOpen, setSidebarOpen }) => (
+  <button
+    className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-muted rounded-xl shadow-neo-xl transform transition hover:scale-105 hover:shadow-neo-3d"
+    onClick={() => setSidebarOpen(!sidebarOpen)}
+  >
+    {sidebarOpen ? <X className="text-catYellow" /> : <Menu className="text-catYellow" />}
+  </button>
+);
 
 export default LayoutHeader;

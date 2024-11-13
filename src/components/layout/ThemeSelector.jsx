@@ -1,47 +1,49 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "../ui/button";
+import { Palette } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Palette } from "lucide-react";
-import { useTheme } from "next-themes";
-import { themeCategories } from "@/config/themes";
+} from "../ui/dropdown-menu";
+import { themes } from "@/config/themes";
+import { toast } from "sonner";
 
-const ThemeSelector = () => {
-  const { setTheme, theme: currentTheme } = useTheme();
+const ThemeSelector = ({ isAdmin, isPowerUser, onThemeChange, currentTheme }) => {
+  const handleThemeChange = (theme) => {
+    if (isAdmin() || isPowerUser()) {
+      onThemeChange(theme);
+    } else {
+      toast.error("Apenas administradores podem alterar o tema!");
+    }
+  };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <Palette className="h-[1.2rem] w-[1.2rem]" />
-          <span className="sr-only">Toggle theme</span>
+        <Button
+          variant="outline"
+          size="icon"
+          className="rounded-xl shadow-neo-xl transform transition hover:scale-105 hover:shadow-neo-3d bg-gradient-to-br from-muted to-accent/10"
+        >
+          <Palette className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Temas</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        {themeCategories.map((category) => (
-          <DropdownMenuGroup key={category.name}>
-            <DropdownMenuLabel className="text-sm text-muted-foreground">
-              {category.name}
-            </DropdownMenuLabel>
-            {category.themes.map((theme) => (
-              <DropdownMenuItem
-                key={theme.value}
-                onClick={() => setTheme(theme.value)}
-                className={currentTheme === theme.value ? "bg-accent" : ""}
-              >
-                {theme.name}
-              </DropdownMenuItem>
-            ))}
-            <DropdownMenuSeparator />
-          </DropdownMenuGroup>
+      <DropdownMenuContent className="rounded-xl shadow-neo-xl backdrop-blur-sm bg-background/95 border border-border">
+        {Object.entries(themes).map(([key, theme]) => (
+          <DropdownMenuItem 
+            key={key} 
+            onClick={() => handleThemeChange(key)}
+            className={`hover:bg-accent/80 ${currentTheme === key ? "bg-accent" : ""}`}
+          >
+            <div className="flex items-center gap-2">
+              <div 
+                className="w-4 h-4 rounded-full" 
+                style={{ backgroundColor: theme.colors.primary }}
+              />
+              {theme.name}
+            </div>
+          </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
