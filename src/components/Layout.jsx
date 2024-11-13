@@ -12,11 +12,12 @@ import LayoutControls from "./layout/LayoutControls";
 import CompanyLocationFilter from "./layout/CompanyLocationFilter";
 
 const CURRENT_USER_KEY = "user";
+const DEFAULT_THEME = "corporate";
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [currentTheme, setCurrentTheme] = useState('corporate');
+  const [currentTheme, setCurrentTheme] = useState(DEFAULT_THEME);
   const [logoUrl, setLogoUrl] = useState("/sotreq-industrial-logo.png");
   const [userCompany, setUserCompany] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
@@ -43,8 +44,10 @@ const Layout = ({ children }) => {
       }
       
       const userTheme = localStorage.getItem(`theme_${currentUser?.id}`);
-      if (userTheme) {
+      if (userTheme && themes[userTheme]) {
         handleThemeChange(userTheme, true);
+      } else {
+        handleThemeChange(DEFAULT_THEME, true);
       }
 
       const savedLogo = localStorage.getItem('logoUrl');
@@ -64,18 +67,18 @@ const Layout = ({ children }) => {
 
   useEffect(() => {
     const userTheme = localStorage.getItem(`theme_${currentUser?.id}`);
-    if (userTheme) {
+    if (userTheme && themes[userTheme]) {
       handleThemeChange(userTheme, true);
       return;
     }
 
     const companyDefaultTheme = localStorage.getItem('company_default_theme');
-    if (companyDefaultTheme) {
+    if (companyDefaultTheme && themes[companyDefaultTheme]) {
       handleThemeChange(companyDefaultTheme, true);
       return;
     }
 
-    handleThemeChange('corporate', true);
+    handleThemeChange(DEFAULT_THEME, true);
 
     const savedLogo = localStorage.getItem('logoUrl');
     if (savedLogo) {
@@ -84,12 +87,19 @@ const Layout = ({ children }) => {
   }, [currentUser]);
 
   const handleThemeChange = (theme, isInitialLoad = false) => {
+    if (!themes[theme]) {
+      console.warn(`Theme "${theme}" not found, using default theme`);
+      theme = DEFAULT_THEME;
+    }
+
     setCurrentTheme(theme);
     const themeColors = themes[theme].colors;
     
-    Object.entries(themeColors).forEach(([key, value]) => {
-      document.documentElement.style.setProperty(`--${key}`, value);
-    });
+    if (themeColors) {
+      Object.entries(themeColors).forEach(([key, value]) => {
+        document.documentElement.style.setProperty(`--${key}`, value);
+      });
+    }
 
     if (!isInitialLoad && (isAdmin || isPowerUser) && theme !== currentTheme) {
       const setAsDefault = window.confirm("Deseja definir este tema como padrão para todos os usuários?");
@@ -102,7 +112,7 @@ const Layout = ({ children }) => {
     if (currentUser) {
       localStorage.setItem(`theme_${currentUser.id}`, theme);
       userService.update(currentUser.id, { theme: theme });
-      if (!isInitialLoad && theme !== 'corporate') {
+      if (!isInitialLoad && theme !== DEFAULT_THEME) {
         toast.success("Tema atualizado e salvo com sucesso!");
       }
     }

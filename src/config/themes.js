@@ -1,9 +1,9 @@
 export const themes = {
-  "corporate-grey": {
-    name: "Corporate Grey",
+  "corporate": {
+    name: "Corporate",
     category: "Corporativo",
     colors: {
-      background: "#f8f9fa",
+      background: "#ffffff",
       foreground: "#1a1c1e",
       primary: "#374151",
       secondary: "#4b5563",
