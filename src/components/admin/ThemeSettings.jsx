@@ -11,9 +11,24 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useState } from "react";
 
 export const ThemeSettings = ({ currentTheme, onThemeChange }) => {
   const { isAdmin, isPowerUser } = useAuth();
+  const [selectedCategory, setSelectedCategory] = useState("all");
+
+  const categories = [...new Set(Object.values(themes).map(theme => theme.category))];
+  
+  const filteredThemes = Object.entries(themes).filter(([_, theme]) => 
+    selectedCategory === "all" || theme.category === selectedCategory
+  );
 
   const handleThemeChange = (theme) => {
     if (isAdmin || isPowerUser) {
@@ -44,9 +59,24 @@ export const ThemeSettings = ({ currentTheme, onThemeChange }) => {
           <DialogHeader>
             <DialogTitle>Escolha um Tema</DialogTitle>
           </DialogHeader>
+          <div className="mb-4">
+            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+              <SelectTrigger>
+                <SelectValue placeholder="Filtrar por categoria" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todas as categorias</SelectItem>
+                {categories.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
           <ScrollArea className="h-[400px] pr-4">
             <div className="grid grid-cols-1 gap-2">
-              {Object.entries(themes).map(([key, theme]) => (
+              {filteredThemes.map(([key, theme]) => (
                 <Button
                   key={key}
                   variant={currentTheme === key ? "default" : "outline"}
@@ -63,6 +93,9 @@ export const ThemeSettings = ({ currentTheme, onThemeChange }) => {
                       style={{ backgroundColor: theme.colors.primary }}
                     />
                     <span>{theme.name}</span>
+                    <span className="text-xs text-muted-foreground ml-auto">
+                      {theme.category}
+                    </span>
                   </div>
                 </Button>
               ))}

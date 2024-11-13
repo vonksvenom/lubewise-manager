@@ -14,15 +14,17 @@ const OrdemServicoSelects = ({ formData, handleChange, equipamentos = [], tecnic
           Tipo de Ordem
         </label>
         <Select
-          value="Corretiva"
+          value={formData.tipo}
           onValueChange={(value) => handleChange("tipo", value)}
-          disabled={true}
         >
           <SelectTrigger>
             <SelectValue placeholder="Selecione o tipo" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="Corretiva">Corretiva</SelectItem>
+            <SelectItem value="Preventiva">Preventiva</SelectItem>
+            <SelectItem value="Preditiva">Preditiva</SelectItem>
+            <SelectItem value="Proativa">Proativa</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -50,14 +52,14 @@ const OrdemServicoSelects = ({ formData, handleChange, equipamentos = [], tecnic
 
       <div className="space-y-2">
         <label htmlFor="tecnico" className="text-sm font-medium">
-          Técnico Responsável
+          Operacional Responsável
         </label>
         <Select
           value={formData.tecnicoId}
           onValueChange={(value) => handleChange("tecnicoId", value)}
         >
           <SelectTrigger>
-            <SelectValue placeholder="Selecione o técnico" />
+            <SelectValue placeholder="Selecione o operacional" />
           </SelectTrigger>
           <SelectContent>
             {tecnicos.filter(t => t.role === "technician").map((tecnico) => (
