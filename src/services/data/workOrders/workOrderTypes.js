@@ -1,34 +1,44 @@
+export const tipos = ["Preventiva", "Preditiva", "Corretiva", "Proativa"];
+
 export const titulosPreventiva = [
-  "Lubrificação dos Mancais",
-  "Troca de Filtros",
-  "Alinhamento de Correias",
-  "Reaperto Geral",
-  "Limpeza do Sistema de Arrefecimento",
-  "Troca de Óleo",
-  "Calibração de Válvulas",
-  "Inspeção de Correias"
+  "Manutenção Preventiva - Troca de Óleo",
+  "Manutenção Preventiva - Inspeção Geral",
+  "Manutenção Preventiva - Alinhamento",
+  "Manutenção Preventiva - Calibração"
 ];
 
 export const titulosCorretiva = [
-  "Substituição de Rolamento",
   "Reparo de Vazamento",
-  "Troca de Selo Mecânico",
-  "Substituição de Acoplamento",
-  "Reparo de Bomba",
-  "Troca de Motor Elétrico",
-  "Reparo de Válvula",
-  "Substituição de Mangueira Hidráulica"
+  "Substituição de Componente",
+  "Correção de Falha",
+  "Reparo Emergencial"
 ];
 
 export const titulosPreditiva = [
   "Análise de Vibração",
   "Termografia",
   "Análise de Óleo",
-  "Ultrassom",
-  "Medição de Espessura",
-  "Balanceamento Dinâmico",
-  "Alinhamento a Laser",
-  "Inspeção Boroscópica"
+  "Ultrassom"
 ];
 
-export const tipos = ["Preventiva", "Corretiva", "Preditiva"];
+export const titulosProativa = [
+  "Melhoria de Eficiência",
+  "Upgrade de Sistema",
+  "Otimização de Processo",
+  "Modernização de Equipamento"
+];
+
+export const getStatusClassName = (status) => {
+  switch (status) {
+    case "Preventiva":
+      return "bg-yellow-100 text-yellow-800";
+    case "Corretiva":
+      return "bg-red-100 text-red-800";
+    case "Preditiva":
+      return "bg-purple-100 text-purple-800";
+    case "Proativa":
+      return "bg-blue-100 text-blue-800";
+    default:
+      return "bg-gray-100 text-gray-800";
+  }
+};
