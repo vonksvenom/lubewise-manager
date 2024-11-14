@@ -15,6 +15,7 @@ const CURRENT_USER_KEY = "user";
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarPinned, setSidebarPinned] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [currentTheme, setCurrentTheme] = useState('corporate');
   const [logoUrl, setLogoUrl] = useState("/sotreq-industrial-logo.png");
@@ -120,26 +121,32 @@ const Layout = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-background bg-gradient-to-br from-background to-accent/5">
-      <LayoutHeader sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+      <LayoutHeader 
+        sidebarOpen={sidebarOpen} 
+        setSidebarOpen={setSidebarOpen}
+        isAdmin={isAdmin}
+        isPowerUser={isPowerUser}
+        userCompany={userCompany}
+        userLocation={userLocation}
+      />
       
       <LayoutSidebar 
         sidebarOpen={sidebarOpen}
+        sidebarPinned={sidebarPinned}
+        setSidebarPinned={setSidebarPinned}
         sidebarCollapsed={sidebarCollapsed}
         setSidebarCollapsed={setSidebarCollapsed}
         logoUrl={logoUrl}
-        navItems={filteredNavItems}
+        navItems={navItems}
         onLogoChange={handleLogoChange}
       />
 
-      <div className={`transition-all duration-200 ${sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'} min-h-screen`}>
-        <main className="p-6">
-          {!isAdmin && !isPowerUser && userCompany && userLocation && (
-            <div className="mb-6 p-4 bg-accent/10 rounded-lg shadow-sm">
-              <p className="text-sm text-muted-foreground">
-                <span className="font-semibold">{userCompany.name}</span> - {userLocation.name}
-              </p>
-            </div>
-          )}
+      <div 
+        className={`transition-all duration-200 ${
+          sidebarPinned ? (sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64') : 'ml-0'
+        } min-h-screen`}
+      >
+        <main className="p-6 pt-24">
           {(isAdmin || isPowerUser) && (
             <div className="mb-6">
               <CompanyLocationFilter />

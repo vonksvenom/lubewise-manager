@@ -9,10 +9,17 @@ import OrdemServicoFilters from "@/components/ordem-servico/OrdemServicoFilters"
 import { ordemServicoService, equipamentoService, userService } from "@/services/dataService";
 import { filterOrdens } from "@/components/ordem-servico/filterOrdens";
 import { OrdemServicoHeader } from "@/components/ordem-servico/OrdemServicoHeader";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const OrdensServico = () => {
+  const queryClient = useQueryClient();
+  const { data: ordensServico = [], isLoading } = useQuery({
+    queryKey: ['ordensServico'],
+    queryFn: () => ordemServicoService.getAll(),
+    refetchInterval: 5000, // Refetch every 5 seconds
+  });
+
   const [searchTerm, setSearchTerm] = useState("");
-  const [ordensServico, setOrdensServico] = useState([]);
   const [selectedOrdem, setSelectedOrdem] = useState(null);
   const [equipamentos, setEquipamentos] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -34,7 +41,6 @@ const OrdensServico = () => {
           ordemServicoService.getAll(),
           equipamentoService.getAll()
         ]);
-        setOrdensServico(ordensData);
         setEquipamentos(equipamentosData);
       } catch (error) {
         console.error('Error loading data:', error);
@@ -58,7 +64,7 @@ const OrdensServico = () => {
 
   const handleDelete = (id) => {
     ordemServicoService.delete(id);
-    setOrdensServico(ordemServicoService.getAll());
+    queryClient.invalidateQueries({ queryKey: ['ordensServico'] });
     toast({
       title: "Ordem de serviço excluída",
       description: "A ordem de serviço foi removida com sucesso.",
@@ -68,18 +74,19 @@ const OrdensServico = () => {
   const handleSave = (data) => {
     if (selectedOrdem) {
       ordemServicoService.update(selectedOrdem.id, data);
+      queryClient.invalidateQueries({ queryKey: ['ordensServico'] });
       toast({
         title: "Ordem de serviço atualizada",
         description: "As alterações foram salvas com sucesso.",
       });
     } else {
       ordemServicoService.add(data);
+      queryClient.invalidateQueries({ queryKey: ['ordensServico'] });
       toast({
         title: "Ordem de serviço criada",
         description: "A nova ordem de serviço foi cadastrada com sucesso.",
       });
     }
-    setOrdensServico(ordemServicoService.getAll());
     setSelectedOrdem(null);
     setDialogOpen(false);
   };

@@ -1,14 +1,16 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Pin, PinOff } from "lucide-react";
 import SidebarNav from "./SidebarNav";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const LayoutSidebar = ({ 
   sidebarOpen, 
+  sidebarPinned,
+  setSidebarPinned,
   sidebarCollapsed, 
   setSidebarCollapsed, 
   logoUrl, 
@@ -16,6 +18,7 @@ const LayoutSidebar = ({
   onLogoChange 
 }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const { isAdmin, isPowerUser } = useAuth();
   
   const handleLogoChange = (event) => {
@@ -85,11 +88,13 @@ const LayoutSidebar = ({
 
   return (
     <div
-      className={`fixed inset-y-0 left-0 z-40 ${
+      className={`fixed inset-y-0 left-0 z-50 ${
         sidebarCollapsed ? 'w-16' : 'w-64'
       } bg-gradient-to-br from-muted to-accent/10 backdrop-blur-sm shadow-neo-xl transform transition-all duration-200 ease-in-out lg:translate-x-0 ${
-        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        sidebarOpen || isHovered || sidebarPinned ? "translate-x-0" : "-translate-x-full lg:translate-x-0 lg:-translate-x-[calc(100%-8px)]"
       } rounded-r-2xl`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <div className="flex flex-col h-full">
         <LogoComponent />
@@ -99,13 +104,25 @@ const LayoutSidebar = ({
           sidebarCollapsed={sidebarCollapsed} 
         />
 
-        <button
-          onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-          className="p-4 text-catYellow hover:bg-accent rounded-xl mx-2 mb-2 flex items-center justify-center transform transition hover:scale-105 shadow-lg bg-gradient-to-br from-muted to-accent/10"
-          title={sidebarCollapsed ? "Expandir menu" : "Recolher menu"}
-        >
-          {sidebarCollapsed ? <ChevronRight /> : <ChevronLeft />}
-        </button>
+        <div className="mt-auto p-2 space-y-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setSidebarPinned(!sidebarPinned)}
+            className="w-full flex items-center justify-center"
+          >
+            {sidebarPinned ? <PinOff className="h-4 w-4" /> : <Pin className="h-4 w-4" />}
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            className="w-full flex items-center justify-center"
+          >
+            {sidebarCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+          </Button>
+        </div>
       </div>
     </div>
   );

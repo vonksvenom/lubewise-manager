@@ -6,7 +6,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const OrdemServicoSelects = ({ formData, handleChange, equipamentos = [], tecnicos = [] }) => {
+const OrdemServicoSelects = ({ formData, handleChange, equipamentos = [], disableEdit = false }) => {
   return (
     <div className="space-y-4">
       <div className="space-y-2">
@@ -16,6 +16,7 @@ const OrdemServicoSelects = ({ formData, handleChange, equipamentos = [], tecnic
         <Select
           value={formData.tipo}
           onValueChange={(value) => handleChange("tipo", value)}
+          disabled={disableEdit}
         >
           <SelectTrigger>
             <SelectValue placeholder="Selecione o tipo" />
@@ -62,6 +63,7 @@ const OrdemServicoSelects = ({ formData, handleChange, equipamentos = [], tecnic
             <SelectValue placeholder="Selecione o operacional" />
           </SelectTrigger>
           <SelectContent>
+            {/* Assuming tecnicos is passed as a prop */}
             {tecnicos.filter(t => t.role === "technician").map((tecnico) => (
               <SelectItem key={tecnico.id} value={tecnico.id}>
                 {tecnico.name} ({tecnico.nivel}) - {tecnico.horasDisponiveis}h/dia
