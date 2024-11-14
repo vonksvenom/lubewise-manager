@@ -90,8 +90,8 @@ const LayoutSidebar = ({
     <div
       className={`fixed inset-y-0 left-0 z-50 ${
         sidebarCollapsed ? 'w-16' : 'w-64'
-      } bg-gradient-to-br from-muted to-accent/10 backdrop-blur-sm shadow-neo-xl transform transition-all duration-200 ease-in-out lg:translate-x-0 ${
-        sidebarOpen || isHovered || sidebarPinned ? "translate-x-0" : "-translate-x-full lg:translate-x-0 lg:-translate-x-[calc(100%-8px)]"
+      } bg-gradient-to-br from-muted to-accent/10 backdrop-blur-sm shadow-neo-xl transform transition-all duration-200 ease-in-out ${
+        sidebarOpen || isHovered || sidebarPinned ? "translate-x-0" : "lg:translate-x-0 lg:-translate-x-[calc(100%-4px)]"
       } rounded-r-2xl`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
