@@ -97,6 +97,15 @@ const LayoutSidebar = ({
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="flex flex-col h-full">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setSidebarPinned(!sidebarPinned)}
+          className="absolute right-2 top-2"
+        >
+          {sidebarPinned ? <PinOff className="h-4 w-4" /> : <Pin className="h-4 w-4" />}
+        </Button>
+
         <LogoComponent />
         
         <SidebarNav 
@@ -104,16 +113,7 @@ const LayoutSidebar = ({
           sidebarCollapsed={sidebarCollapsed} 
         />
 
-        <div className="mt-auto p-2 space-y-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setSidebarPinned(!sidebarPinned)}
-            className="w-full flex items-center justify-center"
-          >
-            {sidebarPinned ? <PinOff className="h-4 w-4" /> : <Pin className="h-4 w-4" />}
-          </Button>
-
+        <div className="mt-auto p-2">
           <Button
             variant="ghost"
             size="icon"
