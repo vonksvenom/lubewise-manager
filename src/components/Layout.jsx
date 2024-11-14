@@ -85,6 +85,11 @@ const Layout = ({ children }) => {
   }, [currentUser]);
 
   const handleThemeChange = (theme, isInitialLoad = false) => {
+    if (!themes[theme]) {
+      console.warn(`Theme "${theme}" not found, falling back to corporate theme`);
+      theme = 'corporate';
+    }
+
     setCurrentTheme(theme);
     const themeColors = themes[theme].colors;
     
