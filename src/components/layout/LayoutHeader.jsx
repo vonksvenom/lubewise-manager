@@ -1,5 +1,5 @@
 import { Menu } from "lucide-react";
-import { CompanyLocationFilter } from "./CompanyLocationFilter";
+import CompanyLocationFilter from "./CompanyLocationFilter";
 
 const LayoutHeader = ({ 
   sidebarOpen, 
