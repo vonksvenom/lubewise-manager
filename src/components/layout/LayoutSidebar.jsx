@@ -96,12 +96,12 @@ const LayoutSidebar = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col h-full pt-12 relative">
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setSidebarPinned(!sidebarPinned)}
-          className="absolute right-2 top-2"
+          className="absolute right-2 top-2 z-50"
         >
           {sidebarPinned ? <PinOff className="h-4 w-4" /> : <Pin className="h-4 w-4" />}
         </Button>
