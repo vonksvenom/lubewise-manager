@@ -22,13 +22,14 @@ const LayoutHeader = ({
         >
           <Menu className="text-foreground h-5 w-5" />
         </button>
-        <h1 className="text-2xl font-bold tracking-tight font-mono relative group">
-          <span className="relative z-10 bg-gradient-to-r from-slate-800 to-slate-600 dark:from-slate-200 dark:to-slate-400 bg-clip-text">
-            <span className="font-black tracking-tighter">Lubri</span>
-            <span className="font-light tracking-wide">Tracker</span>
-            <span className="absolute -top-1 -right-3 text-[0.6rem] text-slate-600 dark:text-slate-400">™</span>
-          </span>
-          <span className="absolute inset-0 bg-gradient-to-r from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded"></span>
+        <h1 className="text-2xl font-bold tracking-tight relative group">
+          <div className="relative z-10 bg-gradient-to-r from-primary/90 to-primary/70 bg-clip-text text-transparent">
+            <span className="font-black tracking-tighter text-3xl">Lubri</span>
+            <span className="font-light tracking-wide text-3xl">Tracker</span>
+            <span className="absolute -top-1 -right-3 text-[0.6rem] text-primary/70">™</span>
+          </div>
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-primary/10 blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded"></div>
+          <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/5 rounded-lg transform scale-105 opacity-0 group-hover:opacity-100 transition-all duration-300"></div>
         </h1>
       </div>
 
