@@ -87,44 +87,55 @@ const LayoutSidebar = ({
   };
 
   return (
-    <div
-      className={`fixed inset-y-0 left-0 z-50 ${
-        sidebarCollapsed ? 'w-16' : 'w-64'
-      } bg-gradient-to-br from-muted to-accent/10 backdrop-blur-sm shadow-neo-xl transform transition-all duration-200 ease-in-out ${
-        sidebarOpen || isHovered || sidebarPinned ? "translate-x-0" : "lg:translate-x-0 lg:-translate-x-[calc(100%-4px)]"
-      } rounded-r-2xl`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="flex flex-col h-full pt-12 relative">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => setSidebarPinned(!sidebarPinned)}
-          className="absolute right-2 top-2 z-50"
-        >
-          {sidebarPinned ? <PinOff className="h-4 w-4" /> : <Pin className="h-4 w-4" />}
-        </Button>
+    <>
+      {/* Área sensível ao hover na borda esquerda */}
+      <div 
+        className={`fixed inset-y-0 left-0 w-1 z-50 ${sidebarPinned ? 'hidden' : ''}`}
+        onMouseEnter={() => !sidebarPinned && setIsHovered(true)}
+      />
 
-        <LogoComponent />
-        
-        <SidebarNav 
-          navItems={navItems} 
-          sidebarCollapsed={sidebarCollapsed} 
-        />
-
-        <div className="mt-auto p-2">
+      <div
+        className={`fixed inset-y-0 left-0 z-40 ${
+          sidebarCollapsed ? 'w-16' : 'w-64'
+        } bg-gradient-to-br from-muted to-accent/10 backdrop-blur-sm shadow-neo-xl transform transition-all duration-200 ease-in-out ${
+          sidebarOpen || isHovered || sidebarPinned ? "translate-x-0" : "-translate-x-full"
+        } rounded-r-2xl`}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <div className="flex flex-col h-full pt-12 relative">
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-            className="w-full flex items-center justify-center"
+            onClick={() => setSidebarPinned(!sidebarPinned)}
+            className="absolute right-2 top-2 z-50"
           >
-            {sidebarCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+            {sidebarPinned ? <PinOff className="h-4 w-4" /> : <Pin className="h-4 w-4" />}
           </Button>
+
+          <LogoComponent />
+          
+          <SidebarNav 
+            navItems={navItems} 
+            sidebarCollapsed={sidebarCollapsed} 
+          />
+
+          <div className="mt-auto p-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              className="w-full flex items-center justify-center text-xs sm:text-sm md:text-base"
+            >
+              {sidebarCollapsed ? (
+                <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4" />
+              ) : (
+                <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4" />
+              )}
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
