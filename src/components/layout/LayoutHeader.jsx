@@ -22,10 +22,13 @@ const LayoutHeader = ({
         >
           <Menu className="text-foreground h-5 w-5" />
         </button>
-        <h1 className="text-2xl font-bold tracking-tight bg-clip-text text-foreground font-mono">
-          <span className="text-primary">Lubri</span>
-          <span className="text-accent">Tracker</span>
-          <span className="absolute -mt-1 ml-0.5 text-[0.6rem] text-primary opacity-70">™</span>
+        <h1 className="text-2xl font-bold tracking-tight font-mono relative group">
+          <span className="relative z-10 bg-gradient-to-r from-slate-800 to-slate-600 dark:from-slate-200 dark:to-slate-400 bg-clip-text">
+            <span className="font-black tracking-tighter">Lubri</span>
+            <span className="font-light tracking-wide">Tracker</span>
+            <span className="absolute -top-1 -right-3 text-[0.6rem] text-slate-600 dark:text-slate-400">™</span>
+          </span>
+          <span className="absolute inset-0 bg-gradient-to-r from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 opacity-0 group-hover:opacity-10 transition-opacity duration-300 rounded"></span>
         </h1>
       </div>
 

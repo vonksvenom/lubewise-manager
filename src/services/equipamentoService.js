@@ -46,11 +46,34 @@ const remove = (id) => {
   return equipamentos;
 };
 
+const addDateChangeHistory = (equipamentoId, changeData) => {
+  const equipamento = getById(equipamentoId);
+  if (equipamento) {
+    if (!equipamento.dateChangeHistory) {
+      equipamento.dateChangeHistory = [];
+    }
+
+    equipamento.dateChangeHistory.push({
+      id: Date.now().toString(),
+      previousDate: changeData.previousDate,
+      newDate: changeData.newDate,
+      reason: changeData.reason,
+      changedBy: changeData.userId,
+      changedAt: new Date().toISOString(),
+      updatedRecurring: changeData.updateRecurring
+    });
+
+    return equipamento;
+  }
+  return null;
+};
+
 export const equipamentoService = {
   getAll,
   getById,
   add,
   update,
   addLessonLearned,
+  addDateChangeHistory,
   delete: remove
 };

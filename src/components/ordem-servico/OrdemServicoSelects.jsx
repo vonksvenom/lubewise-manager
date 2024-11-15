@@ -7,6 +7,9 @@ import {
 } from "@/components/ui/select";
 
 const OrdemServicoSelects = ({ formData, handleChange, equipamentos = [], disableEdit = false }) => {
+  const isPreventiveOrPredictive = formData.tipo === "Preventiva" || formData.tipo === "Preditiva";
+  const disableFields = disableEdit || isPreventiveOrPredictive;
+
   return (
     <div className="space-y-4">
       <div className="space-y-2">
@@ -16,7 +19,7 @@ const OrdemServicoSelects = ({ formData, handleChange, equipamentos = [], disabl
         <Select
           value={formData.tipo}
           onValueChange={(value) => handleChange("tipo", value)}
-          disabled={disableEdit}
+          disabled={disableFields}
         >
           <SelectTrigger>
             <SelectValue placeholder="Selecione o tipo" />
