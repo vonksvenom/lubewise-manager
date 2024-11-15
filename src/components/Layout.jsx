@@ -9,7 +9,6 @@ import { navItems } from "../nav-items";
 import LayoutHeader from "./layout/LayoutHeader";
 import LayoutSidebar from "./layout/LayoutSidebar";
 import LayoutControls from "./layout/LayoutControls";
-import CompanyLocationFilter from "./layout/CompanyLocationFilter";
 
 const CURRENT_USER_KEY = "user";
 
@@ -119,11 +118,6 @@ const Layout = ({ children }) => {
     localStorage.setItem('logoUrl', newLogo);
   };
 
-  const filteredNavItems = navItems.filter(item => 
-    (!item.adminOnly || (item.adminOnly && isAdmin)) &&
-    (!item.adminOrPowerUserOnly || (item.adminOrPowerUserOnly && (isAdmin || isPowerUser)))
-  );
-
   return (
     <div className="min-h-screen bg-background bg-gradient-to-br from-background to-accent/5">
       <LayoutHeader 
@@ -133,6 +127,8 @@ const Layout = ({ children }) => {
         isPowerUser={isPowerUser}
         userCompany={userCompany}
         userLocation={userLocation}
+        sidebarPinned={sidebarPinned}
+        sidebarCollapsed={sidebarCollapsed}
       />
       
       <LayoutSidebar 
@@ -152,11 +148,6 @@ const Layout = ({ children }) => {
         } min-h-screen`}
       >
         <main className="p-6 pt-24">
-          {(isAdmin || isPowerUser) && (
-            <div className="mb-6">
-              <CompanyLocationFilter />
-            </div>
-          )}
           {children}
           <LayoutControls 
             isAdmin={isAdmin}

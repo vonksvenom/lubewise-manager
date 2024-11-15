@@ -61,13 +61,13 @@ const CompanyLocationFilter = () => {
   }, [selectedCompany, isAdmin, isPowerUser, user]);
 
   return (
-    <div className="flex gap-4">
+    <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
       <Select
         value={selectedCompany}
         onValueChange={setSelectedCompany}
         disabled={!isAdmin && user?.companyId}
       >
-        <SelectTrigger className="w-[200px]">
+        <SelectTrigger className="w-[160px] sm:w-[200px]">
           <SelectValue placeholder="Selecione a empresa" />
         </SelectTrigger>
         <SelectContent>
@@ -84,7 +84,7 @@ const CompanyLocationFilter = () => {
         onValueChange={setSelectedLocation}
         disabled={!selectedCompany || (!isAdmin && !isPowerUser && user?.locationId)}
       >
-        <SelectTrigger className="w-[200px]">
+        <SelectTrigger className="w-[160px] sm:w-[200px]">
           <SelectValue placeholder="Selecione o local" />
         </SelectTrigger>
         <SelectContent>
