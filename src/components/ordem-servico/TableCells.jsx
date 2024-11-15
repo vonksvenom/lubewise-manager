@@ -66,30 +66,36 @@ export const getStatusDisplay = (ordem) => {
   }
 };
 
-export const ActionButtons = ({ ordem, onEdit, onDelete }) => (
-  <div className="flex gap-2 justify-end">
-    <Button
-      variant="ghost"
-      size="icon"
-      onClick={(e) => {
-        e.stopPropagation();
-        onEdit(ordem);
-      }}
-    >
-      <Edit className="h-4 w-4" />
-    </Button>
-    <Button
-      variant="ghost"
-      size="icon"
-      onClick={(e) => {
-        e.stopPropagation();
-        onDelete(ordem.id);
-      }}
-    >
-      <Trash2 className="h-4 w-4 text-red-500" />
-    </Button>
-  </div>
-);
+export const ActionButtons = ({ ordem, onEdit, onDelete }) => {
+  const canEdit = ordem.tipo === "Corretiva" || ordem.tipo === "Proativa";
+  
+  return (
+    <div className="flex gap-2 justify-end">
+      {canEdit && (
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit(ordem);
+          }}
+        >
+          <Edit className="h-4 w-4" />
+        </Button>
+      )}
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete(ordem.id);
+        }}
+      >
+        <Trash2 className="h-4 w-4 text-red-500" />
+      </Button>
+    </div>
+  );
+};
 
 export const RecurrenceCell = ({ recorrencia }) => (
   <TableCell>
