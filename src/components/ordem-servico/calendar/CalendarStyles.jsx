@@ -97,7 +97,7 @@ export const CalendarStyles = () => (
       .fullcalendar-custom .fc-popover {
         background: var(--background);
         border: 1px solid var(--border);
-        box-shadow: var(--shadow-neo);
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         border-radius: 0.5rem;
         max-width: 300px !important;
       }
@@ -106,6 +106,8 @@ export const CalendarStyles = () => (
         padding: 0.5rem;
         font-size: 0.875rem;
         font-weight: 600;
+        border-top-left-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
       }
       .fullcalendar-custom .fc-popover-body {
         padding: 0.5rem;
