@@ -19,19 +19,25 @@ const Dashboard = () => {
   const { data: ordensServico = [] } = useQuery({
     queryKey: ['ordensServico'],
     queryFn: () => ordemServicoService.getAll(),
-    initialData: []
+    initialData: [],
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnWindowFocus: false
   });
 
   const { data: equipamentos = [] } = useQuery({
     queryKey: ['equipamentos'],
     queryFn: () => equipamentoService.getAll(),
-    initialData: []
+    initialData: [],
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false
   });
 
   const { data: inventario = [] } = useQuery({
     queryKey: ['inventario'],
     queryFn: () => inventarioService.getAll(),
-    initialData: []
+    initialData: [],
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false
   });
 
   const tecnicos = userService.getAll().filter(user => user.role === "technician");
@@ -42,10 +48,10 @@ const Dashboard = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-catYellow">Dashboard</h1>
+        <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
         <div className="flex items-center gap-2">
-          <Clock className="h-5 w-5 text-catYellow" />
-          <span className="text-gray-400">
+          <Clock className="h-5 w-5 text-muted-foreground" />
+          <span className="text-muted-foreground">
             Última atualização: {format(new Date(), "dd/MM/yyyy HH:mm")}
           </span>
         </div>
@@ -58,7 +64,7 @@ const Dashboard = () => {
               <Clock className="h-6 w-6 text-blue-500" />
             </div>
             <div>
-              <p className="text-sm text-gray-400">Total de Horas Disponíveis</p>
+              <p className="text-sm text-muted-foreground">Total de Horas Disponíveis</p>
               <p className="text-2xl font-bold text-blue-500">{totalHorasDisponiveis}h/dia</p>
             </div>
           </div>
@@ -70,7 +76,7 @@ const Dashboard = () => {
               <Users className="h-6 w-6 text-green-500" />
             </div>
             <div>
-              <p className="text-sm text-gray-400">Total de Técnicos</p>
+              <p className="text-sm text-muted-foreground">Total de Técnicos</p>
               <p className="text-2xl font-bold text-green-500">{tecnicos.length}</p>
             </div>
           </div>
