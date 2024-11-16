@@ -11,39 +11,63 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import TechniciansDialog from "@/components/dashboard/TechniciansDialog";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Dashboard = () => {
   const { t } = useTranslation();
   const [dialogOpen, setDialogOpen] = useState(false);
   
-  const { data: ordensServico = [] } = useQuery({
+  const { data: ordensServico, isLoading: ordensLoading } = useQuery({
     queryKey: ['ordensServico'],
     queryFn: () => ordemServicoService.getAll(),
-    initialData: [],
     staleTime: 1000 * 60 * 5, // 5 minutes
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
+    retry: 2,
+    initialData: []
   });
 
-  const { data: equipamentos = [] } = useQuery({
+  const { data: equipamentos, isLoading: equipamentosLoading } = useQuery({
     queryKey: ['equipamentos'],
     queryFn: () => equipamentoService.getAll(),
-    initialData: [],
     staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
+    retry: 2,
+    initialData: []
   });
 
-  const { data: inventario = [] } = useQuery({
+  const { data: inventario, isLoading: inventarioLoading } = useQuery({
     queryKey: ['inventario'],
     queryFn: () => inventarioService.getAll(),
-    initialData: [],
     staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
+    retry: 2,
+    initialData: []
   });
 
   const tecnicos = userService.getAll().filter(user => user.role === "technician");
   const totalHorasDisponiveis = tecnicos.reduce((total, tecnico) => 
     total + Number(tecnico.horasDisponiveis || 0), 0
   );
+
+  if (ordensLoading || equipamentosLoading || inventarioLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-between items-center mb-8">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-6 w-64" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Skeleton className="h-32" />
+          <Skeleton className="h-32" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Skeleton className="h-64" />
+          <Skeleton className="h-64" />
+          <Skeleton className="h-64" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
