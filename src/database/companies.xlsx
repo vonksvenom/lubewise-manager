@@ -1,0 +1,2 @@
+[Binary Excel file with company data from miningCompanies.js, steelCompanies.js, and oilCompanies.js]
+Columns: id, name, active, sector, mainProducts, foundedYear

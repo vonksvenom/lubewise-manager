@@ -1,0 +1,2 @@
+[Binary Excel file with equipment data from equipmentData.js]
+Columns: id, nome, tag, modelo, fabricante, area, descricao, status, responsavel, sistemas, maintenancePlans, critico, ultimaManutencao, proximaManutencao

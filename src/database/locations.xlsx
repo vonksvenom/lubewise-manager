@@ -1,0 +1,2 @@
+[Binary Excel file with location data from miningLocations.js, steelLocations.js, and oilLocations.js]
+Columns: id, name, companyId, active, type, city, state, coordinates

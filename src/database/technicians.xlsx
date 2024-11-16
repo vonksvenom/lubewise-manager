@@ -1,0 +1,2 @@
+[Binary Excel file with technician data from technicians.js]
+Columns: id, name, email, password, role, department, nivel, horasDisponiveis, permissions

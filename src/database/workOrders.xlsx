@@ -1,0 +1,2 @@
+[Binary Excel file with work order data from workOrderData.js and baseWorkOrders.js]
+Columns: id, titulo, descricao, tipo, status, prioridade, equipamentoId, dataInicio, dataFim, dataExecucao, tecnicoId, recorrencia
