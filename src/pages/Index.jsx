@@ -6,9 +6,9 @@ const Index = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="container mx-auto py-8">
-      <Card className="p-8 shadow-neo bg-background">
-        <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-primary/90 to-primary/70 bg-clip-text text-transparent">
+    <div className="container mx-auto p-8">
+      <Card className="p-8 bg-background border-none">
+        <h1 className="text-4xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
           Bem-vindo ao LubriTracker
         </h1>
         
@@ -16,11 +16,11 @@ const Index = () => {
           Sistema de gerenciamento de lubrificação e manutenção industrial
         </p>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Button
             variant="outline"
-            className="p-6 h-auto flex flex-col items-center gap-2 shadow-neo hover:shadow-neo-xl transition-all"
-            onClick={() => navigate("/dashboard")}
+            className="p-6 h-auto flex flex-col items-center gap-2 hover:bg-accent/5 transition-colors border border-border/50"
+            onClick={() => navigate("/")}
           >
             <span className="text-lg font-semibold">Dashboard</span>
             <span className="text-sm text-muted-foreground text-center">
@@ -30,8 +30,8 @@ const Index = () => {
 
           <Button
             variant="outline"
-            className="p-6 h-auto flex flex-col items-center gap-2 shadow-neo hover:shadow-neo-xl transition-all"
-            onClick={() => navigate("/ordens-servico")}
+            className="p-6 h-auto flex flex-col items-center gap-2 hover:bg-accent/5 transition-colors border border-border/50"
+            onClick={() => navigate("/ordens")}
           >
             <span className="text-lg font-semibold">Ordens de Serviço</span>
             <span className="text-sm text-muted-foreground text-center">
@@ -41,7 +41,7 @@ const Index = () => {
 
           <Button
             variant="outline"
-            className="p-6 h-auto flex flex-col items-center gap-2 shadow-neo hover:shadow-neo-xl transition-all"
+            className="p-6 h-auto flex flex-col items-center gap-2 hover:bg-accent/5 transition-colors border border-border/50"
             onClick={() => navigate("/equipamentos")}
           >
             <span className="text-lg font-semibold">Equipamentos</span>
